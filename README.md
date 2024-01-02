@@ -14,7 +14,7 @@ Contributions and feedback are welcome and encouraged from our user community, a
 * [ECG image digitization tools](codes/ecg-image-digitizer/)
 
 ## Reference
-[![arXiv](https://img.shields.io/badge/arXiv-ECGgen-b31b1b.svg)](https://doi.org/10.48550/ARXIV.2307.01946)
+[![arXiv](https://img.shields.io/badge/ecg-image-kit)](https://doi.org/10.48550/ARXIV.2307.01946)
 
 Shivashankara, K. K., Shervedani, A. M., and Sameni, R. (2023). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. doi: [10.48550/ARXIV.2307.01946](https://doi.org/10.48550/ARXIV.2307.01946)
 
