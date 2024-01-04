@@ -47,7 +47,7 @@ To address these challenges, we present methods and tools for generating synthet
      ### Example with 2 lead ECG input data data:
 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i ./SampleData/QT_data -o ./SampleData/GeneratedData --deterministic_lead -se 10
+     python gen_ecg_images_from_data_batch.py -i SampleData/QT_data -o SampleData/GeneratedData --deterministic_lead -se 10
      ```
 
      Output can be found here: [./SampleData/GeneratedData](./SampleData/GeneratedData)
@@ -58,10 +58,6 @@ To address these challenges, we present methods and tools for generating synthet
 
 
      ### Example with 12 lead ECG input data data:
-
-     ```bash
-     python gen_ecg_images_from_data_batch.py -i ./SampleData/QT_data -o ./SampleData/GeneratedData --deterministic_lead -se 10
-     ```
 
      Output can be found here: [./SampleData/12lead_generated](./SampleData/12lead_generated)
 
