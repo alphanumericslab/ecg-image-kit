@@ -1,4 +1,3 @@
-import os
 import pickle
 import argparse
 import numpy as np
@@ -13,6 +12,7 @@ import seaborn
 from collections import namedtuple
 import spacy
 import os, sys, argparse
+from sys import platform
 import requests
 from bs4 import BeautifulSoup, Comment
 import validators
@@ -148,7 +148,12 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
     if(validators.url(link)):
         #Parse URL
         r = requests.get(link)
-        soup = BeautifulSoup(r.content, "html5lib")
+
+        if platform == "darwin":
+            soup = BeautifulSoup(r.content, "html5lib")
+
+        else:
+            soup = BeautifulSoup(r.content, "lxml")
 
         medicalText = ""
         for text in soup.body.find_all(string=True):
