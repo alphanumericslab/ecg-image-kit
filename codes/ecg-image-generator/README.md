@@ -27,8 +27,6 @@ To address these challenges, we present methods and tools for generating synthet
           ```
           
           Note that the requirements file has been compiled for python versions >= 3.8.11 and < 3.11
-- Additional Instructions for MAC users:
-     *  The text generation pipeline will make use of a different Parser object for BeautifulSoap. Change the parser object from "lxml" to "html5lib" on line 151 in [generate.py](codes/synthetic-ecg-image-generator/HandwrittenText/generate.py)
 
 
 ## Running the pipeline
