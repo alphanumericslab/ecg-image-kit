@@ -47,15 +47,8 @@ To address these challenges, we present methods and tools for generating synthet
      ### Example with 2 lead ECG input data data:
 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i SampleData/QT_data -o SampleData/GeneratedData --deterministic_lead -se 10
+     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --deterministic_lead -se 10
      ```
-
-     Output can be found here: [./SampleData/GeneratedData](./SampleData/GeneratedData)
-
-     | Synthetic ECG Image with gridlines and Lead names                            | Ground truth ECG image                            |
-     | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/GeneratedData/sel100-0.png) | ![GT Image](SampleData/GeneratedData/sel100-0-gt.png) |
-
 
      ### Example with 12 lead ECG input data data:
 
