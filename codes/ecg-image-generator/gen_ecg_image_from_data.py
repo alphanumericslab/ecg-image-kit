@@ -14,7 +14,7 @@ def get_parser():
     parser.add_argument('-i', '--input_file', type=str, required=True)
     parser.add_argument('-hea', '--header_file', type=str, required=True)
     parser.add_argument('-o', '--output_directory', type=str, required=True)
-    parser.add_argument('-se', '--seed', type=int, required=True)
+    parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
     parser.add_argument('-st', '--start_index', type=int, required=True)
     parser.add_argument('--num_leads',type=str,default='twelve')
     
@@ -85,7 +85,8 @@ def writeCSV(args):
                 writer.writerow(["filename","xgrid","ygrid","lead_name","start","end"])
 
 def run_single_file(args):  
-        random.seed(args.seed)
+        if args.seed != -1:
+            random.seed(args.seed)
         writeCSV(args)      
         
         filename = args.input_file

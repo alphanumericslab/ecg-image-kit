@@ -64,7 +64,10 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
 
     if(recording.shape[0]>recording.shape[1]):
        recording = np.transpose(recording)
-    
+
+    if recording.shape[1]/rate < 10:
+        return []
+
     record_dict = create_signal_dictionary(recording,full_leads)
    
     gain_index = 0
@@ -74,6 +77,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
     end_flag = False
     start = 0
     lead_length_in_seconds = 10.0/columns
+    next_lead_step = 10.0
 
     if start_index != -1:
         start = start_index
@@ -123,7 +127,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
                     gain_index += 1
             if(end_flag==False):
                 ecg_frame.append(frame)
-                start += int(rate*lead_length_in_seconds)
+                start += int(rate*next_lead_step)
 
     outfile_array = []
         

@@ -13,7 +13,7 @@ def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input_directory', type=str, required=True)
     parser.add_argument('-o', '--output_directory', type=str, required=True)
-    parser.add_argument('-se', '--seed', type=int, required=True)
+    parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
     parser.add_argument('--num_leads',type=str,default='twelve')
     parser.add_argument('--num_images',type=int,default = -1)
     
