@@ -21,27 +21,24 @@ def generate_template(header_file, font_type, mode, template_file):
 
     else:
         comments = fields.comments
-
+        
         attributes = {}
+        attributes['Date'] = str(fields.base_date)
+        attributes['Time'] = str(fields.base_time)
         attributes['Name'] = header_file.split('.')[0].split('/')[-1]
-        attributes['Date']= str(random.randint(1, 31)) + " " + random.choice(('Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')) + " " + str(random.randint(0, 23))
+        if attributes['Date'] == None:
+            attributes['Date']= str(random.randint(1, 31)) + " " + random.choice(('Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')) + " " + str(random.randint(0, 23))
         attributes['Age'] = random.randint(10, 80) 
         attributes['Height'] = ''
         attributes['Weight'] = ''
         
-        if mode == 12:
-            attributes['mode'] = '12-Lead I'
-        
-        else:
-            attributes['mode'] = ""
-        
-
         for c in comments:
             col = c.split(':')[0]
             val = c.split(':')[1]
 
             if col == 'Age' or col == 'Height' or col == 'Weight':
-                if val == 'Unknown' or val == ' Unknown':
+                val = val.replace(" ", "")
+                if val == 'Unknown':
                     attributes[str(col)] = ''
                 else:
                     attributes[str(col)] = int(val)
@@ -50,7 +47,7 @@ def generate_template(header_file, font_type, mode, template_file):
 
 
         lines = []
-        l1 = 'Date:' + attributes['Date'] + '     ' 
+        l1 = 'Date:' + attributes['Date'] + '     ' + attributes['Time'] + str("   ")
         l2 = 'Name:' + attributes['Name'] + '    ' + "Height:" + str(attributes['Height']) + ' '
         l3 = 'Sex:' + attributes['Sex'] + '           ' + "Weight:" + str(attributes['Weight']) + ' '
         l4 = 'Age:' + str(attributes['Age']) + '             ' 
