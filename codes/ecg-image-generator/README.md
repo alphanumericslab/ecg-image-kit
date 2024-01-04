@@ -230,6 +230,20 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      ```
      Remember to enable a particular distortion to add the given artifacts.
 
+
+## Timing Analysis
+Average computational time for generating an ECG image of size 2200 X 1700 pixels and 200 dpi on MAC OS
+
+|  Steps | Time taken by each step per image (in seconds) |
+| ------------- | ------------- |
+| Distortion less ECG  | 0.72 |
+| Distortion less ECG with printed text  | 0.87  |
+| ECG with Hand written text distortion | 6.25 |
+| ECG with Creases and Wrinkles distortions | 0.92 |
+| ECG with Augmentations (Noise and rotation)  | 2.65  |
+| ECG with all distoritons (Hand-written text, creases, wrinkles, rotation, noise)  | 7.75  |
+
+
 ## Reference
 [![arXiv](https://img.shields.io/badge/arXiv-ECGgen-b31b1b.svg)](https://doi.org/10.48550/ARXIV.2307.01946)
 

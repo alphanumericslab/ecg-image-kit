@@ -25,6 +25,8 @@ def generate_template(header_file, font_type, mode, template_file):
         attributes['Name'] = header_file.split('.')[0].split('/')[-1]
         attributes['Date']= str(random.randint(1, 31)) + " " + random.choice(('Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')) + " " + str(random.randint(0, 23))
         attributes['Age'] = random.randint(10, 80) 
+        attributes['Height'] = ''
+        attributes['Weight'] = ''
         
         if mode == 12:
             attributes['mode'] = '12-Lead I'
