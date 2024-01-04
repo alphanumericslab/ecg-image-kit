@@ -44,21 +44,6 @@ To address these challenges, we present methods and tools for generating synthet
      * **gridsize.csv:** A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
      * **text_bouding_box text file:** Text file with bouding box information (Format : x1, y2, x2, y1) along with the text.
 
-     ### Example with 2 lead ECG input data data:
-
-     ```bash
-     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --deterministic_lead -se 10
-     ```
-
-     ### Example with 12 lead ECG input data data:
-
-     Output can be found here: [./SampleData/12lead_generated](./SampleData/12lead_generated)
-
-
-     | Synthetic ECG Image with gridlines and Lead names                            | Ground truth ECG image                            |
-     | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](./SampleData/12lead_generated/JS00001-0.png) | ![GT Image](./SampleData/12lead_generated/JS00001-0-gt.png) |
-
 
      ### Synthetic Images generated with PTB XL dataset
 

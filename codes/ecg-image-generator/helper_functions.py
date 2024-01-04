@@ -24,14 +24,17 @@ def find_records(folder, output_dir):
                 header_files.append(hd)
                 recording_files.append(record)
     
+    if recording_files == []:
+        raise Exception("The input directory does not have any WFDB compatible ECG files, please re-check the folder!")
+
+
     for file in recording_files:
-        f, ext = file.split('.')
+        f, ext = os.path.splitext(file)
         f1 = f.split('/')[:-1]
-        p1 = output_dir
-        for k in f1:
-            if os.path.exists(os.path.join(p1, k)) == False:
-                os.mkdir(os.path.join(p1, k))
-            p1 = os.path.join(p1, k)
+        f1 = '/'.join(f1)
+
+        if os.path.exists(os.path.join(output_dir, f1)) == False:
+            os.makedirs(os.path.join(output_dir, f1))
 
     return header_files, recording_files
 

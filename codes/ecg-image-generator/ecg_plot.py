@@ -137,7 +137,7 @@ def ecg_plot(
     #leads represent number of leads in the ecg
     #rows are calculated based on corresponding number of leads and number of columns
 
-    #matplotlib.use("Agg")
+    matplotlib.use("Agg")
     randindex = randint(0,99)
     random_sampler = random.uniform(-0.05,0.004)
 
@@ -394,6 +394,9 @@ def ecg_plot(
     rec_file_name = os.path.join(output_dir, tail)
     if(is_gt):
         plt.savefig(os.path.join(output_dir,tail + '-gt'+'.png'),dpi=resolution)
+        plt.close(fig)
+       
+
     else:
         if(store_text_bbox):
             if(os.path.exists(os.path.join(output_dir, 'text_bouding_box'))  == False):
@@ -408,7 +411,10 @@ def ecg_plot(
                     f.write('\n')
                     
         plt.savefig(os.path.join(output_dir,tail +'.png'),dpi=resolution)
-        
+        plt.close(fig)
+        plt.clf()
+        plt.cla()
+
         #plt.show()
 
     if(not is_gt):
@@ -471,6 +477,9 @@ def ecg_plot(
                     ax.add_patch(rect)
         
                 plt.savefig(os.path.join(output_dir,tail + '-boxed'+'.png'),dpi=resolution)
+                plt.close(fig)
+                plt.clf()
+                plt.cla()
 
     #To do: Pad only up and down 
     if pad_inches!=0:

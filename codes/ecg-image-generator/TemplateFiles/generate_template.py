@@ -5,7 +5,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def generate_template(header_file, font_type, mode, template_file):
-    fields = wfdb.rdheader(header_file.split('.')[0])
+    filename, extn = os.path.splitext(header_file)
+    fields = wfdb.rdheader(filename)
     
     if fields.comments == []:
         template_file_content = open(os.path.join('TemplateFiles','TextFile1.txt'), 'r')
@@ -49,10 +50,10 @@ def generate_template(header_file, font_type, mode, template_file):
 
 
         lines = []
-        l1 = 'Date:' + attributes['Date'] + '     ' + attributes['mode'] + ' '
+        l1 = 'Date:' + attributes['Date'] + '     ' 
         l2 = 'Name:' + attributes['Name'] + '    ' + "Height:" + str(attributes['Height']) + ' '
         l3 = 'Sex:' + attributes['Sex'] + '           ' + "Weight:" + str(attributes['Weight']) + ' '
-        l4 = 'Age:' + str(attributes['Age']) + '             ' + "Dx:" + attributes['Dx'] + ' '
+        l4 = 'Age:' + str(attributes['Age']) + '             ' 
 
         lines.append(l1)
         lines.append(l2)
@@ -67,7 +68,8 @@ def generate_template(header_file, font_type, mode, template_file):
             max = len(line.strip())
 
     
-    font_size = random.randint(15, 40)
+    font_size = random.randint(15, 30)
+    font_type = os.path.join('Fonts','Arial.ttf')
     font = ImageFont.truetype(font_type, font_size, encoding="unic")
     text_width, text_height = font.getsize(maxIdx)
 
