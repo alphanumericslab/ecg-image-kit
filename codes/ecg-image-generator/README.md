@@ -66,7 +66,13 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
 - `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
 - `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
+- `store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. The json file has following attributes:
+     - `x_grid`: Number of pixels per 0.2 seconds of the grid on the image.
+     - `y_grid`: Number of pixels per 0.5mV of the grid on the image.
+     - `text_bounding_box_file`: Path to the bounding boxes for the lead names if the `store_text_bouding_box` is True else ''
+     - `lead_bounding_box_file`: Path to the bounding boxes for the ECG leads if the `bbox` is True else ''.
 
+     Example: 
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_print 0.8 --random_dc 0.5
      ```
@@ -94,7 +100,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      - `--deterministic_offset`: Use the provided offset parameters deterministically. If not, takes the offset parameters as a range by which we can offset the text; default: False
      - `--deterministic_num_words`: Uses the provided number of words deterministically. If False, it takes the number of words as a range and adds random number of words; default: False
      - `--deterministic_hw_size`: Uses a fixed handwriting size for the handwritten text artifacts added; default: False
-     
+    
      Example: 
 
      ```bash
