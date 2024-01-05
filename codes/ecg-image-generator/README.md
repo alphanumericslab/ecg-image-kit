@@ -81,7 +81,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](./SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](./SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
+     | ![Sythentic ECG image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
