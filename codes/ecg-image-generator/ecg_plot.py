@@ -171,8 +171,6 @@ def ecg_plot(
     else:
         width = papersize_values[papersize][1]
         height = papersize_values[papersize][0]
-
-
     
     y_grid = standard_values['y_grid_inch'] + random_sampler
     x_grid = standard_values['x_grid_inch'] + random_sampler
@@ -186,6 +184,7 @@ def ecg_plot(
     x_gap = np.floor(((x_max - (columns*secs))/2)/0.2)*0.2
     y_min = 0
     y_max = height * y_grid_size/y_grid
+
     #Set figure and subplot sizes
     fig, ax = plt.subplots(figsize=(width, height))
    
@@ -267,7 +266,8 @@ def ecg_plot(
     x_offset = 0
 
     text_bbox = {}
-    
+    lead_bbox = {}
+
     for i in np.arange(len(lead_index)):
         if len(lead_index) == 12:
             leadName = leadNames_12[i]
@@ -298,20 +298,17 @@ def ecg_plot(
                             fontsize=lead_fontsize)
                     
                     if (store_text_bbox):
+                        
                         renderer1 = fig.canvas.get_renderer()
                         transf = ax.transData.inverted()
-                        bb = t1.get_window_extent(renderer = fig.canvas.renderer)
-                        bb_datacoords = bb.transformed(transf)
-                        h, w = fig.get_size_inches()*fig.dpi 
-                        text_bbox[leadName] = [bb.x0, w - bb.y0, bb.x1, w - bb.y1]
-                                      
-            
-
+                        bb = t1.get_window_extent()                                                
+                        text_bbox[leadName] = [bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi, bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi]
+                        
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
             if(show_dc_pulse):
                 #Plot dc pulse for 0.2 seconds with 2 trailing and leading zeros to get the pulse
-                ax.plot(x_range + x_offset + x_gap,
+                t1 = ax.plot(x_range + x_offset + x_gap,
                         dc_pulse+y_offset,
                         linewidth=line_width * 1.5, 
                         color=color_line
@@ -320,26 +317,21 @@ def ecg_plot(
         elif(columns == 4 and i == 0 or i == 4 or i == 8):
             if(show_dc_pulse):
                 #Plot dc pulse for 0.2 seconds with 2 trailing and leading zeros to get the pulse
-                ax.plot(np.arange(0,sample_rate*standard_values['dc_offset_length']*step + 4*step,step) + x_offset + x_gap,
+                t1 = ax.plot(np.arange(0,sample_rate*standard_values['dc_offset_length']*step + 4*step,step) + x_offset + x_gap,
                         dc_pulse+y_offset,
                         linewidth=line_width * 1.5, 
                         color=color_line
                         )
-                       
-        ax.plot(np.arange(0,len(ecg[leadName])*step,step) + x_offset + dc_offset + x_gap, 
+
+        t1 = ax.plot(np.arange(0,len(ecg[leadName])*step,step) + x_offset + dc_offset + x_gap, 
                 ecg[leadName] + y_offset,
                 linewidth=line_width, 
                 color=color_line
                 )
-        
-        
+    
         start_ind = round((x_offset + dc_offset + x_gap)*x_grid_dots/x_grid_size)
         end_ind = round((x_offset + dc_offset + x_gap + len(ecg[leadName])*step)*x_grid_dots/x_grid_size)
 
-        with open(os.path.join(output_dir,"gridsizes.csv"), 'a',newline='') as file:
-            writer = csv.writer(file)
-            datarow = [rec_file_name,x_grid_dots,y_grid_dots,leadName,start_ind, end_ind]
-            writer.writerow(datarow)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
@@ -353,9 +345,8 @@ def ecg_plot(
                         renderer1 = fig.canvas.get_renderer()
                         transf = ax.transData.inverted()
                         bb = t1.get_window_extent(renderer = fig.canvas.renderer)
-                        bb_datacoords = bb.transformed(transf)
-                        h, w = fig.get_size_inches()*fig.dpi 
-                        text_bbox[full_mode] = [bb.x0, w - bb.y0, bb.x1, w - bb.y1]
+                        text_bbox['full_mode_' + full_mode] = [bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi, bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi]
+                        
 
         if(show_dc_pulse):
             ax.plot(x_range + x_gap,
@@ -377,22 +368,14 @@ def ecg_plot(
         start_ind = round((dc_full_lead_offset + x_gap)*x_grid_dots/x_grid_size)
         end_ind = round((dc_full_lead_offset + x_gap + len(ecg['full'+full_mode])*step)*x_grid_dots/x_grid_size)
 
-        with open(os.path.join(output_dir,"gridsizes.csv"), 'a',newline='') as file:
-            writer = csv.writer(file)
-            datarow = [rec_file_name,x_grid_dots,y_grid_dots,'full'+full_mode,start_ind, end_ind]
-            writer.writerow(datarow)
-
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
     
-       
-
-    
     if(store_text_bbox):
-        if(os.path.exists(os.path.join(output_dir, 'text_bouding_box'))  == False):
-            os.mkdir(os.path.join(output_dir, 'text_bouding_box'))
+        if(os.path.exists(os.path.join(output_dir, 'text_bounding_box'))  == False):
+            os.mkdir(os.path.join(output_dir, 'text_bounding_box'))
         
-        with open(os.path.join(output_dir, 'text_bouding_box', tail + '.txt'), 'w') as f:
+        with open(os.path.join(output_dir, 'text_bounding_box', tail + '.txt'), 'w') as f:
             for i, key in enumerate(text_bbox):
                 for val in text_bbox[key]:
                     f.write(str(val))
@@ -406,39 +389,15 @@ def ecg_plot(
     plt.cla()
 
     if(bbox):
-        with open(os.path.join(output_dir,"Coordinates.csv"), 'a',newline='') as file:
-            writer = csv.writer(file)
-            y_offset = (row_height/2)
-            for i in np.arange(len(lead_index)):
-                if(i%columns==0):
-                    y_offset += row_height
-                
-                #x_offset will be distance by which we shift the plot in each iteration
-                if(columns>1):
-                    x_offset = (i%columns) * secs
-                else:
-                    x_offset = 0
-
-                #Plot raw waveform for 3 seconds, offset is adjusted based on lead index
-                bb_width = len(ecg[lead_index[i]])*step
-                bb_height = max(ecg[lead_index[i]]) - min(ecg[lead_index[i]])
-
-                # Create a Rectangle patch
-                rect = patches.Rectangle((x_offset + dc_offset + x_gap, y_offset+min(ecg[lead_index[i]])), bb_width, bb_height, linewidth=1, edgecolor='r', facecolor='none')
-
-                #Get X and Y coordinates of centre of bounding box
-                label = 0
-
-                box_edges = rect.get_bbox().get_points()
-                x_center_normalized = ((box_edges[0][0] + box_edges[1][0])/2 - x_min)/(x_max-x_min)
-                y_center_normalized = 1 - ((box_edges[0][1] + box_edges[1][1])/2 - y_min)/(y_max - y_min)
-                bb_width_normalized = bb_width/(x_max-x_min)
-                bb_height_normalized = bb_height/(y_max - y_min)
-
-                writer.writerow(data_row)
-
-                # Add the patch to the Axes
-                ax.add_patch(rect)
+        if(os.path.exists(os.path.join(output_dir, 'lead_bounding_box'))  == False):
+            os.mkdir(os.path.join(output_dir, 'lead_bounding_box'))
+        with open(os.path.join(output_dir, 'lead_bounding_box', tail + '.txt'), 'w') as f:
+            for i, key in enumerate(text_bbox):
+                for val in lead_bbox[key]:
+                    f.write(str(val))
+                    f.write(',')
+                f.write(key)
+                f.write('\n')
 
             if(full_mode!='None'):
                 dc_full_lead_offset = 0 
@@ -456,12 +415,10 @@ def ecg_plot(
                 y_center_normalized = 1 - ((box_edges[0][1] + box_edges[1][1])/2 - y_min)/(y_max - y_min)
                 bb_width_normalized = bb_width/(x_max-x_min)
                 bb_height_normalized = bb_height/(y_max - y_min)
-                writer.writerow(data_row)
 
                 # Add the patch to the Axes
                 ax.add_patch(rect)
     
-            plt.savefig(os.path.join(output_dir,tail + '-boxed'+'.png'),dpi=resolution)
             plt.close(fig)
             plt.clf()
             plt.cla()
@@ -469,8 +426,7 @@ def ecg_plot(
     if pad_inches!=0:
         
         ecg_image = Image.open(os.path.join(output_dir,tail +'.png'))
-        if(bbox):
-            ecg_image_boxed = Image.open(os.path.join(output_dir,tail + '-boxed'+'.png'))
+        
         right = pad_inches * resolution
         left = pad_inches * resolution
         top = pad_inches * resolution
@@ -481,19 +437,12 @@ def ecg_plot(
         result_image = Image.new(ecg_image.mode, (new_width, new_height), (255, 255, 255))
         result_image.paste(ecg_image, (left, top))
         
-        if(bbox):
-            result_image_boxed = Image.new(ecg_image_boxed.mode, (new_width, new_height), (255, 255, 255))
-            result_image_boxed.paste(ecg_image_boxed, (left, top))
-        
-        
         result_image.save(os.path.join(output_dir,tail +'.png'))
-        if(bbox):
-            result_image_boxed.save(os.path.join(output_dir,tail + '-boxed'+'.png'))
 
         plt.close('all')
         plt.close(fig)
         plt.clf()
         plt.cla()
 
-    return x_grid,y_grid
+    return x_grid_dots,y_grid_dots
        
