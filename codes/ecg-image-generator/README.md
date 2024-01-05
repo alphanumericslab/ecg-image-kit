@@ -40,14 +40,14 @@ To address these challenges, we present methods and tools for generating synthet
 
 - The `gen_ecg_images_from_data_batch.py` script generates the following outputs at every iteration:
 
-     * **Synthetic Image and GT image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. The pipeline will also generate the image without any artifacts and gridlines which can serve as a ground truth image. 
-     * **gridsize.csv:** A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
+     * **Synthetic Image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. 
+     * **gridsize.csv:**  A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
 
      ### Synthetic Images generated with PTB XL dataset
 
-     | Synthetic ECG Image with gridlines and Lead names                            | Ground truth ECG image                            |
+     |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00001_lr-0-gt.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00002_lr-0.png) |
 
 ## Generating distortionless ECG
 The basic mode of the tool generates ECG images without any distortions. The flags that can be set in this mode are as follows: 
@@ -95,7 +95,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00002_lr-0.png) |
 
 
      Adding text artifacts is a computationally expensive process and should be run with GPU machines for large scale dataset generation.
@@ -119,13 +119,13 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      ```
      | 12 lead Image with wrinkles and creases                            | 2 lead Image with wrinkles and creases                            |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/JS00001-2.png) | ![2 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/sel100-4.png) |
+     | ![12 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/JS00001-0.png) | ![2 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/sel100-4.png) |
 
      ### Wrinkle and creases distortion on synthetic images generated from the PTB-XL dataset
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00002_lr-0.png) |
 
 - ### Augmentation and noise
      Add `--augment` to the python command to add augmentations to the images. Furthermore following attributes specific to the wrinkles can be adjusted: 
@@ -153,7 +153,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00003_lr-0.png) |
 
      ### Adding Rotation and Crop Augmentation 
      ```bash
@@ -162,7 +162,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-2.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-0.png) |
 
      
 
@@ -184,7 +184,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/00001_lr-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/00003_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
 
 
 ## Generating image from a single ECG record
