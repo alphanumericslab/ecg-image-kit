@@ -49,19 +49,10 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
           iaa.ChangeColorTemperature(temperature)
           ])
     
-    file_head, file_ext = os.path.splitext(filename)
-    gt_file = file_head + '-gt.png'
-    gt_image = imageio.imread(gt_file,pilmode='RGB')
-    
-    gt_images = [gt_image]
-
-    seq_gt = iaa.Sequential([
-          iaa.Affine(rotate=rot),
-          iaa.Crop(percent=crop_sample)
-          ])
+   
     #Apply the sequential transform
     images_aug = seq(images=images)
-    gt_images_aug = seq_gt(images=gt_images)
+
     if(bbox):
         images_aug_boxed = seq(images=images_boxed)
         plt.imsave(fname=boxed_file,arr=images_aug_boxed[0])
@@ -69,8 +60,6 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     f = os.path.join(output_directory,tail)
     plt.imsave(fname=f,arr=images_aug[0])
     
-    f = os.path.join(file_head + '-gt.png')
-    plt.imsave(fname=f,arr=gt_images_aug[0])
 
     return f
 

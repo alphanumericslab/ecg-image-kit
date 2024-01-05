@@ -144,8 +144,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         name, ext = os.path.splitext(full_header_file)
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),is_gt=False,standard_colours=standard_colours,bbox=bbox)
-        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox =  False, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=False,x_grid=x_grid,y_grid=y_grid,is_gt=True,standard_colours=standard_colours,bbox=bbox)
+        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox)
     
         rec_head, rec_tail = os.path.split(rec_file)
 

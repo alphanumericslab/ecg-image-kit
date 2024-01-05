@@ -22,7 +22,7 @@ def get_parser():
     parser.add_argument('--num_columns',type=int,default = -1)
     parser.add_argument('--full_mode', type=str,default='random')
 
-    parser.add_argument('-l', '--link', type=str, required=False,default='https://www.physionet.org/content/ptbdb/1.0.0/')
+    parser.add_argument('-l', '--link', type=str, required=False,default='')
     parser.add_argument('-n','--num_words',type=int,required=False,default=5)
     parser.add_argument('--x_offset',dest='x_offset',type=int,default = 30)
     parser.add_argument('--y_offset',dest='y_offset',type=int,default = 30)
@@ -44,7 +44,7 @@ def get_parser():
     parser.add_argument('--random_print',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_true",default=True)
-    parser.add_argument('--store_text_bouding_box',action="store_true",default=False)
+    parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
 
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
     parser.add_argument('--deterministic_num_words',action="store_true",default=False)

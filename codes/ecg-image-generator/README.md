@@ -64,7 +64,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 - `--random_print`: Add printed text to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_print` $\in$ [0, 1].
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0. Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
-- `--store_text_bouding_box`: Store bounding box coordinates in a text file in the folder output_directory/text_bouding_box; default: False, 
+- `--store_text_bouding_box`: Store bounding box coordinates in a text file in the folder output_directory/text_bouding_box; default: False.
 
 
 ## Adding distortions to the synethic images
