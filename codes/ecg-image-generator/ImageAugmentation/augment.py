@@ -26,7 +26,6 @@ def get_parser():
     return parser
 
 # Main function for running augmentations
-#def run(args):
 def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False):
     filename = input_file
     #Number of files in input directory
@@ -74,5 +73,4 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     plt.imsave(fname=f,arr=gt_images_aug[0])
 
     return f
-#if __name__=='__main__':
-#    run(get_parser().parse_args(sys.argv[1:]))
+

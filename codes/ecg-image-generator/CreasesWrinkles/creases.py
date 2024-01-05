@@ -261,9 +261,6 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
         wrinklesImg = wrinklesImg.astype("float32") / 255.0
 
     img_path = filename
-                # read ecg input image and convert to float in range 0 to 1
-                #if(cv2.imread(img_path)==None):
-                    #continue
     img = cv2.imread(img_path).astype("float32") / 255.0
     if(bbox):
         img_boxed = cv2.imread(boxed_file).astype("float32") / 255.0
@@ -357,6 +354,3 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
         cv2.imwrite(boxed_file,img_boxed)
     return filename
     
-
-#if __name__=='__main__':
-#    run(get_parser().parse_args(sys.argv[1:]))

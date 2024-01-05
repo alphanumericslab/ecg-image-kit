@@ -203,7 +203,6 @@ def ecg_plot(
 
     #Mark grid based on whether we want black and white or colour
 
-    #To do: Define some standard colours, and some non standard colours. Select them randomly
     if (style == 'bw'):
         color_major = (0.4,0.4,0.4)
         color_minor = (0.75, 0.75, 0.75)
@@ -481,7 +480,6 @@ def ecg_plot(
                 plt.clf()
                 plt.cla()
 
-    #To do: Pad only up and down 
     if pad_inches!=0:
         if(is_gt):
             ecg_image = Image.open(os.path.join(output_dir,tail+'-gt.png'))
