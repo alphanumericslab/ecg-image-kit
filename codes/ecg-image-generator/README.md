@@ -42,8 +42,6 @@ To address these challenges, we present methods and tools for generating synthet
 
      * **Synthetic Image and GT image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. The pipeline will also generate the image without any artifacts and gridlines which can serve as a ground truth image. 
      * **gridsize.csv:** A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
-     * **text_bouding_box text file:** Text file with bouding box information (Format : x1, y2, x2, y1) along with the text.
-
 
      ### Synthetic Images generated with PTB XL dataset
 
@@ -66,6 +64,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 - `--random_print`: Add printed text to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_print` $\in$ [0, 1].
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0. Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
+- `--store_text_bouding_box`: Store bounding box coordinates in a text file in the folder output_directory/text_bouding_box; default: False, 
 
 
 ## Adding distortions to the synethic images
@@ -81,7 +80,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      - `--deterministic_offset`: Use the provided offset parameters deterministically. If not, takes the offset parameters as a range by which we can offset the text; default: False
      - `--deterministic_num_words`: Uses the provided number of words deterministically. If False, it takes the number of words as a range and adds random number of words; default: False
      - `--deterministic_hw_size`: Uses a fixed handwriting size for the handwritten text artifacts added; default: False
-
+     
      Example: 
 
      ```bash
