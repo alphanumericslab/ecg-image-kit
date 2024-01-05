@@ -45,10 +45,10 @@ def get_parser():
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_true",default=True)
 
-
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
     parser.add_argument('--deterministic_num_words',action="store_true",default=False)
     parser.add_argument('--deterministic_hw_size',action="store_true",default=False)
+    parser.add_argument('--deterministic_offset',action="store_true",default=False)
 
     parser.add_argument('--deterministic_angle',action="store_true",default=False)
     parser.add_argument('--deterministic_vertical',action="store_true",default=False)
