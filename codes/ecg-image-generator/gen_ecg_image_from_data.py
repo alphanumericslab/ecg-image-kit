@@ -71,7 +71,6 @@ def get_parser():
 def writeCSV(args):
     csv_file_path = os.path.join(args.output_directory,'Coordinates.csv')
     if os.path.isfile(csv_file_path) == False:
-        
         with open (csv_file_path,'a') as ground_truth_file:
                 writer = csv.writer(ground_truth_file)
                 if args.start_index != -1:
@@ -87,25 +86,19 @@ def writeCSV(args):
 def run_single_file(args):  
         if args.seed != -1:
             random.seed(args.seed)
-        writeCSV(args)      
-        
+
         filename = args.input_file
         header = args.header_file
         resolution = random.choice(range(50,args.resolution+1)) if (args.random_resolution) else args.resolution
         padding = random.choice(range(0,args.pad_inches+1)) if (args.random_padding) else args.pad_inches
         
-        if(args.bbox):
-            padding = 0
-            resolution = args.resolution
-        
         papersize = ''
-        lead = True if (args.deterministic_lead) else False
+        lead = args.deterministic_lead
 
         bernoulli_dc = bernoulli(args.random_dc)
         bernoulli_bw = bernoulli(args.random_bw)
         bernoulli_grid = bernoulli(args.random_grid_present)
         bernoulli_add_print = bernoulli(args.random_print)
-
         
         font = os.path.join('Fonts',random.choice(os.listdir("Fonts")))
         
