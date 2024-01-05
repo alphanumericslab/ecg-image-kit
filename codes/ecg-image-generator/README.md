@@ -75,7 +75,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
+     | ![Sythentic ECG image](./SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](./SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
@@ -223,7 +223,7 @@ Average computational time for generating an ECG image of size 2200 X 1700 pixel
 
 |  Steps | Time taken by each step per image (in seconds) |
 | ------------- | ------------- |
-| Distortion less ECG  | 0.72 |
+| Distortion less ECG  | 0.72 |m
 | Distortion less ECG with printed text  | 0.87  |
 | ECG with Hand written text distortion | 6.25 |
 | ECG with Creases and Wrinkles distortions | 0.92 |
