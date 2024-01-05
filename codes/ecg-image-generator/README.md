@@ -41,13 +41,13 @@ To address these challenges, we present methods and tools for generating synthet
 - The `gen_ecg_images_from_data_batch.py` script generates the following outputs at every iteration:
 
      * **Synthetic Image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. 
-     * **gridsize.csv:**  A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
+     * **Text and lead bounding box (Optional)**  A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
 
      ### Synthetic Images generated with PTB XL dataset
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00002_lr-0.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
 
 ## Generating distortionless ECG
 The basic mode of the tool generates ECG images without any distortions. The flags that can be set in this mode are as follows: 
@@ -64,7 +64,21 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 - `--random_print`: Add printed text to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_print` $\in$ [0, 1].
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0. Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
-- `--store_text_bouding_box`: Store bounding box coordinates in a text file in the folder output_directory/text_bouding_box; default: False.
+- `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
+- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
+
+     ```bash
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_print 0.8 --random_dc 0.5
+     ```
+
+     ### Synthetic Images generated with PTB XL dataset
+
+     |                           |                             |
+     | ----------------------------------- | ----------------------------------- |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
+
+     *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
+
 
 
 ## Adding distortions to the synethic images
