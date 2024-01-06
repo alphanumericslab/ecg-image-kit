@@ -184,8 +184,6 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ----------------------------------- | ----------------------------------- |
      | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-0.png) |
 
-     
-
 
 - ### Adding all the distortions together:
 
@@ -206,6 +204,17 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ----------------------------------- | ----------------------------------- |
      | ![12 lead Image with handwritten text](SampleData/DistortionData/00003_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
 
+     Example:
+
+     ```
+     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --deterministic_lead --random_print 1 -se 20 --store_text_bounding_box  --resolution 300 --random_padding --pad_inches 1 --bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45
+     ```
+
+     |                            |                             |
+     | ----------------------------------- | ----------------------------------- |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/bbox/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/bbox/00002_lr-0.png) |
+
+     *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
 ## Generating image from a single ECG record
 - To provide more flexibility, we also allow users to generate synthetic ECG image from a single ECG record from a give index. The start index should be in the range: [0, len(signal))
