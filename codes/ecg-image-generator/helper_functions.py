@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import wfdb
+from imgaug import augmenters as iaa
+from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
 def find_records(folder, output_dir):
     header_files = list()
@@ -188,6 +190,51 @@ def standardize_leads(full_leads):
                  full_leads_array[i] = 'aVF'
     return full_leads_array
 
+def read_bounding_box_txt(filename):
+    bbs = []
+
+    with open(filename, 'r') as text_file:
+        lines = text_file.readlines()
+    
+    for i, line in enumerate(lines):
+        line = line.split('\n')[0]
+        
+        parts = line.split(',')
+        x1 = float(parts[0])
+        y1 = float(parts[1])
+        x2 = float(parts[2])
+        y2 = float(parts[3])
+        try:
+           label = float(parts[4])
+        except ValueError:
+            label = str(parts[4])
+
+        box = BoundingBox(x1=x1, y1=y1, x2=x2, y2=y2, label=label)
+        bbs.append(box)
+
+    return bbs
+
+def write_bounding_box_txt(bboxes, filename):
+    with open(filename, 'w') as text_file:
+        for i in range(len(bboxes)):
+            box = bboxes.bounding_boxes[i]
+            x1 = box.x1
+            y1 = box.y1
+            x2 = box.x2
+            y2 = box.y2
+            label = box.label
+            text_file.write(str(x1))
+            text_file.write(',')
+            text_file.write(str(y1))
+            text_file.write(',')
+            text_file.write(str(x2))
+            text_file.write(',')
+            text_file.write(str(y2))
+            text_file.write(',')
+            text_file.write(str(label))
+            text_file.write('\n')
+
+
 def convert_mm_to_volts(mm):
     return float(mm/10)
 
@@ -199,3 +246,4 @@ def convert_inches_to_volts(inches):
 
 def convert_inches_to_seconds(inches):
     return float(inches*1.016)
+

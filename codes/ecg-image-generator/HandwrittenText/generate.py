@@ -256,19 +256,6 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
         img_final.save(os.path.join(output_dir,tail))
 
         #Load the ecg image
-        if(bbox):
-            img_ecg_boxed = Image.open(boxed_file)
-            #Convert from RGBA to RGB
-            img_ecg_boxed = img_ecg_boxed.convert('RGB')
-            img_ecg_boxed = np.asarray(img_ecg_boxed).copy()
-            #Shift the handwritten text by specified offset
-            img_cropped_boxed = img_ecg_boxed[x_offset:img_handwritten.shape[0]+x_offset,y_offset:img_handwritten.shape[1]+y_offset,:img_handwritten.shape[2]] * img_handwritten
-            #Apply cropped image
-            img_ecg_boxed[x_offset:img_handwritten.shape[0]+x_offset,y_offset:img_handwritten.shape[1]+y_offset,:img_handwritten.shape[2]] = img_cropped_boxed
-            #Save final image
-            img_final_boxed = Image.fromarray(img_ecg_boxed)
-            img_final_boxed.save(boxed_file)
-
         plt.close('all')
         plt.close(fig)
         plt.clf()

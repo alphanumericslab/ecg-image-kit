@@ -3,6 +3,7 @@ from PIL import Image
 import argparse
 import imgaug as ia
 from imgaug import augmenters as iaa
+from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 import numpy as np
 import matplotlib.pyplot as plt
 import os, sys, argparse
@@ -13,6 +14,7 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import time
 import random
+from helper_functions import read_bounding_box_txt, write_bounding_box_txt
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -26,17 +28,30 @@ def get_parser():
     return parser
 
 # Main function for running augmentations
-def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False):
+def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False):
     filename = input_file
-    #Number of files in input directory
-    image_path = filename
-    if(bbox):
-        boxed_file_head, boxed_file_ext = os.path.splitext(filename)
-        boxed_file = boxed_file_head + '-boxed.png'
-        image_boxed = imageio.imread(boxed_file,pilmode='RGB')
-        images_boxed = [image_boxed]
+    image = Image.open(filename)
+    
+    image = np.array(image)
+    
+    lead_bbs = []
+    leadNames_bbs = []
+    
+    if bbox:
+        head, tail = os.path.split(filename)
+        f, extn = os.path.splitext(tail)
+        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
+        lead_bbs = read_bounding_box_txt(txt_file)
+        lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
 
-    image = imageio.imread(image_path,pilmode='RGB')
+    if store_text_bounding_box:
+        
+        head, tail = os.path.split(filename)
+        f, extn = os.path.splitext(tail)
+        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
+        leadNames_bbs = read_bounding_box_txt(txt_file)
+        leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
+       
     
     images = [image]
     rot = random.randint(-rotate, rotate)
@@ -49,17 +64,35 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
           iaa.ChangeColorTemperature(temperature)
           ])
     
+    seq_bbox = iaa.Sequential([
+          iaa.Affine(rotate=-rot),
+          iaa.Crop(percent=crop_sample)
+          ])
    
-    #Apply the sequential transform
     images_aug = seq(images=images)
 
-    if(bbox):
-        images_aug_boxed = seq(images=images_boxed)
-        plt.imsave(fname=boxed_file,arr=images_aug_boxed[0])
+    if bbox:
+        temp, augmented_lead_bbs = seq_bbox(images=images, bounding_boxes=lead_bbs)
+    
+    if store_text_bounding_box:
+        temp, augmented_leadName_bbs = seq_bbox(images=images, bounding_boxes=leadNames_bbs)
+
     head, tail = os.path.split(filename)
+
     f = os.path.join(output_directory,tail)
     plt.imsave(fname=f,arr=images_aug[0])
     
+    if bbox:
+        head, tail = os.path.split(filename)
+        f, extn = os.path.splitext(tail)
+        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
+        write_bounding_box_txt(augmented_lead_bbs, txt_file)
+
+    if store_text_bounding_box:
+        head, tail = os.path.split(filename)
+        f, extn = os.path.splitext(tail)
+        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
+        write_bounding_box_txt(augmented_leadName_bbs, txt_file)
 
     return f
 

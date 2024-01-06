@@ -300,8 +300,12 @@ def ecg_plot(
                     if (store_text_bbox):
                         renderer1 = fig.canvas.get_renderer()
                         transf = ax.transData.inverted()
-                        bb = t1.get_window_extent()                                                
-                        text_bbox.append([bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi, bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi, leadName])
+                        bb = t1.get_window_extent()    
+                        x1 = bb.x0*resolution/fig.dpi      
+                        y1 = bb.y0*resolution/fig.dpi   
+                        x2 = bb.x1*resolution/fig.dpi     
+                        y2 = bb.y1*resolution/fig.dpi              
+                        text_bbox.append([x1, y1, x2, y2, leadName])
                         
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
@@ -371,7 +375,11 @@ def ecg_plot(
                 renderer1 = fig.canvas.get_renderer()
                 transf = ax.transData.inverted()
                 bb = t1.get_window_extent(renderer = fig.canvas.renderer)
-                text_bbox.append([bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi, bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi, leadName])
+                x1 = bb.x0*resolution/fig.dpi      
+                y1 = bb.y0*resolution/fig.dpi   
+                x2 = bb.x1*resolution/fig.dpi     
+                y2 = bb.y1*resolution/fig.dpi              
+                text_bbox.append([x1, y1, x2, y2, leadName])
                 
 
         if(show_dc_pulse):
@@ -457,7 +465,7 @@ def ecg_plot(
                     l[1] += top
                     l[3] += top
 
-                for val in l:
+                for val in l[:4]:
                     f.write(str(val))
                     f.write(',')
                 f.write(str(l[4]))
@@ -474,7 +482,7 @@ def ecg_plot(
                     l[1] += top
                     l[3] += top
 
-                for val in l:
+                for val in l[:4]:
                     f.write(str(val))
                     f.write(',')
                 f.write(str(l[4]))

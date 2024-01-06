@@ -248,9 +248,6 @@ def getCoords(angle,n,hh,ww):
 #Main fnction to apply wrinkles and creases
 def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,crease_angle=0,num_creases_vertically=3,num_creases_horizontally=2,bbox=False):
     filename = input_file
-    if(bbox):
-        boxed_file_head,boxed_file_tail = os.path.splitext(filename) 
-        boxed_file = boxed_file_head + '-boxed.png'
 
     if(ifWrinkles):
     #Seed with a different selection of a wrinkle image
@@ -262,8 +259,7 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
 
     img_path = filename
     img = cv2.imread(img_path).astype("float32") / 255.0
-    if(bbox):
-        img_boxed = cv2.imread(boxed_file).astype("float32") / 255.0
+    
     hh, ww = img.shape[:2]
 
     if ifWrinkles:
@@ -324,8 +320,7 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
         folds_creases = cv2.cvtColor(folds_creases,cv2.COLOR_GRAY2BGR)
         #Apply folds and crease mask
         img = (img*folds_creases)
-        if(bbox):
-            img_boxed = (img_boxed*folds_creases)
+        
             
     # If wrinkles need to be added, add the wrinkles mask
     if ifWrinkles:
@@ -340,17 +335,10 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
         high = 1 - 2.0 * (1-img) * (1-transform)
         img = low*thresh_inv + high*thresh
 
-        if(bbox):
-            low = 2.0 * img_boxed * transform
-            high = 1 - 2.0 * (1-img_boxed) * (1-transform)
-            img_boxed = low*thresh_inv + high*thresh
-            
     img = ( 255 * img ).clip(0, 255).astype(np.uint8)
-    if(bbox):
-        img_boxed = ( 255 * img_boxed ).clip(0, 255).astype(np.uint8)
+   
     # save results
     cv2.imwrite(filename, img)
-    if(bbox):
-        cv2.imwrite(boxed_file,img_boxed)
+    
     return filename
     
