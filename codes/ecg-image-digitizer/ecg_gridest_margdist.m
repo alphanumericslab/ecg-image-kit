@@ -1,4 +1,4 @@
-function [grid_size_hor, grid_size_ver, grid_spacing_hor_all_seg, grid_spacing_ver_all_seg] = ecg_gridest_margdist(img, varargin)
+function [grid_size_hor, grid_size_ver, peak_gaps_hor, peak_gaps_ver, peak_amps_hor, peak_amps_ver] = ecg_gridest_margdist(img, varargin)
 % ecg_gridest_margdist Estimates grid size in ECG images.
 %
 % This function analyzes an ECG image to estimate the grid size in both
@@ -71,6 +71,29 @@ if ~isfield(params, 'apply_edge_detection') || isempty(params.apply_edge_detecti
     params.apply_edge_detection = false; % detect grid on edge detection outputs
 end
 
+if ~isfield(params, 'cluster_peaks') || isempty(params.cluster_peaks)
+    params.cluster_peaks = true; % cluster the marginal histogram peaks or not
+end
+
+if params.cluster_peaks
+    if ~isfield(params, 'max_clusters') || isempty(params.max_clusters)
+        params.max_clusters = 3; % number of clusters
+    end
+
+    if ~isfield(params, 'cluster_selection_method') || isempty(params.cluster_selection_method)
+        params.cluster_selection_method = 'GAP_MIN_VAR'; % method for selecting clusters: 'GAP_MIN_VAR', 'MAX_AMP_PEAKS'
+    end
+
+end
+
+if ~isfield(params, 'avg_quartile') || isempty(params.avg_quartile)
+    params.avg_quartile = 50.0; % the middle quartile used for averaging the estimated grid gaps
+end
+
+if params.avg_quartile > 100.0
+    error('avg_quartile parameter must be between 0 and 100.0');
+end
+
 if params.apply_edge_detection
     if ~isfield(params, 'post_edge_det_gauss_filt_std') || isempty(params.post_edge_det_gauss_filt_std)
         params.post_edge_det_gauss_filt_std = 0.01; % post edge detection line smoothing
@@ -100,11 +123,11 @@ if ~isfield(params, 'hist_grid_det_method') || isempty(params.hist_grid_det_meth
 end
 
 if ~isfield(params, 'min_grid_resolution') || isempty(params.min_grid_resolution)
-    params.min_grid_resolution = 3; % in pixels
+    params.min_grid_resolution = 1; % in pixels
 end
 
 if ~isfield(params, 'min_grid_peak_prom_prctile') || isempty(params.min_grid_peak_prom_prctile)
-    params.min_grid_peak_prom_prctile = 25;
+    params.min_grid_peak_prom_prctile = 2;
 end
 
 if ~isfield(params, 'detailed_plots') || isempty(params.detailed_plots)
@@ -193,37 +216,108 @@ switch params.hist_grid_det_method
         end
 end
 
-grid_spacing_hor_all_seg = zeros(1, size(segments_stacked, 3));
-grid_spacing_ver_all_seg = zeros(1, size(segments_stacked, 3));
+% grid_spacing_hor_all_seg = zeros(1, size(segments_stacked, 3));
+% grid_spacing_ver_all_seg = zeros(1, size(segments_stacked, 3));
+peak_amps_hor = [];
+peak_gaps_hor = [];
+peak_amps_ver = [];
+peak_gaps_ver = [];
 for k = 1 : size(segments_stacked, 3)
     hist_hor = 1.0 - mean(segments_stacked(:, :, k), 2);
     min_grid_peak_prominence = prctile(hist_hor, params.min_grid_peak_prom_prctile) - min(hist_hor);
-    [~, I_peaks_hor] = findpeaks(hist_hor, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
-    grid_spacing_hor_all_seg(k) = mean(diff(I_peaks_hor));
+    [pk_amps_hor, I_pk_hor] = findpeaks(hist_hor, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
+    if length(pk_amps_hor) > 1
+        peak_amps_hor = cat(1, peak_amps_hor, pk_amps_hor(2:end));
+        peak_gaps_hor = cat(1, peak_gaps_hor, diff(I_pk_hor));
+    end
 
-    hist_ver = 1.0 - mean(segments_stacked(:, :, k), 1);
+    hist_ver = 1.0 - mean(segments_stacked(:, :, k), 1)';
     min_grid_peak_prominence = prctile(hist_ver, params.min_grid_peak_prom_prctile) - min(hist_ver);
-    [~, I_peaks_ver] = findpeaks(hist_ver, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
-    grid_spacing_ver_all_seg(k) = mean(diff(I_peaks_ver));
-
-    if params.detailed_plots > 1
-        figure
-        hold on
-        nn = 1 : length(hist_hor);
-        plot(nn, hist_hor)
-        plot(nn(I_peaks_hor), peaks_hor, 'ro')
-        grid
-
-        figure
-        hold on
-        nn = 1 : length(hist_ver);
-        plot(nn, hist_ver)
-        plot(nn(I_peaks_ver), peaks_ver, 'ro')
-        grid
+    [pk_amps_ver, I_pk_ver] = findpeaks(hist_ver, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
+    if length(pk_amps_ver) > 1
+        peak_amps_ver = cat(1, peak_amps_ver, pk_amps_ver(2:end));
+        peak_gaps_ver = cat(1, peak_gaps_ver, diff(I_pk_ver));
     end
 end
-grid_size_hor = median(grid_spacing_hor_all_seg);
-grid_size_ver = median(grid_spacing_ver_all_seg);
+
+if params.cluster_peaks == false
+    peak_gaps_prctiles = prctile(peak_gaps_hor, [50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
+    grid_size_hor = mean(peak_gaps_hor(peak_gaps_hor >= peak_gaps_prctiles(1) & peak_gaps_hor <= peak_gaps_prctiles(2)), 'omitnan');
+
+    peak_gaps_prctiles = prctile(peak_gaps_ver, [50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
+    grid_size_ver = mean(peak_gaps_ver(peak_gaps_ver >= peak_gaps_prctiles(1) & peak_gaps_ver <= peak_gaps_prctiles(2)), 'omitnan');
+else
+    eval_kmeans = @(X,K)(kmeans(X, K));
+    klist = 1 : params.max_clusters;
+
+    eva = evalclusters([peak_amps_hor(:), peak_gaps_hor(:)], eval_kmeans, 'CalinskiHarabasz', 'klist', klist);
+    IDX_hor = kmeans(peak_amps_hor(:), eva.OptimalK);
+    switch params.cluster_selection_method % method for selecting clusters: 'GAP_MIN_VAR', 'MAX_AMP_PEAKS'
+        case 'GAP_MIN_VAR'
+            peak_gaps_per_cluster = zeros(1, eva.OptimalK);
+            for cc = 1 : eva.OptimalK
+                peak_gaps_per_cluster(cc) = std(peak_gaps_hor(IDX_hor == cc));
+            end
+            [~, selected_cluster_hor] = min(peak_gaps_per_cluster);
+        case 'MAX_AMP_PEAKS'
+            peak_amps_per_cluster = zeros(1, eva.OptimalK);
+            for cc = 1 : eva.OptimalK
+                peak_amps_per_cluster(cc) = median(peak_amps_hor(IDX_hor == cc));
+            end
+            [~, selected_cluster_hor] = max(peak_amps_per_cluster);
+        otherwise
+            error('undefined cluster selection method')
+    end
+    peak_gaps_selected_cluster = peak_gaps_hor(IDX_hor == selected_cluster_hor);
+    peak_gaps_prctiles = prctile(peak_gaps_selected_cluster,[50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
+    grid_size_hor = mean(peak_gaps_selected_cluster(peak_gaps_selected_cluster >= peak_gaps_prctiles(1) & peak_gaps_selected_cluster <= peak_gaps_prctiles(2)), 'omitnan');
+
+    eva = evalclusters([peak_amps_ver(:), peak_gaps_ver(:)], eval_kmeans, 'CalinskiHarabasz', 'klist', klist);
+    IDX_ver = kmeans(peak_amps_ver(:), eva.OptimalK);
+    switch params.cluster_selection_method % method for selecting clusters: 'GAP_MIN_VAR', 'MAX_AMP_PEAKS'
+        case 'GAP_MIN_VAR'
+            peak_gaps_per_cluster = zeros(1, eva.OptimalK);
+            for cc = 1 : eva.OptimalK
+                peak_gaps_per_cluster(cc) = std(peak_gaps_ver(IDX_ver == cc));
+            end
+            [~, selected_cluster_ver] = min(peak_gaps_per_cluster);
+        case 'MAX_AMP_PEAKS'
+            peak_amps_per_cluster = zeros(1, eva.OptimalK);
+            for cc = 1 : eva.OptimalK
+                peak_amps_per_cluster(cc) = median(peak_amps_ver(IDX_ver == cc));
+            end
+            [~, selected_cluster_ver] = max(peak_amps_per_cluster);
+        otherwise
+            error('undefined cluster selection method')
+    end
+    peak_gaps_selected_cluster = peak_gaps_ver(IDX_ver == selected_cluster_ver);
+    peak_gaps_prctiles = prctile(peak_gaps_selected_cluster,[50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
+    grid_size_ver = mean(peak_gaps_selected_cluster(peak_gaps_selected_cluster >= peak_gaps_prctiles(1) & peak_gaps_selected_cluster <= peak_gaps_prctiles(2)), 'omitnan');
+
+end
+% if params.detailed_plots > 1
+%     figure
+%     hold on
+%     nn = 1 : length(hist_hor);
+%     plot(nn, hist_hor)
+%     plot(nn(I_peaks_hor), peak_amps_hor, 'ro')
+%     if params.cluster_peaks == true
+%         plot(nn(I_peaks_hor(IDX_hor == selected_cluster_hor)), peak_amps_hor(IDX_hor == selected_cluster_hor), 'gx', 'markersize', 12)
+%     end
+%     grid
+%
+%     figure
+%     hold on
+%     nn = 1 : length(hist_ver);
+%     plot(nn, hist_ver)
+%     plot(nn(I_peaks_ver), peak_amps_ver, 'ro')
+%     if params.cluster_peaks == true
+%         plot(nn(I_peaks_ver(IDX_ver == selected_cluster_ver)), peak_amps_ver(IDX_ver == selected_cluster_ver), 'gx', 'markersize', 12)
+%     end
+%     grid
+% end
+% grid_size_hor = median(grid_spacing_hor_all_seg, 'omitnan');
+% grid_size_ver = median(grid_spacing_ver_all_seg, 'omitnan');
 
 
 %% Plot results
@@ -245,10 +339,10 @@ if params.detailed_plots > 0
 
     figure
     subplot(121)
-    histogram(grid_spacing_hor_all_seg)
+    histogram(peak_gaps_hor)
     title('Histogram of horizontal grid spacing estimate of all segments')
 
     subplot(122)
-    histogram(grid_spacing_ver_all_seg)
+    histogram(peak_gaps_ver)
     title('Histogram of vertical grid spacing estimate of all segments')
 end
