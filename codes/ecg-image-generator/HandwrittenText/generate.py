@@ -164,6 +164,8 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
         doc = nlp(medicalText)
     else:
         #Extract medical terms from .txt files
+        if link == '':
+            link = 'HandwrittenText/Biomedical.txt'
         with open(link, 'r') as f:
         #Extract lines from the file
             text = ""
@@ -275,5 +277,3 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
         os.remove('HandwrittenText.png')
         outfile = os.path.join(output_dir,tail)
         return outfile
-#if __name__=='__main__':
-#    words=run(get_parser().parse_args(sys.argv[1:]))

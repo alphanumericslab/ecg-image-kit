@@ -45,7 +45,8 @@ def get_parser():
     parser.add_argument('--random_print',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_true",default=True)
-
+    parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
+    parser.add_argument('--store_config',action="store_true",default=False)
 
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
     parser.add_argument('--deterministic_num_words',action="store_true",default=False)
@@ -71,7 +72,6 @@ def get_parser():
 def writeCSV(args):
     csv_file_path = os.path.join(args.output_directory,'Coordinates.csv')
     if os.path.isfile(csv_file_path) == False:
-        
         with open (csv_file_path,'a') as ground_truth_file:
                 writer = csv.writer(ground_truth_file)
                 if args.start_index != -1:
@@ -87,25 +87,19 @@ def writeCSV(args):
 def run_single_file(args):  
         if args.seed != -1:
             random.seed(args.seed)
-        writeCSV(args)      
-        
+
         filename = args.input_file
         header = args.header_file
         resolution = random.choice(range(50,args.resolution+1)) if (args.random_resolution) else args.resolution
         padding = random.choice(range(0,args.pad_inches+1)) if (args.random_padding) else args.pad_inches
         
-        if(args.bbox):
-            padding = 0
-            resolution = args.resolution
-        
         papersize = ''
-        lead = True if (args.deterministic_lead) else False
+        lead = args.deterministic_lead
 
         bernoulli_dc = bernoulli(args.random_dc)
         bernoulli_bw = bernoulli(args.random_bw)
         bernoulli_grid = bernoulli(args.random_grid_present)
         bernoulli_add_print = bernoulli(args.random_print)
-
         
         font = os.path.join('Fonts',random.choice(os.listdir("Fonts")))
         
@@ -114,7 +108,7 @@ def run_single_file(args):
         else:
             standard_colours = False
 
-        out_array = get_paper_ecg(input_file=filename,header_file=header, start_index=args.start_index, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.bbox, columns = args.num_columns, seed=args.seed)
+        out_array = get_paper_ecg(input_file=filename,header_file=header, start_index=args.start_index, store_text_bbox=args.store_text_bounding_box, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.bbox, columns = args.num_columns, seed=args.seed)
         
         for out in out_array:
             if(args.fully_random):

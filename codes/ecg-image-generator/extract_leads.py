@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Load libraries.
 import os, sys, argparse
+import json
 import numpy as np
 from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
@@ -137,6 +138,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         grid = show_grid.rvs()
         print_txt = add_print.rvs()
 
+        json_dict = {}
         grid_colour = 'colour'
         if(bw):
             grid_colour = 'bw'
@@ -144,15 +146,24 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         name, ext = os.path.splitext(full_header_file)
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),is_gt=False,standard_colours=standard_colours,bbox=bbox)
-        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox =  False, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=False,x_grid=x_grid,y_grid=y_grid,is_gt=True,standard_colours=standard_colours,bbox=bbox)
-    
+        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox)
+
         rec_head, rec_tail = os.path.split(rec_file)
+
+        json_dict["x_grid"] = x_grid
+        json_dict["y_grid"] = y_grid
+        if store_text_bbox:
+            json_dict["text_bounding_box_file"] = os.path.join(output_directory, 'text_bounding_box', rec_tail + '.txt')
+        else:
+            json_dict["text_bounding_box_file"] = ""
+        if bbox:
+            json_dict["lead_bounding_box_file"] = os.path.join(output_directory, 'lead_bounding_box', rec_tail + '.txt')
+        else:
+            json_dict["lead_bounding_box_file"] = ""
 
         if(print_txt):
             img_ecg = Image.open(os.path.join(output_directory,rec_tail+'.png'))
-            if(bbox):
-                img_ecg_boxed = Image.open(os.path.join(output_directory,rec_tail+'-boxed.png'))
+            
             img = Image.open(template_name)
             img = img.resize((int(img_ecg.size[0]/3),int(img_ecg.size[0]*img.size[1]/(3*img.size[0]))))
             img = np.asarray(img).copy()
@@ -160,21 +171,21 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
             img[img==255] = 1
             img =  np.asarray(img)
             img_ecg = np.asarray(img_ecg).copy()
-            if(bbox):
-                img_ecg_boxed = np.asarray(img_ecg_boxed).copy()
+            
 
             im1 = img_ecg[:img.shape[0],:img.shape[1],:img.shape[2]] * img
             img_ecg[:img.shape[0],:img.shape[1],:img.shape[2]] = im1
             im = Image.fromarray(img_ecg)
             im.save(os.path.join(output_directory,rec_tail+'.png'))
 
-            if(bbox):
-                im2 = img_ecg_boxed[:img.shape[0],:img.shape[1],:img.shape[2]] * img
-                img_ecg_boxed[:img.shape[0],:img.shape[1],:img.shape[2]] = im2
-                img_boxed = Image.fromarray(img_ecg_boxed)
-                img_boxed.save(os.path.join(output_directory,rec_tail + '-boxed'+'.png'))
         outfile = os.path.join(output_directory,rec_tail+'.png')
         
+        json_object = json.dumps(json_dict, indent=4)
+ 
+        # Writing to sample.json
+        with open(os.path.join(output_directory,rec_tail+'.json'), "w") as f:
+            f.write(json_object)
+
         outfile_array.append(outfile)
 
     os.remove(template_name)

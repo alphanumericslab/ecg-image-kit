@@ -40,16 +40,14 @@ To address these challenges, we present methods and tools for generating synthet
 
 - The `gen_ecg_images_from_data_batch.py` script generates the following outputs at every iteration:
 
-     * **Synthetic Image and GT image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. The pipeline will also generate the image without any artifacts and gridlines which can serve as a ground truth image. 
-     * **gridsize.csv:** A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
-     * **text_bouding_box text file:** Text file with bouding box information (Format : x1, y2, x2, y1) along with the text.
-
+     * **Synthetic Image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. 
+     * **Text and lead bounding box (Optional)**  A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
 
      ### Synthetic Images generated with PTB XL dataset
 
-     | Synthetic ECG Image with gridlines and Lead names                            | Ground truth ECG image                            |
+     |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00001_lr-0-gt.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
 
 ## Generating distortionless ECG
 The basic mode of the tool generates ECG images without any distortions. The flags that can be set in this mode are as follows: 
@@ -66,6 +64,27 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 - `--random_print`: Add printed text to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_print` $\in$ [0, 1].
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0. Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
+- `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
+- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
+- `store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. The json file has following attributes:
+     - `x_grid`: Number of pixels per 0.2 seconds of the grid on the image.
+     - `y_grid`: Number of pixels per 0.5mV of the grid on the image.
+     - `text_bounding_box_file`: Path to the bounding boxes for the lead names if the `store_text_bouding_box` is True else ''
+     - `lead_bounding_box_file`: Path to the bounding boxes for the ECG leads if the `bbox` is True else ''.
+
+     Example: 
+     ```bash
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_print 0.8 --random_dc 0.5
+     ```
+
+     ### Synthetic Images generated with PTB XL dataset
+
+     |                           |                             |
+     | ----------------------------------- | ----------------------------------- |
+     | ![Sythentic ECG image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
+
+     *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
+
 
 
 ## Adding distortions to the synethic images
@@ -81,7 +100,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      - `--deterministic_offset`: Use the provided offset parameters deterministically. If not, takes the offset parameters as a range by which we can offset the text; default: False
      - `--deterministic_num_words`: Uses the provided number of words deterministically. If False, it takes the number of words as a range and adds random number of words; default: False
      - `--deterministic_hw_size`: Uses a fixed handwriting size for the handwritten text artifacts added; default: False
-
+    
      Example: 
 
      ```bash
@@ -96,7 +115,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00002_lr-0.png) |
 
 
      Adding text artifacts is a computationally expensive process and should be run with GPU machines for large scale dataset generation.
@@ -120,13 +139,13 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      ```
      | 12 lead Image with wrinkles and creases                            | 2 lead Image with wrinkles and creases                            |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/JS00001-2.png) | ![2 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/sel100-4.png) |
+     | ![12 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/JS00001-0.png) | ![2 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/sel100-4.png) |
 
      ### Wrinkle and creases distortion on synthetic images generated from the PTB-XL dataset
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00002_lr-0.png) |
 
 - ### Augmentation and noise
      Add `--augment` to the python command to add augmentations to the images. Furthermore following attributes specific to the wrinkles can be adjusted: 
@@ -154,7 +173,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-1.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00003_lr-0.png) |
 
      ### Adding Rotation and Crop Augmentation 
      ```bash
@@ -163,7 +182,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-2.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/JS00001-0.png) |
 
      
 
@@ -185,7 +204,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/00001_lr-1.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/00003_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
 
 
 ## Generating image from a single ECG record
@@ -210,7 +229,7 @@ Average computational time for generating an ECG image of size 2200 X 1700 pixel
 
 |  Steps | Time taken by each step per image (in seconds) |
 | ------------- | ------------- |
-| Distortion less ECG  | 0.72 |
+| Distortion less ECG  | 0.72 |m
 | Distortion less ECG with printed text  | 0.87  |
 | ECG with Hand written text distortion | 6.25 |
 | ECG with Creases and Wrinkles distortions | 0.92 |
