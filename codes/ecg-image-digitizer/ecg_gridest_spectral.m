@@ -97,11 +97,11 @@ if params.apply_edge_detection
 end
 
 if ~isfield(params, 'num_seg_hor') || isempty(params.num_seg_hor)
-    params.num_seg_hor = 4;
+    params.num_seg_hor = 5;
 end
 
 if ~isfield(params, 'num_seg_ver') || isempty(params.num_seg_ver)
-    params.num_seg_ver = 4;
+    params.num_seg_ver = 5;
 end
 
 if ~isfield(params, 'spectral_tiling_method') || isempty(params.spectral_tiling_method)

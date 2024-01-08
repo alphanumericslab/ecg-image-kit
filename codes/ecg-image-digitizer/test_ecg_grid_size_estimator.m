@@ -27,11 +27,15 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
         error(['image file ', image_fname, ' not found or readable by imread']);
     end
     
+    %% estimate grid resolution based on paper-size
+    paper_size = [11.0, 8.5];
+    [coarse_grid_size_paper_based, fine_grid_size_paper_based] = ecg_grid_size_from_paper(img, paper_size(1), 'in');
+
     %% Marginal distribution-based method
     % Setting all the parameters for ecg_gridest_margdist function
     params_margdist = struct;
     params_margdist.blur_sigma_in_inch = 1.0; % Blurring filter sigma in inches, used for shadow removal
-    params_margdist.paper_size_in_inch = [11.0, 8.5]; % Paper size in inches, used for scaling the blurring filter
+    params_margdist.paper_size_in_inch = paper_size; % Paper size in inches, used for scaling the blurring filter
     params_margdist.remove_shadows = true; % Flag to remove shadows due to photography/scanning
     params_margdist.apply_edge_detection = false; % Flag to enable or disable edge detection prior to grid detection
     params_margdist.post_edge_det_gauss_filt_std = 0.01; % Standard deviation for Gaussian filter post edge detection in inch
@@ -55,11 +59,11 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
     % Setting all the parameters for ecg_gridest_margdist function
     params_spectral = struct;
     params_spectral.blur_sigma_in_inch = 1.0; % Blurring filter sigma in inches, used for shadow removal
-    params_spectral.paper_size_in_inch = [11.0, 8.5]; % Paper size in inches, used for scaling the blurring filter
+    params_spectral.paper_size_in_inch = paper_size; % Paper size in inches, used for scaling the blurring filter
     params_spectral.remove_shadows = true; % Flag to remove shadows due to photography/scanning
     params_spectral.apply_edge_detection = false; % Flag to enable or disable edge detection prior to grid detection
     params_spectral.post_edge_det_gauss_filt_std = 0.01; % Standard deviation for Gaussian filter post edge detection in inch
-    params_spectral.sat_densities = true; % Saturate densities or not
+    params_spectral.sat_densities = false; % Saturate densities or not
     params_spectral.sat_level_upper_prctile = 99.0; % Upper percentile for saturation level post blurring
     params_spectral.sat_level_lower_prctile = 1.0; % Lower percentile for saturation level post blurring
     params_spectral.num_seg_hor = 4; % Number of horizontal segments for grid detection
@@ -70,11 +74,22 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
     params_spectral.min_grid_peak_prominence = 1.0; % minimum grid peak prominence in the spectral domain in dB
     params_spectral.detailed_plots = 1; % Flag to enable or disable detailed plotting (0 for none, 1 for end results, 2 for all figures)
     [gridsize_hor_spectral, gridsize_ver_spectral] = ecg_gridest_spectral(img, params_spectral);
-    
+
+    [~, closest_ind_hor] = min(abs(gridsize_hor_spectral - fine_grid_size_paper_based));
+    [~, closest_ind_ver] = min(abs(gridsize_ver_spectral - fine_grid_size_paper_based));
+
+    disp(['Grid resolution estimate per 0.1mV x 40ms (paper-size-based): ', num2str(fine_grid_size_paper_based) ' pixels'])
+
     disp(['Horizontal grid resolution estimate (margdist): ', num2str(gridsize_hor_margdist) ' pixels'])
     disp(['Vertical grid resolution estimate (margdist): ', num2str(gridsize_ver_margdist) ' pixels'])
+    
     disp(['Horizontal grid resolution estimate (spectral): [', num2str(gridsize_hor_spectral) '] pixels'])
     disp(['Vertical grid resolution estimate (spectral): [', num2str(gridsize_ver_spectral) '] pixels'])
+
+    disp(['Closest spectral horizontal grid resolution estimate from paper-based resolution (per 0.1mV x 40ms): ', num2str(gridsize_hor_spectral(closest_ind_hor)) ' pixels'])
+    disp(['Closest spectral vertical grid resolution estimate from paper-based resolution (per 0.1mV x 40ms): ', num2str(gridsize_ver_spectral(closest_ind_ver)) ' pixels'])
+    
     disp('---');
+
     close all
 end
