@@ -31,6 +31,7 @@ def generate_template(header_file, font_type, mode, template_file):
         attributes['Age'] = random.randint(10, 80) 
         attributes['Height'] = ''
         attributes['Weight'] = ''
+        attributes['Sex'] = ''
         
         for c in comments:
             col = c.split(':')[0]
