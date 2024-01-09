@@ -2,18 +2,24 @@ function [grid_size_hor, grid_size_ver, peak_gaps_hor, peak_gaps_ver, peak_amps_
 % ecg_gridest_margdist Estimates grid size in ECG images.
 %
 % This function analyzes an ECG image to estimate the grid size in both
-% horizontal and vertical directions.
+% horizontal and vertical directions using the average marginal pixel 
+% densities of regular or random patches of the ECG. Potential horizontal
+% and vertical grid sizes are returned for further evaluation  
 %
+% Note: This function only detects regular grids. The returned values should
+%   be evaluated based on the image DPI and ECG image style to map the grid
+%   resolutions to physical time and amplitude units.
+% 
 % Syntax:
 %   [grid_size_hor, grid_size_ver, grid_spacing_hor_all_seg, grid_spacing_ver_all_seg] = ecg_gridest_margdist(img)
 %   [grid_size_hor, grid_size_ver, grid_spacing_hor_all_seg, grid_spacing_ver_all_seg] = ecg_gridest_margdist(img, params)
 %
 % Inputs:
 %   img - A 2D matrix representing the ECG image in grayscale or RGB formats.
-%   params - (Optional) A struct containing various parameters to control
+%   params - (optional) A struct containing various parameters to control
 %            the image processing and grid detection algorithm. Default
-%            values are used if this argument is not provided. See function
-%            for details
+%            values are used if this argument is not provided or is partially
+%            provided. See function implementation for details.
 %
 % Outputs:
 %   grid_size_hor - Estimated grid size in the horizontal direction (in pixels).
@@ -49,13 +55,13 @@ function [grid_size_hor, grid_size_ver, peak_gaps_hor, peak_gaps_ver, peak_amps_
 %   2023: First release
 %
 
+%% parse algorithm parameters
 if nargin > 1
     params = varargin{1};
 else
     params = [];
 end
 
-%% algorithm parameters
 if ~isfield(params, 'blur_sigma_in_inch') || isempty(params.blur_sigma_in_inch)
     params.blur_sigma_in_inch = 1.0; % bluring filter sigma in inches
 end
@@ -99,11 +105,25 @@ if params.apply_edge_detection
         params.post_edge_det_gauss_filt_std = 0.01; % post edge detection line smoothing
     end
 
-    if ~isfield(params, 'sat_level_upper_prctile') || isempty(params.sat_level_upper_prctile)
-        params.sat_level_upper_prctile = 99.0; % upper saturation threshold after bluring
+    if ~isfield(params, 'post_edge_det_sat') || isempty(params.post_edge_det_sat)
+        params.post_edge_det_sat = true; % saturate densities or not
     end
-    if ~isfield(params, 'sat_level_lower_prctile') || isempty(params.sat_level_lower_prctile)
-        params.sat_level_lower_prctile = 1.0; % lower saturation threshold after bluring
+    if params.post_edge_det_sat
+        if ~isfield(params, 'sat_level_upper_prctile') || isempty(params.sat_level_upper_prctile)
+            params.sat_level_upper_prctile = 99.0; % upper saturation threshold after bluring
+        end
+        if ~isfield(params, 'sat_level_lower_prctile') || isempty(params.sat_level_lower_prctile)
+            params.sat_level_lower_prctile = 1.0; % lower saturation threshold after bluring
+        end
+    end
+end
+
+if ~isfield(params, 'sat_pre_grid_det') || isempty(params.sat_pre_grid_det)
+    params.sat_pre_grid_det = true; % saturate densities or not (before spectral estimation)
+end
+if params.sat_pre_grid_det
+    if ~isfield(params, 'sat_level_pre_grid_det') || isempty(params.sat_level_pre_grid_det)
+        params.sat_level_pre_grid_det = 0.7; % saturation k-sigma before grid detection
     end
 end
 
@@ -131,13 +151,13 @@ if ~isfield(params, 'min_grid_peak_prom_prctile') || isempty(params.min_grid_pea
 end
 
 if ~isfield(params, 'detailed_plots') || isempty(params.detailed_plots)
-    params.detailed_plots = 0;
+    params.detailed_plots = 0; % 0 no plots, 1 some plots, 2 all plots (for diagnosis mode only)
 end
 
 width = size(img, 2);
 height = size(img, 1);
 
-%% convert image to gray scale
+%% convert image to gray scale if in RGB
 if ndims(img) == 3
     img_gray = double(rgb2gray(img));
     img_gray = img_gray / max(img_gray(:));
@@ -160,6 +180,7 @@ switch params.remove_shadows
         img_gray_normalized = img_gray;
 
 end
+
 %% edge detection
 if params.apply_edge_detection
     % Canny edge detection
@@ -175,30 +196,36 @@ if params.apply_edge_detection
     % edges_blurred = edges_blurred / max(edges_blurred(:));
     % edges_blurred = double(edges) / max(double(edges(:)));
 
-    % saturate extreme pixels
     edges_blurred_sat = edges_blurred;
+    % saturate extreme pixels
+    if params.post_edge_det_sat
+        % upper saturation level
+        sat_level = prctile(edges_blurred(:), params.sat_level_upper_prctile);
+        I_sat = edges_blurred > sat_level;
+        edges_blurred_sat(I_sat) = sat_level;
 
-    % upper saturation level
-    sat_level = prctile(edges_blurred(:), params.sat_level_upper_prctile);
-    I_sat = edges_blurred > sat_level;
-    edges_blurred_sat(I_sat) = sat_level;
-
-    % lower saturation level
-    sat_level = prctile(edges_blurred(:), params.sat_level_lower_prctile);
-    I_sat = edges_blurred < sat_level;
-    edges_blurred_sat(I_sat) = sat_level;
-
+        % lower saturation level
+        sat_level = prctile(edges_blurred(:), params.sat_level_lower_prctile);
+        I_sat = edges_blurred < sat_level;
+        edges_blurred_sat(I_sat) = sat_level;
+    end
+    
     edges_blurred_sat = edges_blurred_sat / max(edges_blurred_sat(:));
 
     img_gray_normalized = imcomplement((edges_blurred_sat - min(edges_blurred_sat(:)))/(max(edges_blurred_sat(:)) - min(edges_blurred_sat(:))));
 end
 
-%% Horizontal/vertical histogram approach
-% estimate spectra
-seg_width = floor(width / params.num_seg_hor); % 150
-seg_height = floor(height / params.num_seg_ver); % 100
+%% image density saturation
+if params.sat_pre_grid_det
+    img_sat = tanh_sat(1.0 - img_gray_normalized(:)', params.sat_level_pre_grid_det, 'ksigma')';%imbinarize(img_gray_normalized, 'adaptive','ForegroundPolarity','dark','Sensitivity',0.4);
+    img_gray_normalized = reshape(img_sat, size(img_gray_normalized));
+end
+
+%% segmentation
+seg_width = floor(width / params.num_seg_hor);
+seg_height = floor(height / params.num_seg_ver);
 switch params.hist_grid_det_method
-    case 'REGULAR_TILING'
+    case 'REGULAR_TILING' % regular tiling across the entire image
         segments_stacked = zeros(seg_height, seg_width, params.num_seg_hor * params.num_seg_ver);
         k = 1;
         for i = 1 : params.num_seg_ver
@@ -207,7 +234,7 @@ switch params.hist_grid_det_method
                 k = k + 1;
             end
         end
-    case 'RANDOM_TILING'
+    case 'RANDOM_TILING' % random segments across the entire image
         segments_stacked = zeros(seg_height, seg_width, params.total_segments);
         for k = 1 : params.total_segments
             start_hor = randi(width - seg_width);
@@ -216,6 +243,7 @@ switch params.hist_grid_det_method
         end
 end
 
+%% horizontal/vertical histogram estimation per patch
 % grid_spacing_hor_all_seg = zeros(1, size(segments_stacked, 3));
 % grid_spacing_ver_all_seg = zeros(1, size(segments_stacked, 3));
 peak_amps_hor = [];
@@ -223,7 +251,7 @@ peak_gaps_hor = [];
 peak_amps_ver = [];
 peak_gaps_ver = [];
 for k = 1 : size(segments_stacked, 3)
-    hist_hor = 1.0 - mean(segments_stacked(:, :, k), 2);
+    hist_hor = 1.0 - mean(segments_stacked(:, :, k), 2); % marginal intensity (black and white flipped)
     min_grid_peak_prominence = prctile(hist_hor, params.min_grid_peak_prom_prctile) - min(hist_hor);
     [pk_amps_hor, I_pk_hor] = findpeaks(hist_hor, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
     if length(pk_amps_hor) > 1
@@ -231,7 +259,7 @@ for k = 1 : size(segments_stacked, 3)
         peak_gaps_hor = cat(1, peak_gaps_hor, diff(I_pk_hor));
     end
 
-    hist_ver = 1.0 - mean(segments_stacked(:, :, k), 1)';
+    hist_ver = 1.0 - mean(segments_stacked(:, :, k), 1)'; % marginal intensity (black and white flipped)
     min_grid_peak_prominence = prctile(hist_ver, params.min_grid_peak_prom_prctile) - min(hist_ver);
     [pk_amps_ver, I_pk_ver] = findpeaks(hist_ver, 'MinPeakDistance', params.min_grid_resolution, 'MinPeakProminence', min_grid_peak_prominence);
     if length(pk_amps_ver) > 1
@@ -240,26 +268,27 @@ for k = 1 : size(segments_stacked, 3)
     end
 end
 
-if params.cluster_peaks == false
+%% calculate horizontal/vertical grid sizes based on the marginal distributions with max intensity
+if params.cluster_peaks == false % direct method
     peak_gaps_prctiles = prctile(peak_gaps_hor, [50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
     grid_size_hor = mean(peak_gaps_hor(peak_gaps_hor >= peak_gaps_prctiles(1) & peak_gaps_hor <= peak_gaps_prctiles(2)), 'omitnan');
 
     peak_gaps_prctiles = prctile(peak_gaps_ver, [50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
     grid_size_ver = mean(peak_gaps_ver(peak_gaps_ver >= peak_gaps_prctiles(1) & peak_gaps_ver <= peak_gaps_prctiles(2)), 'omitnan');
-else
-    eval_kmeans = @(X,K)(kmeans(X, K));
-    klist = 1 : params.max_clusters;
+else % indirect method (cluster the local peaks) 
+    eval_kmeans = @(X,K)(kmeans(X, K)); % use kmeans clustering
+    klist = 1 : params.max_clusters; % the maximum number of clusters
 
-    eva = evalclusters([peak_amps_hor(:), peak_gaps_hor(:)], eval_kmeans, 'CalinskiHarabasz', 'klist', klist);
+    eva = evalclusters([peak_amps_hor(:), peak_gaps_hor(:)], eval_kmeans, 'CalinskiHarabasz', 'klist', klist); % use peak amps and gaps as features
     IDX_hor = kmeans(peak_amps_hor(:), eva.OptimalK);
     switch params.cluster_selection_method % method for selecting clusters: 'GAP_MIN_VAR', 'MAX_AMP_PEAKS'
-        case 'GAP_MIN_VAR'
+        case 'GAP_MIN_VAR' % select the cluster with local peaks that are most regular in their gaps (have the smallest inter-peak gap variance)
             peak_gaps_per_cluster = zeros(1, eva.OptimalK);
             for cc = 1 : eva.OptimalK
                 peak_gaps_per_cluster(cc) = std(peak_gaps_hor(IDX_hor == cc));
             end
             [~, selected_cluster_hor] = min(peak_gaps_per_cluster);
-        case 'MAX_AMP_PEAKS'
+        case 'MAX_AMP_PEAKS' % select the cluster that has the highest marginal density
             peak_amps_per_cluster = zeros(1, eva.OptimalK);
             for cc = 1 : eva.OptimalK
                 peak_amps_per_cluster(cc) = median(peak_amps_hor(IDX_hor == cc));
@@ -268,10 +297,13 @@ else
         otherwise
             error('undefined cluster selection method')
     end
+    % calculate the average of the middle of the distribution
+    % (trimmed-mean) for robustness
     peak_gaps_selected_cluster = peak_gaps_hor(IDX_hor == selected_cluster_hor);
     peak_gaps_prctiles = prctile(peak_gaps_selected_cluster,[50.0 - params.avg_quartile/2, 50.0 + params.avg_quartile/2]);
     grid_size_hor = mean(peak_gaps_selected_cluster(peak_gaps_selected_cluster >= peak_gaps_prctiles(1) & peak_gaps_selected_cluster <= peak_gaps_prctiles(2)), 'omitnan');
 
+    % repat the above steps for the vertical marginal densities
     eva = evalclusters([peak_amps_ver(:), peak_gaps_ver(:)], eval_kmeans, 'CalinskiHarabasz', 'klist', klist);
     IDX_ver = kmeans(peak_amps_ver(:), eva.OptimalK);
     switch params.cluster_selection_method % method for selecting clusters: 'GAP_MIN_VAR', 'MAX_AMP_PEAKS'
@@ -295,30 +327,33 @@ else
     grid_size_ver = mean(peak_gaps_selected_cluster(peak_gaps_selected_cluster >= peak_gaps_prctiles(1) & peak_gaps_selected_cluster <= peak_gaps_prctiles(2)), 'omitnan');
 
 end
-% if params.detailed_plots > 1
-%     figure
-%     hold on
-%     nn = 1 : length(hist_hor);
-%     plot(nn, hist_hor)
-%     plot(nn(I_peaks_hor), peak_amps_hor, 'ro')
-%     if params.cluster_peaks == true
-%         plot(nn(I_peaks_hor(IDX_hor == selected_cluster_hor)), peak_amps_hor(IDX_hor == selected_cluster_hor), 'gx', 'markersize', 12)
-%     end
-%     grid
-%
-%     figure
-%     hold on
-%     nn = 1 : length(hist_ver);
-%     plot(nn, hist_ver)
-%     plot(nn(I_peaks_ver), peak_amps_ver, 'ro')
-%     if params.cluster_peaks == true
-%         plot(nn(I_peaks_ver(IDX_ver == selected_cluster_ver)), peak_amps_ver(IDX_ver == selected_cluster_ver), 'gx', 'markersize', 12)
-%     end
-%     grid
-% end
-% grid_size_hor = median(grid_spacing_hor_all_seg, 'omitnan');
-% grid_size_ver = median(grid_spacing_ver_all_seg, 'omitnan');
 
+%{
+% plots used during development
+if params.detailed_plots > 1
+    figure
+    hold on
+    nn = 1 : length(hist_hor);
+    plot(nn, hist_hor)
+    plot(nn(I_peaks_hor), peak_amps_hor, 'ro')
+    if params.cluster_peaks == true
+        plot(nn(I_peaks_hor(IDX_hor == selected_cluster_hor)), peak_amps_hor(IDX_hor == selected_cluster_hor), 'gx', 'markersize', 12)
+    end
+    grid
+
+    figure
+    hold on
+    nn = 1 : length(hist_ver);
+    plot(nn, hist_ver)
+    plot(nn(I_peaks_ver), peak_amps_ver, 'ro')
+    if params.cluster_peaks == true
+        plot(nn(I_peaks_ver(IDX_ver == selected_cluster_ver)), peak_amps_ver(IDX_ver == selected_cluster_ver), 'gx', 'markersize', 12)
+    end
+    grid
+end
+grid_size_hor = median(grid_spacing_hor_all_seg, 'omitnan');
+grid_size_ver = median(grid_spacing_ver_all_seg, 'omitnan');
+%}
 
 %% Plot results
 if params.detailed_plots > 0
