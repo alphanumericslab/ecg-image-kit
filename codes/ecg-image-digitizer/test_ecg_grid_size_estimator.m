@@ -1,5 +1,4 @@
-% A test script for ecg_gridest_margdist and ecg_gridest_spectral - ECG grid
-% size estimation using marginal distributions and spectra of the ECG images
+% A test script for multiple ECG grid size estimation algorithms
 % 
 % Reference:
 %   Reza Sameni, 2023, ECG-Image-Kit: A toolkit for ECG image analysis.
@@ -39,9 +38,11 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
     params_margdist.remove_shadows = true; % Flag to remove shadows due to photography/scanning
     params_margdist.apply_edge_detection = false; % Flag to enable or disable edge detection prior to grid detection
     params_margdist.post_edge_det_gauss_filt_std = 0.01; % Standard deviation for Gaussian filter post edge detection in inch
-    params_margdist.sat_densities = true; % Saturate densities or not
+    params_margdist.post_edge_det_sat = true; % Saturate densities or not post edge detection
     params_margdist.sat_level_upper_prctile = 99.0; % Upper percentile for saturation level post blurring
     params_margdist.sat_level_lower_prctile = 1.0; % Lower percentile for saturation level post blurring
+    params_margdist.sat_pre_grid_det = false; % Pre grid detection saturation
+    params_margdist.sat_level_pre_grid_det = 0.7; % Saturation k-sigma before grid detection
     params_margdist.num_seg_hor = 4; % Number of horizontal segments for grid detection
     params_margdist.num_seg_ver = 4; % Number of vertical segments for grid detection
     params_margdist.hist_grid_det_method = 'RANDOM_TILING'; % Method for histogram grid detection ('RANDOM_TILING' or 'REGULAR_TILING')
@@ -63,9 +64,11 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
     params_spectral.remove_shadows = true; % Flag to remove shadows due to photography/scanning
     params_spectral.apply_edge_detection = false; % Flag to enable or disable edge detection prior to grid detection
     params_spectral.post_edge_det_gauss_filt_std = 0.01; % Standard deviation for Gaussian filter post edge detection in inch
-    params_spectral.sat_densities = false; % Saturate densities or not
+    params_spectral.post_edge_det_sat = false; % Saturate densities or not
     params_spectral.sat_level_upper_prctile = 99.0; % Upper percentile for saturation level post blurring
     params_spectral.sat_level_lower_prctile = 1.0; % Lower percentile for saturation level post blurring
+    params_spectral.sat_pre_grid_det = false; % Pre grid detection saturation
+    params_spectral.sat_level_pre_grid_det = 0.7; % Saturation k-sigma before grid detection
     params_spectral.num_seg_hor = 4; % Number of horizontal segments for grid detection
     params_spectral.num_seg_ver = 4; % Number of vertical segments for grid detection
     params_spectral.spectral_tiling_method = 'RANDOM_TILING'; % Spectral tiling method ('REGULAR_TILING', 'RANDOM_TILING' or 'RANDOM_VAR_SIZE_TILING')
@@ -78,7 +81,15 @@ for k = 1 : length(img_fnames) % Sweep over all or specific records
     [~, closest_ind_hor] = min(abs(gridsize_hor_spectral - fine_grid_size_paper_based));
     [~, closest_ind_ver] = min(abs(gridsize_ver_spectral - fine_grid_size_paper_based));
 
-    disp(['Grid resolution estimate per 0.1mV x 40ms (paper-size-based): ', num2str(fine_grid_size_paper_based) ' pixels'])
+    params_matchfilt = params_margdist;
+    params_matchfilt.sat_pre_grid_det = true; % Pre grid detection saturation
+    params_matchfilt.sat_level_pre_grid_det = 0.7; % Saturation k-sigma before grid detection
+    params_matchfilt.total_segments = 10; % Total number of segments in 'RANDOM_TILING' method
+    params_matchfilt.tiling_method = 'RANDOM_TILING'; % Segmentation and tiling method ('REGULAR_TILING' or 'RANDOM_TILING')
+    [grid_sizes_matchedfilt, grid_size_prom_matchedfilt, mask_size_matchedfilt, matchedfilt_powers_avg, I_peaks_matchedfilt] = ecg_gridest_matchedfilt(img, params_matchfilt);
+
+    disp(['Grid resolution estimate per 0.1mV x 40ms (paper size-based): ', num2str(fine_grid_size_paper_based) ' pixels'])
+    disp(['Grid resolution estimates per 0.1mV x 40ms (matched filter-based): [', num2str(grid_sizes_matchedfilt) '] pixels'])
 
     disp(['Horizontal grid resolution estimate (margdist): ', num2str(gridsize_hor_margdist) ' pixels'])
     disp(['Vertical grid resolution estimate (margdist): ', num2str(gridsize_ver_margdist) ' pixels'])

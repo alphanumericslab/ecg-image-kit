@@ -6,10 +6,11 @@ Tools for ECG image digitization.
 
 | Code | Description |
 |---|---|
-[ecg_grid_size_from_paper.m](ecg_grid_size_from_paper.m)| Estimate ECG grid resolution in pixels using paper width |
-[ecg_gridest_margdist.m](ecg_gridest_margdist.m)| Estimate ECG grid resolution in pixels using marginal image density |
-[ecg_gridest_spectral.m](./ecg_gridest_spectral.m)| Estimate ECG grid resolution in pixels using a spectral approach |
-[test_ecg_grid_size_estimator.m](./test_ecg_grid_size_estimator.m)| A test code for running and comparing the grid size estimation codes |
+[ecg_grid_size_from_paper.m](ecg_grid_size_from_paper.m)| ECG grid size estimation using paper size |
+[ecg_gridest_margdist.m](ecg_gridest_margdist.m)| ECG grid size estimation - marginal image intensity approach |
+[ecg_gridest_spectral.m](ecg_gridest_spectral.m)| ECG grid size estimation - spectral approach |
+[ecg_gridest_matchedfilt.m](ecg_gridest_matchedfilt.m)| ECG grid size estimation - matched filter-based approach |
+[test_ecg_grid_size_estimator.m](./test_ecg_grid_size_estimator.m)| A test code for running and comparing the grid size estimation methods |
 
 
 

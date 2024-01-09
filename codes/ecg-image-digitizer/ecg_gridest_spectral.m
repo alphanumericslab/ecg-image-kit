@@ -83,16 +83,25 @@ if params.apply_edge_detection
         params.post_edge_det_gauss_filt_std = 0.01; % post edge detection line smoothing
     end
 
-    if ~isfield(params, 'sat_densities') || isempty(params.sat_densities)
-        params.sat_densities = true; % saturate densities or not
+    if ~isfield(params, 'post_edge_det_sat') || isempty(params.post_edge_det_sat)
+        params.post_edge_det_sat = true; % saturate densities or not
     end
-    if params.sat_densities
+    if params.post_edge_det_sat
         if ~isfield(params, 'sat_level_upper_prctile') || isempty(params.sat_level_upper_prctile)
             params.sat_level_upper_prctile = 99.0; % upper saturation threshold after bluring
         end
         if ~isfield(params, 'sat_level_lower_prctile') || isempty(params.sat_level_lower_prctile)
             params.sat_level_lower_prctile = 1.0; % lower saturation threshold after bluring
         end
+    end
+end
+
+if ~isfield(params, 'sat_pre_grid_det') || isempty(params.sat_pre_grid_det)
+    params.sat_pre_grid_det = true; % saturate densities or not (before spectral estimation)
+end
+if params.sat_pre_grid_det
+    if ~isfield(params, 'sat_level_pre_grid_det') || isempty(params.sat_level_pre_grid_det)
+        params.sat_level_pre_grid_det = 0.7; % saturation k-sigma before grid detection
     end
 end
 
@@ -190,7 +199,7 @@ if params.apply_edge_detection
 
     edges_blurred_sat = edges_blurred;
     % saturate extreme pixels
-    if params.sat_densities
+    if params.post_edge_det_sat
         % upper saturation level
         sat_level = prctile(edges_blurred(:), params.sat_level_upper_prctile);
         I_sat = edges_blurred > sat_level;
@@ -204,6 +213,12 @@ if params.apply_edge_detection
     edges_blurred_sat = edges_blurred_sat / max(edges_blurred_sat(:));
 
     img_gray_normalized = imcomplement((edges_blurred_sat - min(edges_blurred_sat(:)))/(max(edges_blurred_sat(:)) - min(edges_blurred_sat(:))));
+end
+
+%% image density saturation
+if params.sat_pre_grid_det
+    img_sat = tanh_sat(1.0 - img_gray_normalized(:)', params.sat_level_pre_grid_det, 'ksigma')';%imbinarize(img_gray_normalized, 'adaptive','ForegroundPolarity','dark','Sensitivity',0.4);
+    img_gray_normalized = reshape(img_sat, size(img_gray_normalized));
 end
 
 %% segmentize and estimate spectra
