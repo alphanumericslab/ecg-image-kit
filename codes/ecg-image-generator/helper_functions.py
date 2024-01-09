@@ -13,6 +13,7 @@ def find_records(folder, output_dir):
     recording_files = list()
 
     for root, directories, files in os.walk(folder):
+        files = sorted(files)
         for file in files:
             extension = os.path.splitext(file)[1]
             if extension == '.mat':

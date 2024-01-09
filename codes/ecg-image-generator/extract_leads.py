@@ -17,7 +17,7 @@ import random
 
 
 # Run script.
-def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Arial.ttf'),standard_colours=True,full_mode='random',bbox = False,columns=-1):
+def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Arial.ttf'),standard_colours=True,full_mode='random',bbox = False,columns=-1):
 
     # Extract a reduced-lead set from each pair of full-lead header and recording files.
     full_header_file = header_file
@@ -183,8 +183,9 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         json_object = json.dumps(json_dict, indent=4)
  
         # Writing to sample.json
-        with open(os.path.join(output_directory,rec_tail+'.json'), "w") as f:
-            f.write(json_object)
+        if store_configs:
+            with open(os.path.join(output_directory,rec_tail+'.json'), "w") as f:
+                f.write(json_object)
 
         outfile_array.append(outfile)
 
