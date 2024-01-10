@@ -9,6 +9,8 @@ In this repository, you will find tools and utilities for analyzing scanned ECG 
 
 Contributions and feedback are welcome and encouraged from our user community as we strive to revolutionize the digitization and analysis of ECG data using state-of-the-art deep learning and image processing techniques.
 
+Scanning ECG images and their digitization have some fundamental limitations and requirements rooted in signal and image processing theory. A brief tutorial on these requirements is provided in a short note [here](./codes/ecg-image-generator/documentation/ECG_IMAGE_RESOLUTION.md).
+
 ## Toolsets
 Below are the toolsets for the forward and inverse processes of ECG image generation and digitization:
 * [Synthetic ECG image generation tools](codes/ecg-image-generator/)
