@@ -1,6 +1,5 @@
 # `ecg-image-digitizer`
-
-Tools for ECG image digitization.
+***Software tools for ECG image processing and digitization***
 
 ## MATLAB
 
