@@ -17,7 +17,7 @@ import random
 
 
 # Run script.
-def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Arial.ttf'),standard_colours=True,full_mode='random',bbox = False,columns=-1):
+def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Arial.ttf'),standard_colours=True,full_mode='II',bbox = False,columns=-1):
 
     # Extract a reduced-lead set from each pair of full-lead header and recording files.
     full_header_file = header_file
@@ -26,7 +26,8 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
     full_leads = get_leads(full_header)
     num_full_leads = len(full_leads)
 
-     # Update the header file
+    print(full_leads)
+    # Update the header file
     full_lines = full_header.split('\n')
 
     # For the first line, update the number of leads.
@@ -53,10 +54,14 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
             columns = 1
     elif(len(full_leads)==12):
         gen_m = 12
-        full_mode = 'II'
+        if full_mode not in full_leads:
+            full_mode = random.choice(full_leads)
+        else:
+            full_mode = full_mode
         if(columns==-1):
             columns = 4
     else:
+        gen_m = len(full_leads)
         columns = 4
         full_mode = 'None'
 

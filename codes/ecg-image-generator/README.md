@@ -37,7 +37,7 @@ This folder contains tools for generating realistic ECG images from time-series 
     
 - The `gen_ecg_images_from_data_batch.py` script produces the following outputs in each iteration:
     * **Synthetic ECG image:** Includes ECG signals from all leads, gridlines, and the name of each ECG lead.
-    * **Text and lead bounding box (optional):** A CSV file detailing the grid size (`xgrid` and `ygrid`), along with the start and end pixel values for each lead in every generated image. This information can be used as ground truth for training machine learning and deep learning models.
+    * **Text and lead bounding box (optional):** A CSV file detailing the grid size (`xgrid` and `ygrid`) for every generated image. This information can be used as ground truth for training machine learning and deep learning models.
 
 - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset.
 
@@ -78,7 +78,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](./ecg-image-generator/SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/Distortionless/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/Distortionless/00002_lr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
@@ -234,7 +234,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
 
 ## Run-time benchmarks
-Average computational time for generating an ECG image of size 2200 X 1700 pixels and 200 DPI on a MAC OS
+Average computational time for generating an ECG image of size 2200 X 1700 pixels and 200 DPI on a MAC OS 13.4.1 (c) and Apple M2 chip
 
 |  Steps | Time taken by each step per image (in seconds) |
 | ------------- | ------------- |
