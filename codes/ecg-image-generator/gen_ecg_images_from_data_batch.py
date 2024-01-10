@@ -7,7 +7,10 @@ from HandwrittenText.generate import get_handwritten
 from CreasesWrinkles.creases import get_creased
 from ImageAugmentation.augment import get_augment
 from gen_ecg_image_from_data import run_single_file
+import warnings
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+warnings.filterwarnings("ignore")
 
 def get_parser():
     parser = argparse.ArgumentParser()

@@ -26,7 +26,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
     full_leads = get_leads(full_header)
     num_full_leads = len(full_leads)
 
-    print(full_leads)
     # Update the header file
     full_lines = full_header.split('\n')
 

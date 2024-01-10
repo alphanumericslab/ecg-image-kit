@@ -8,6 +8,10 @@ from extract_leads import get_paper_ecg
 from HandwrittenText.generate import get_handwritten
 from CreasesWrinkles.creases import get_creased
 from ImageAugmentation.augment import get_augment
+import warnings
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+warnings.filterwarnings("ignore")
 
 def get_parser():
     parser = argparse.ArgumentParser()
