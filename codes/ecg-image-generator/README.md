@@ -1,14 +1,12 @@
-# `ecg-image-gen` - a toolkit for generating synthetic ECG images from time-series data
-The ECG is a widely-used, accurate diagnostic tool for cardiovascular diseases. ECGs have traditionally been recorded in printed formats; their digitization holds immense potential for training machine learning and deep learning models in algorithmic ECG diagnosis. However, physical ECG archives risk deterioration, and scanning printed ECGs is insufficient, as advanced machine learning-based ECG diagnostic models require ECG data in time-series format for measuring clinical parameters and detecting anomalies. This necessitates the digitization and conversion of paper ECG archives into time-series data.
+# `ecg-image-gen`
+***Generating realistic ECG images from time-series data***
 
-To address these challenges, we present methods and tools for generating synthetic ECG images on standard, paper-like ECG backgrounds, faithfully replicating realistic printing and scanning artifacts. Our approach includes applying various distortions, such as handwritten text artifacts (similar to physicians' clinical notes), wrinkles, creases, and perspective transforms, to the generated images while ensuring the absence of personally identifiable information. These synthetic ECG images provide a valuable resource for developing and evaluating machine and deep learning models for ECG analysis.
+This folder contains tools for generating realistic ECG images from time-series data, creating synthetic ECGs on standard paper-like backgrounds with genuine printing and scanning artifacts. Our approach adds distortions such as handwritten notes, wrinkles, creases, and perspective transforms. These images are ideal for producing large sets of ECG images for the development and evaluation of machine and deep learning models in ECG analysis.
 
-## 🚀 Release Update
+## Release History
+- (January 2024) Initial public release
 
-- Code under maintanence, will be released soon!
-
-
-## 💻 Installation
+## Installation
 - Setup with Conda env: 
      ```
      conda env create -f environment_droplet.yml
@@ -30,54 +28,53 @@ To address these challenges, we present methods and tools for generating synthet
 
 
 ## Running the pipeline
-- The python script to generate the ECG images requires two mandatory parameters; input directory with the ECG time-series data (in [PhysioNet's WFDB](https://www.physionet.org/content/wfdb/) format) and output directory to store the synthetic ECG images. Here is an example case of running the python script with only the mandatory arguments:
+- The python script to generate the ECG images requires two mandatory parameters: the path to the input directory with the ECG time-series data and its header file (in [PhysioNet's WFDB](https://www.physionet.org/content/wfdb/) format) and the path to the output directory to store the synthetic ECG images. Here is an example case of running the python script with only the mandatory arguments:
 
     
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10
      ```
     
+- The `gen_ecg_images_from_data_batch.py` script produces the following outputs in each iteration:
+    * **Synthetic ECG image:** Includes ECG signals from all leads, gridlines, and the name of each ECG lead.
+    * **Text and lead bounding box (optional):** A CSV file detailing the grid size (`xgrid` and `ygrid`), along with the start and end pixel values for each lead in every generated image. This information can be used as ground truth for training machine learning and deep learning models.
 
-- The `gen_ecg_images_from_data_batch.py` script generates the following outputs at every iteration:
-
-     * **Synthetic Image:** The pipeline will generate the images with ECG signals from all the leads along with gridlines and the name of the ECG lead. 
-     * **Text and lead bounding box (Optional)**  A csv file with the size of grid size of xgrid and ygrid, the start and end pixel values for each lead for each generated image. 
-
-     ### Synthetic Images generated with PTB XL dataset
+- Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset.
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
      | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
 
 ## Generating distortionless ECG
-The basic mode of the tool generates ECG images without any distortions. The flags that can be set in this mode are as follows: 
-- `-se`: Seed controlling all the random parameters; type: int, required: True
+The basic mode of the tool creates ECG images without distortions. The mode of operation and generated outputs can be configured using these command-line flags:
+
+- `-se`: Seed controlling all the random parameters; type: int
 - `-r`: Resolution with default being 200; type: int
 - `--pad_inches`: Padding of white border along the image with default padding of 0 inches; type: int
 - `--num_columns` : Number of columns of the ECG leads with default being -1; type: int
-- `--full_mode`: Chooses which lead to add at the bottom of the paper ECG as a long full lead strip; default: `'II'`; type: str
-- `--num_images`: Add how many ECG images you want to generate; default: all files in the input directory; type: int
+- `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file; default: `'II'`; type: str
+- `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
 - `--random_resolution`: Generate random resolutions of images; default: False
 - `--random_padding`: Generate random padding widths on images; default: False
-- `--random_dc`: Add calibration pulse to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_dc` $\in$ [0, 1]. 
-- `--random_grid_present`: Add grid to random set of images controlled by this parameter; type: Float, default: 1. Make sure that `--random_grid_present` $\in$ [0, 1].
-- `--random_print`: Add printed text to a random set of images controlled by this parameter; type: Float, default: 0. Make sure that `--random_print` $\in$ [0, 1].
-- `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0. Make sure that `--random_bw` $\in$ [0, 1].
+- `--random_dc`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--random_dc` $\in$ [0, 1]. 
+- `--random_grid_present`: Probability of the generated images having the ECG paper grid; type: Float, default: 1 (adds the grid to all images). Make sure that `--random_grid_present` $\in$ [0, 1]. When 0, the images do not have the background grid.
+- `--random_print`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_print` $\in$ [0, 1].
+- `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
 - `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
 - `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
 - `store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. The json file has following attributes:
-     - `x_grid`: Number of pixels per 0.2 seconds of the grid on the image.
+     - `x_grid`: Number of pixels per 200ms of the grid on the image.
      - `y_grid`: Number of pixels per 0.5mV of the grid on the image.
      - `text_bounding_box_file`: Path to the bounding boxes for the lead names if the `store_text_bouding_box` is True else ''
      - `lead_bounding_box_file`: Path to the bounding boxes for the ECG leads if the `bbox` is True else ''.
 
-     Example: 
+     **Example:** 
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_print 0.8 --random_dc 0.5
      ```
 
-     ### Synthetic Images generated with PTB XL dataset
+     - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
@@ -86,22 +83,25 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
 
-
 ## Adding distortions to the synethic images
 - ### Text distortions
-     It is common for scanned ECG images to have handwritten notes by the physician, which may or may not overlap with the ECG traces. The toolkit provides this option by getting a dictionary of relevant keywords and randomly placing them on the ECG images. We collected a set of medical text related to ECG and CVDs. We next applied Natural Language Processing (NLP) models on these text to compile a list of biomedical phrases and keywords from these texts. The resulting set was converted to handwritten style images using pretrained models and the resulting images were overlayed on the ECG images from the previous step of our pipeline. The Python-based en_core_sci_md model from [sciSpacy](https://github.com/allenai/scispacy), was used for the NLP step for tokenization, parts of speech tagging, dependency parsing and names entity recognition.  Next, the [SpaCy model](https://sentometrics-research.com/publication/72/)  was retrained on our collected medical texts to retain words in the ECG-CVD context. The dependency parser and the parts of speech tagger in the released models were retrained on the treebank of [McClosky and Charniak](https://www.semanticscholar.org/paper/Self-Training-for-Biomedical-Parsing-McClosky-Charniak/170479ac946ef294455005cc6fb6adb1d2df7a4f), which is based on the GENIA 1.0 corpus.  Our developed synthetic ECG image generation toolbox parses words from an input text file or from online links using the [BeatifulSoup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), performs parts of speech tagging on the parsed words and then uses named entity recognition from the aforementioned models to identify ECG-related keywords, which are randomly chosen and add as handwritten text. A pretrained Recurrent Neural Network (RNN) transducer-based model paired with soft window is used to generate handwritten text from these extracted words.  
+     Scanned ECG images often contain handwritten notes by physicians, sometimes overlapping the ECG traces. Our toolkit simulates this by using a dictionary of relevant keywords, which are randomly placed on the ECG images. We gathered medical texts related to ECG and cardiovascular diseases and employed Natural Language Processing (NLP) models to extract biomedical phrases and keywords. These were transformed into handwritten-style images using pretrained models and overlaid on the ECG images.
+
+     For NLP, we utilized the Python-based `en_core_sci_md` model from [sciSpacy](https://github.com/allenai/scispacy) for tokenization, parts of speech tagging, dependency parsing, and named entity recognition. The [SpaCy model](https://sentometrics-research.com/publication/72/) was retrained with our medical texts, focusing on ECG and cardiocascular context. We also retrained the dependency parser and parts of speech tagger using the McClosky and Charniak treebank, based on the GENIA 1.0 corpus.
+
+     Our toolbox generates synthetic ECG images by parsing words from text files or online sources using the [BeautifulSoup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), tagging them, and identifying ECG-related keywords with named entity recognition. These keywords are then converted into handwritten text using a pretrained Recurrent Neural Network (RNN) transducer-based model with a soft window.
 
      Adding the `--hw_text` flag to the python command provides this feature. Furthermore, following attributes specific to the text can be adjusted: 
 
-     - `-l`: URL to capture relevant ECG-related text for generating handwritten text artifacts; default: https://www.physionet.org/content/ptbdb/-0.0/; type: str
+     - `-l`: URL to capture relevant ECG-related text for generating handwritten text artifacts; default: [https://www.physionet.org/content/ptbdb/](https://www.physionet.org/content/ptbdb/); type: str
      - `-n`: Number of handwritten words to add; default: 5; type: int
-     - `--x_offset`: Number of pixels by which we want to offset the words placed from the border of the image; default: 30; type: int
-     - `--y_offset`: Number of pixels by which we want to offset the vertical placement of words from the upper border of the image; default: 30; type: int
+     - `--x_offset`: Defines the horizontal offset (in pixels) of the placed words from the image's border; default value: 30; data type: int.
+- `--y_offset`: Sets the vertical offset (in pixels) of word placement from the image's top border; default value: 30; data type: int.
      - `--deterministic_offset`: Use the provided offset parameters deterministically. If not, takes the offset parameters as a range by which we can offset the text; default: False
      - `--deterministic_num_words`: Uses the provided number of words deterministically. If False, it takes the number of words as a range and adds random number of words; default: False
      - `--deterministic_hw_size`: Uses a fixed handwriting size for the handwritten text artifacts added; default: False
     
-     Example: 
+     **Example:** 
 
      ```bash
      python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --deterministic_lead --hw_text -n 4 --x_offset 30 --y_offset 20 -se 10
@@ -111,7 +111,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ----------------------------------- | ----------------------------------- |
      | ![12 lead Image with handwritten text](./SampleData/DistortionData/HandwrittenText/JS00001-0.png) | ![2 lead Image with handwritten text](./SampleData/DistortionData/HandwrittenText//sel100-1.png) |
 
-     ### Hand-written distortions on synthetic images generated from the PTB-XL dataset
+     - Below are sample synthetic ECG images with handwritten text generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
@@ -121,18 +121,18 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      Adding text artifacts is a computationally expensive process and should be run with GPU machines for large scale dataset generation.
 
 - ### Wrinkles and creases
-     Creases can be modeled by Gaussian-distributed blurred lines, linearly spaced to give an impression of creases caused by paper folds. To simulate the effect of blurring on crease lines, we apply Gaussian blurring to the generated crease lines, which is commonly used as an image augmentation technique to simulate smoothing or blurring effects in images. The application of Gaussian blurring to the created crease lines aids in generating more realistic images by simulating a shadow effect in the crease, which is commonly observed in scanned paper ECG images. Wrinkles can be thought of as textures and can thus be synthesized by state-of-the-art texture synthesis techniques such as image quilting. 
+     Creases are simulated using Gaussian-blurred lines, evenly spaced to mimic paper fold creases. Gaussian blurring, a common image augmentation technique for smoothing effects, is applied to these lines. This blurring enhances realism by creating a shadow effect in the creases, common in scanned images or real paper ECG. For wrinkles, which are essentially textures, advanced texture synthesis methods like image quilting are used.
 
      Add `--wrinkes` to the python command to add wrinkle distoritions to the images. Furthermore following attributes specific to the wrinkles can be adjusted: 
 
-     - `-ca`: Crease angle with respect to the image; default: 90
+     - `-ca`: Crease angle (in degrees) with respect to the image; default: 90
      - `-nv`: Number of creases to add vertically; Default: 10
      - `-nh`: Number of creases to add horizontally; default: 10
-     - `--deterministic_angle`: Chooses the angle as a fixed crease angle for all images; default: False
-     - `--deterministic_vertical`: Adds the number of vertical creases given deterministically to all images; default: False
-     - `--deterministic_horizontal`: Adds the number of horizontal creases given dtereministically to all images; default: False
+     - `--deterministic_angle`: Chooses a fixed crease angle for all images; default: False
+     - `--deterministic_vertical`: Adds the given number of vertical creases deterministically to all images; default: False
+     - `--deterministic_horizontal`: Adds the given number of horizontal creases detereministically to all images; default: False
 
-     Example:
+     **Example:**
      
      ```bash
      python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --wrinkles -ca 45 --deterministic_lead -se 10
@@ -141,7 +141,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ----------------------------------- | ----------------------------------- |
      | ![12 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/JS00001-0.png) | ![2 lead Image with wrinkles and creases](./SampleData/DistortionData/Wrinkles_Creases/sel100-4.png) |
 
-     ### Wrinkle and creases distortion on synthetic images generated from the PTB-XL dataset
+     - Wrinkle and creases distortion on synthetic images generated from the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/)
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
@@ -159,7 +159,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      - `--deterministic_crop`: Adds the given level of crop to all images deterministically. If False, adds random crop levels; default: False
      - `--deterministic_temp`: Adds the deterministic temperature level to all images. If False, adds random colour temepratures in that range; default- False
 
-     Example:
+     **Example:**
 
      ```bash
      python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --deterministic_lead -se 10
@@ -169,7 +169,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ----- | ----- |
      | ![12 lead Image with Augmentations](./SampleData/DistortionData/Augmentation/JS00001-0.png) | ![2 lead Image Augmentations](./SampleData/DistortionData/Augmentation/sel100-2.png) | 
 
-     ### Augmentation on synthetic images generated from the PTB-XL dataset
+     - Augmentation on synthetic images generated from the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/)
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
@@ -187,7 +187,7 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 
 - ### Adding all the distortions together:
 
-     Example:
+     **Example:**
 
      ```bash
      python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 --deterministic_lead -se 10
@@ -198,13 +198,13 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      | ![12 lead Image with all Distortions](./SampleData/DistortionData/JS00001-0.png)| ![2 lead Image Augmentations](./SampleData/DistortionData/sel100-5.png) |
 
 
-     ### All distortions on synthetic images generated from the PTB-XL dataset
+     - All distortions on synthetic images generated from the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/)
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
      | ![12 lead Image with handwritten text](SampleData/DistortionData/00003_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
 
-     Example:
+     **Example:**
 
      ```
      python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --deterministic_lead --random_print 1 -se 20 --store_text_bounding_box  --resolution 300 --random_padding --pad_inches 1 --bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45
@@ -219,12 +219,12 @@ The basic mode of the tool generates ECG images without any distortions. The fla
 ## Generating image from a single ECG record
 - To provide more flexibility, we also allow users to generate synthetic ECG image from a single ECG record from a give index. The start index should be in the range: [0, len(signal))
 
-     Example:
+     **Example:**
      ```
      python gen_ecg_image_from_data.py -i <path_to_input_file> -hea <path_to_header_file> -o <path_to_output_directory> -st start_index
      ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 - The following command does not add handwritten text artifacts to the image:
 
      ```bash
@@ -233,8 +233,8 @@ The basic mode of the tool generates ECG images without any distortions. The fla
      Remember to enable a particular distortion to add the given artifacts.
 
 
-## Timing Analysis
-Average computational time for generating an ECG image of size 2200 X 1700 pixels and 200 dpi on MAC OS
+## Run-time benchmarks
+Average computational time for generating an ECG image of size 2200 X 1700 pixels and 200 DPI on a MAC OS
 
 |  Steps | Time taken by each step per image (in seconds) |
 | ------------- | ------------- |
@@ -246,13 +246,18 @@ Average computational time for generating an ECG image of size 2200 X 1700 pixel
 | ECG with all distoritons (Hand-written text, creases, wrinkles, rotation, noise)  | 7.75  |
 
 
-## Reference
-[![arXiv](https://img.shields.io/badge/arXiv-ECGgen-b31b1b.svg)](https://doi.org/10.48550/ARXIV.2307.01946)
+## Citation
+Please include references to the following articles in any publications:
 
-Shivashankara, K. K., Shervedani, A. M., and Sameni, R. (2023). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization (Version 2). arXiv. https://doi.org/10.48550/ARXIV.2307.01946
+1. Kshama Kodthalu Shivashankara, Afagh Mehri Shervedani, Matthew A. Reyna, Gari D. Clifford, Reza Sameni (2024). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. doi: [10.48550/ARXIV.2307.01946](https://doi.org/10.48550/ARXIV.2307.01946)
+
+2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: https://github.com/alphanumericslab/ecg-image-kit
 
 ## Contributors
-- [Reza Sameni](rsameni@dbmi.emory.edu) (corresponding contributor), Department of Biomedical Informatics, Emory University, GA, US
-- [Kshama Kodthalu Shivashankara](kshamashivashankar@gmail.com), School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, USA
-- [Deepanshi](deepanshi.asr.21@gmail.com), Department of Biomedical Informatics, Emory University, GA, US
-- [Matthew Reyna](matthew@dbmi.emory.edu), Department of Biomedical Informatics, Emory University, GA, US
+- [Kshama Kodthalu Shivashankara](mailto:kshamashivashankar@gmail.com), School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, US
+- [Deepanshi](mailto:deepanshi.asr.21@gmail.com), Department of Biomedical Informatics, Emory University, GA, US
+- [Matthew Reyna](mailto:matthew@dbmi.emory.edu), Department of Biomedical Informatics, Emory University, GA, US
+- [Gari D Clifford](mailto:gari@dbmi.emory.edu), Department of Biomedical Informatics, Emory University, GA, US
+- [Reza Sameni](mailto:rsameni@dbmi.emory.edu) (corresponding author), Department of Biomedical Informatics, Emory University, GA, US
+
+![Static Badge](https://img.shields.io/badge/ecg_image-kit-blue)
