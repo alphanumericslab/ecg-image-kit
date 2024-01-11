@@ -4,6 +4,7 @@
 
 Department of Biomedical Informatics, Emory University
 
+January 2024
 ## ECG as a time-series
 The electrocardiogram (ECG), recorded by standard body surface leads, typically has an amplitude of several millivolts, and its spectral content ranges from approximately 0.05Hz to around 150Hz. When transformed into a digital signal, it first passes through an anti-aliasing low-pass filter (in the analog domain) before being sampled at a sampling frequency $f_s$. According to the Nyquist theorem, the cutoff frequency of the anti-aliasing filter should be lower than $f_s/2$. Systems with lower resolution, such as old single-lead ECG machines, Holder monitors and wearable devices, may have sampling frequencies as low as 100Hz. Modern high-quality clinical monitors often sample at higher frequencies, such as 1000Hz or more. Non-uniform (irregular) sampling is a less common, yet viable, option employed in some low-power, microcontroller-based devices. These devices satisfy the Nyquist frequency only on average but do not adhere to precise sampling times. This flexibility allows for accommodation of other microcontroller processes that run concurrently in the background. For more in-depth information on Nyquist theory, uniform and non-uniform sampling theory refer to the references <sup>[[Oppenheim 1998]](#ref-oppenheim-discrete), [[Marvasti 2001]](#ref-marvasti-nonuniform), [[Mitra 2001]](#ref-mitra-dsp)</sup>.
 
