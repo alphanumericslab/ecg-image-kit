@@ -3,7 +3,7 @@
 
 This folder contains tools for generating realistic ECG images from time-series data, creating synthetic ECGs on standard paper-like backgrounds with genuine printing and scanning artifacts. Our approach adds distortions such as handwritten notes, wrinkles, creases, and perspective transforms. These images are ideal for producing large sets of ECG images for the development and evaluation of machine and deep learning models in ECG analysis.
 
-The process of scanning and digitizing ECG images is governed by some fundamental limitations and requiements rooting in signal and image processing theory. A short overview of these concepts is available in a brief document found [here](./codes/ecg-image-generator/documentation/ECG_IMAGE_RESOLUTION.md).
+The process of scanning and digitizing ECG images is governed by some fundamental limitations and requiements rooting in signal and image processing theory. A short overview of these concepts is available in a brief document found [here](./documentation/ECG_IMAGE_RESOLUTION.md).
 
 ## Release History
 - January 2024, initial public release
