@@ -53,11 +53,11 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `-se`: Seed controlling all the random parameters; type: int
 - `-r`: Resolution with default being 200; type: int
 - `--pad_inches`: Padding of white border along the image with default padding of 0 inches; type: int
-- `--num_columns` : Number of columns of the ECG leads with default being -1; type: int
-- `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file; default: `'II'`; type: str
+- `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
+- `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
-- `--random_resolution`: Generate random resolutions of images; default: False
-- `--random_padding`: Generate random padding widths on images; default: False
+- `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `-r` + 1] else every image is generated at the `-r` resolution; default: False
+- `--random_padding`: Generate random padding widths on images, if True pad inches is randomly picked from the range [0, `--pad_inches` + 1], else every image is padded with `--pad_inches`; default: False
 - `--random_dc`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--random_dc` $\in$ [0, 1]. 
 - `--random_grid_present`: Probability of the generated images having the ECG paper grid; type: Float, default: 1 (adds the grid to all images). Make sure that `--random_grid_present` $\in$ [0, 1]. When 0, the images do not have the background grid.
 - `--random_print`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_print` $\in$ [0, 1].
@@ -98,8 +98,8 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      - `-l`: URL to capture relevant ECG-related text for generating handwritten text artifacts; default: [https://www.physionet.org/content/ptbdb/](https://www.physionet.org/content/ptbdb/); type: str
      - `-n`: Number of handwritten words to add; default: 5; type: int
      - `--x_offset`: Defines the horizontal offset (in pixels) of the placed words from the image's border; default value: 30; data type: int.
-- `--y_offset`: Sets the vertical offset (in pixels) of word placement from the image's top border; default value: 30; data type: int.
-     - `--deterministic_offset`: Use the provided offset parameters deterministically. If not, takes the offset parameters as a range by which we can offset the text; default: False
+     - `--y_offset`: Sets the vertical offset (in pixels) of word placement from the image's top border; default value: 30; data type: int.
+     - `--deterministic_offset`: Use the provided offset parameters deterministically(Text is printed at [`x_offset`, `y_offset`]). If not, randomizes the text position based on `x_offset` and `y_offset` (x coordinate range:[1, `x_offset`+1], y coordinate range: [1, `y_offset`+1]); default: False
      - `--deterministic_num_words`: Uses the provided number of words deterministically. If False, it takes the number of words as a range and adds random number of words; default: False
      - `--deterministic_hw_size`: Uses a fixed handwriting size for the handwritten text artifacts added; default: False
     
@@ -225,6 +225,11 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      ```
      python gen_ecg_image_from_data.py -i <path_to_input_file> -hea <path_to_header_file> -o <path_to_output_directory> -st start_index
      ```
+
+     *Note:* Following pointers should be kept in mind, while generating images from a single record:
+     
+     - If the length of the signal from the `-st` is less than 10 seconds, the image will not be generated
+     - All the batch level attributes explained above can be used to generate the image from `gen_ecg_image_from_data.py`
 
 ## Troubleshooting
 - The following command does not add handwritten text artifacts to the image:

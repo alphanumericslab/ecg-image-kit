@@ -54,7 +54,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
     elif(len(full_leads)==12):
         gen_m = 12
         if full_mode not in full_leads:
-            full_mode = random.choice(full_leads)
+            full_mode = full_leads[0]
         else:
             full_mode = full_mode
         if(columns==-1):
