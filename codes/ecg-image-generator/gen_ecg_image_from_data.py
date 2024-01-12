@@ -88,8 +88,8 @@ def writeCSV(args):
             if args.start_index != -1:
                 writer.writerow(["filename","xgrid","ygrid","lead_name","start","end"])
 
-def run_single_file(args):  
-        if args.seed != -1:
+def run_single_file(args):
+        if hasattr(args, 'st') == True:
             random.seed(args.seed)
 
         filename = args.input_file

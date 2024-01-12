@@ -16,8 +16,8 @@ import matplotlib.patches as patches
 
 standard_values = {'y_grid_size' : 0.5,
                    'x_grid_size' : 0.2,
-                   'y_grid_inch' : 0.196,
-                   'x_grid_inch' : 0.196,
+                   'y_grid_inch' : 5/25.4,
+                   'x_grid_inch' : 5/25.4,
                    'grid_line_width' : 0.5,
                    'lead_name_offset' : 0.5,
                    'lead_fontsize' : 11,
@@ -172,8 +172,8 @@ def ecg_plot(
         width = papersize_values[papersize][1]
         height = papersize_values[papersize][0]
     
-    y_grid = standard_values['y_grid_inch'] + random_sampler
-    x_grid = standard_values['x_grid_inch'] + random_sampler
+    y_grid = standard_values['y_grid_inch'] 
+    x_grid = standard_values['x_grid_inch']
     y_grid_dots = y_grid*resolution
     x_grid_dots = x_grid*resolution
  

@@ -72,6 +72,7 @@ def get_parser():
     return parser
 
 def run(args):
+        random.seed(args.seed)
 
         if os.path.isabs(args.input_directory) == False:
             args.input_directory = os.path.normpath(os.path.join(os.getcwd(), args.input_directory))
