@@ -3,8 +3,10 @@
 
 This folder contains tools for generating realistic ECG images from time-series data, creating synthetic ECGs on standard paper-like backgrounds with genuine printing and scanning artifacts. Our approach adds distortions such as handwritten notes, wrinkles, creases, and perspective transforms. These images are ideal for producing large sets of ECG images for the development and evaluation of machine and deep learning models in ECG analysis.
 
+The process of scanning and digitizing ECG images is governed by some fundamental limitations and requiements rooting in signal and image processing theory. A short overview of these concepts is available in a brief document found [here](./documentation/ECG_IMAGE_RESOLUTION.md).
+
 ## Release History
-- (January 2024) Initial public release
+- January 2024, initial public release
 
 ## Installation
 - Setup with Conda env: 
@@ -254,10 +256,14 @@ Please include references to the following articles in any publications:
 2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: https://github.com/alphanumericslab/ecg-image-kit
 
 ## Contributors
-- [Kshama Kodthalu Shivashankara](mailto:kshamashivashankar@gmail.com), School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, US
-- [Deepanshi](mailto:deepanshi.asr.21@gmail.com), Department of Biomedical Informatics, Emory University, GA, US
-- [Matthew Reyna](mailto:matthew@dbmi.emory.edu), Department of Biomedical Informatics, Emory University, GA, US
-- [Gari D Clifford](mailto:gari@dbmi.emory.edu), Department of Biomedical Informatics, Emory University, GA, US
-- [Reza Sameni](mailto:rsameni@dbmi.emory.edu) (corresponding author), Department of Biomedical Informatics, Emory University, GA, US
+- Kshama Kodthalu Shivashankara, School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, US
+- Deepanshi, Department of Biomedical Informatics, Emory University, GA, US
+- Matthew A Reyna, Department of Biomedical Informatics, Emory University, GA, US
+- Gari D Clifford, Department of Biomedical Informatics, Emory University, GA, US
+- Reza Sameni (contact person), Department of Biomedical Informatics, Emory University, GA, US
+
+## Contact
+Please direct any inquiries, bug reports or requests for joining the team to: [ecg-image-kit@dbmi.emory.edu](ecg-image-kit@dbmi.emory.edu).
+
 
 ![Static Badge](https://img.shields.io/badge/ecg_image-kit-blue)
