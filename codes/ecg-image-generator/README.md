@@ -53,14 +53,15 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `-se`: Seed controlling all the random parameters; type: int
 - `-r`: Resolution with default being 200; type: int
 - `--pad_inches`: Padding of white border along the image with default padding of 0 inches; type: int
+- `print_header`: Add text from header file on all the generated images; default: False
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
-- `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `-r` + 1] else every image is generated at the `-r` resolution; default: False
-- `--random_padding`: Generate random padding widths on images, if True pad inches is randomly picked from the range [0, `--pad_inches` + 1], else every image is padded with `--pad_inches`; default: False
+- `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `-r`] else every image is generated at the `-r` resolution; default: False
+- `--random_padding`: Generate random padding widths on images, if True pad inches is randomly picked from the range [0, `--pad_inches`], else every image is padded with `--pad_inches`; default: False
 - `--random_dc`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--random_dc` $\in$ [0, 1]. 
 - `--random_grid_present`: Probability of the generated images having the ECG paper grid; type: Float, default: 1 (adds the grid to all images). Make sure that `--random_grid_present` $\in$ [0, 1]. When 0, the images do not have the background grid.
-- `--random_print`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_print` $\in$ [0, 1].
+- `--random_add_header`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_add_header` $\in$ [0, 1]. If `--print_header` is True, code prints text on all the images regardless of the `--random_add_header` attribute.
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
 - `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.

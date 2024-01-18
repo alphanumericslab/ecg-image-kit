@@ -22,6 +22,7 @@ def get_parser():
     
     parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
     parser.add_argument('--pad_inches',type=int,required=False,default=0)
+    parser.add_argument('-ph','--print_header', action="store_true",default=False)
     parser.add_argument('--num_columns',type=int,default = -1)
     parser.add_argument('--full_mode', type=str,default='II')
 
@@ -44,7 +45,7 @@ def get_parser():
     parser.add_argument('--random_padding',action="store_true",default=False)
     parser.add_argument('--random_dc',type=float,default=0)
     parser.add_argument('--random_grid_present',type=float,default=1)
-    parser.add_argument('--random_print',type=float,default=0)
+    parser.add_argument('--random_add_header',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_true",default=True)
     parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
