@@ -14,6 +14,7 @@ import wfdb
 from PIL import Image, ImageDraw, ImageFont
 from random import randint
 import random
+import tempfile
 
 
 # Run script.
@@ -64,7 +65,10 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         columns = 4
         full_mode = 'None'
 
-    template_name = 'custom_template.png'
+    # We want a unique template file for every execution of this code,
+    # so that we can run several executions in parallel.
+    tmp_directory = tempfile.mkdtemp() # get a temporary directory
+    template_name = os.path.join(tmp_directory, 'custom_template.png')
     generate_template(full_header_file, font_type=font_type, mode=gen_m,template_file=template_name)
 
     if(recording.shape[0]>recording.shape[1]):
@@ -193,5 +197,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
 
         outfile_array.append(outfile)
 
+    # Remove both the template file and its temporary directory
     os.remove(template_name)
+    os.rmdir(tmp_directory)
     return outfile_array
