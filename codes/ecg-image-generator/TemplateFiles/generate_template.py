@@ -67,8 +67,8 @@ def generate_template(header_file, font_type, mode, template_file):
 
     
     font_size = random.randint(15, 30)
-    font_type = os.path.join('Fonts','Arial.ttf')
-    font = ImageFont.truetype(font_type, font_size, encoding="unic")
+    font_type = os.path.join('Fonts','Times_New_Roman.ttf')
+    font = ImageFont.truetype(font_type, 25, encoding="unic")
     text_width, text_height = font.getsize(maxIdx)
 
     #Write template file into an image and use this to print on the paper ecg
