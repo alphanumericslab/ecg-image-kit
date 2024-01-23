@@ -63,6 +63,8 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--random_grid_present`: Probability of the generated images having the ECG paper grid; type: Float, default: 1 (adds the grid to all images). Make sure that `--random_grid_present` $\in$ [0, 1]. When 0, the images do not have the background grid.
 - `--random_add_header`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_add_header` $\in$ [0, 1]. If `--print_header` is True, code prints text on all the images regardless of the `--random_add_header` attribute.
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
+- `--standard_grid_color`: Color of the grid lines, 1: brown, 2: pink, 3: blue, 4: green, 5(Default): red .Make sure that `standard_grid_color` $\in$ [1, 5], type: int
+- `--random_grid_color`: Generates random colors for the gridlines, If `'--random_bw` > 0, then the color of gridlines for the non black and white ECG images is picked randomly. Default: False.
 - `--deterministic_lead`: Add lead names to all generated images; default: True 
 - `--store_text_bouding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
 - `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.

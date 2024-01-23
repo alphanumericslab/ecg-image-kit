@@ -34,44 +34,20 @@ standard_values = {'y_grid_size' : 0.5,
                    'height' : 8.5
                    }
 
-#standard_major_colors = {'colour1' : (1,0.6823,0.776),
-                          #'colour2' : (1,0.796,0.866),
-                          #'colour3' : (0.933,0.8235,0.8),
-                          #'colour4' : (0.996,0.807,0.8039),
-                          #'colour5' : (0.611,0.627,0.647), 
-                          #'colour6' : (0.4901,0.498,0.513), 
-                          #'colour7' : (0.4274,0.196,0.1843),
-                          #'colour8' : (0.992,0.7529,0.7254),
-                          #'colour9' : (0.9215,0.9372,0.9725)
-    #}
-
-standard_major_colors = {'colour1' : (1,0.6823,0.776),
-                          'colour2' : (1,0.796,0.866),
-                          'colour3' : (0.933,0.8235,0.8),
-                          'colour4' : (0.996,0.807,0.8039),
-                          'colour5' : (0.4274,0.196,0.1843),
-                          'colour6' : (0.992,0.7529,0.7254)
+standard_major_colors = {'colour1' : (0.4274,0.196,0.1843), #brown
+                          'colour2' : (1,0.796,0.866), #pink
+                          'colour3' : (0.0,0.0, 0.4), #blue
+                          'colour4' : (0,0.3,0.0), #green
+                          'colour5' : (1,0,0) #red
     }
 
 
-standard_minor_colors = {'colour1' : (0.9843,0.9019,0.9529),
+standard_minor_colors = {'colour1' : (0.5882,0.4196,0.3960),
                          'colour2' : (0.996,0.9294,0.9725),
-                         'colour3' : (0.9529,0.8745,0.8549),
-                         'colour4' : (0.996,0.9529,0.9529),
-                         'colour5' : (0.5882,0.4196,0.3960),
-                         'colour6' : (0.996,0.8745,0.8588)
+                         'colour3' : (0.0,0, 0.7),
+                         'colour4' : (0,0.8,0.3),
+                         'colour5' : (0.996,0.8745,0.8588)
     }
-
-#standard_minor_colors = {'colour1' : (0.9843,0.9019,0.9529),
-                         #'colour2' : (0.996,0.9294,0.9725),
-                         #'colour3' : (0.9529,0.8745,0.8549),
-                         #'colour4' : (0.996,0.9529,0.9529),
-                         #'colour5' : (0.7607,0.7725,0.7843),
-                         #'colour6' : (0.6039,0.6235,0.6274),
-                         #'colour7' : (0.5882,0.4196,0.3960),
-                         #'colour8' : (0.996,0.8745,0.8588),
-                         #'colour9' : (0.9568,0.9686,0.9843)
-    #}
 
 papersize_values = {'A0' : (33.1,46.8),
                     'A1' : (33.1,23.39),
@@ -202,13 +178,13 @@ def ecg_plot(
     fig.suptitle(title)
 
     #Mark grid based on whether we want black and white or colour
-
+    
     if (style == 'bw'):
         color_major = (0.4,0.4,0.4)
         color_minor = (0.75, 0.75, 0.75)
         color_line  = (0,0,0)
-    elif(standard_colours):
-        random_colour_index = randint(1,6)
+    elif(standard_colours > 0):
+        random_colour_index = standard_colours
         color_major = standard_major_colors['colour'+str(random_colour_index)]
         color_minor = standard_minor_colors['colour'+str(random_colour_index)]
         randcolorindex_grey = randint(0,24)
