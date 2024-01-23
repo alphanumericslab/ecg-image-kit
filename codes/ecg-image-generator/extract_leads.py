@@ -149,7 +149,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         name, ext = os.path.splitext(full_header_file)
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i],full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox)
+        x_grid,y_grid = ecg_plot(ecg_frame[i],full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
 
         rec_head, rec_tail = os.path.split(rec_file)
 
@@ -164,22 +164,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         else:
             json_dict["lead_bounding_box_file"] = ""
 
-        if(print_txt):
-            img_ecg = Image.open(os.path.join(output_directory,rec_tail+'.png'))
-            
-            img = Image.open(template_name)
-            img = np.asarray(img).copy()
-            img[img!=255] = 0
-            img[img==255] = 1
-            img =  np.asarray(img)
-            img_ecg = np.asarray(img_ecg).copy()
-            im = img[:img.shape[0] - 5,:img.shape[1],:img.shape[2]]
-
-            im1 = img_ecg[:img.shape[0] - 5,:img.shape[1],:img.shape[2]] * im
-            img_ecg[:im.shape[0],:im.shape[1],:im.shape[2]] = im1
-            im = Image.fromarray(img_ecg)
-            im.save(os.path.join(output_directory,rec_tail+'.png'))
-
         outfile = os.path.join(output_directory,rec_tail+'.png')
         
         json_object = json.dumps(json_dict, indent=4)
@@ -191,5 +175,4 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
 
         outfile_array.append(outfile)
 
-    os.remove(template_name)
     return outfile_array

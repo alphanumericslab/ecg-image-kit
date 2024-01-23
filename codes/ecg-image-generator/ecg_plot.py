@@ -91,7 +91,8 @@ def ecg_plot(
         y_grid = 0,
         x_grid = 0,
         standard_colours = False,
-        bbox = False
+        bbox = False,
+        print_txt=False
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -245,7 +246,7 @@ def ecg_plot(
 
     text_bbox = []
     lead_bbox = []
-
+    
     for i in np.arange(len(lead_index)):
         if len(lead_index) == 12:
             leadName = leadNames_12[i]
@@ -339,8 +340,6 @@ def ecg_plot(
         start_ind = round((x_offset + dc_offset + x_gap)*x_grid_dots/x_grid_size)
         end_ind = round((x_offset + dc_offset + x_gap + len(ecg[leadName])*step)*x_grid_dots/x_grid_size)
 
-
-
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
         if(show_lead_name):
@@ -404,7 +403,38 @@ def ecg_plot(
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
-                  
+
+    #printed template file
+    if print_txt:
+        x_offset = 0.05
+        y_offset = int(y_max)
+        template_name = 'custom_template.png'
+        printed_text, attributes, flag = generate_template(full_header_file)
+
+        if flag:
+            for l in range(0, len(printed_text), 1):
+        
+                for j in printed_text[l]:
+                    if j == 'ID':
+                        curr_l = 'ID: '
+                    else:
+                        curr_l = ''
+                    if j in attributes.keys():
+                        curr_l += str(attributes[j])
+                    ax.text(x_offset, y_offset, curr_l, fontsize=lead_fontsize)
+                    x_offset += 3
+
+                y_offset -= 0.5
+                x_offset = 0.05
+        else:
+            for line in printed_text:
+                ax.text(x_offset, y_offset, line, fontsize=lead_fontsize)
+                y_offset -= 0.5
+
+    #change x and y res
+    ax.text(2, 0.5, '25mm/s', fontsize=lead_fontsize)
+    ax.text(4, 0.5, '10mm/mV', fontsize=lead_fontsize)
+    
     plt.savefig(os.path.join(output_dir,tail +'.png'),dpi=resolution)
     plt.close(fig)
     plt.clf()
@@ -466,8 +496,6 @@ def ecg_plot(
                 f.write(str(l[4]))
                 f.write('\n')
     
-    template_name = 'custom_template.png'
-    generate_template(full_header_file, template_file=template_name, width=width, height=height, fontsize=lead_fontsize, resolution=resolution)
 
     return x_grid_dots,y_grid_dots
        

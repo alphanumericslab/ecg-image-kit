@@ -4,27 +4,13 @@ import random
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.pyplot as plt
 from datetime import date, timedelta
+import numpy as np
 
 test_date1 = date(1940, 1, 1)
 
-
-def generate_template(header_file, template_file, width, height, fontsize, resolution):
+def generate_template(header_file):
     filename, extn = os.path.splitext(header_file)
     fields = wfdb.rdheader(filename)
-    
-    fig, ax = plt.subplots(figsize=(width, height/4))
-   
-    fig.subplots_adjust(
-        hspace = 0, 
-        wspace = 0,
-        left   = 0,  
-        right  = 1,  
-        bottom = 0,  
-        top    = 1
-        )
-
-    x_offset = 0.02
-    y_offset = 0.9
 
     if fields.comments == []:
         template_file_content = open(os.path.join('TemplateFiles','TextFile1.txt'), 'r')
@@ -37,10 +23,7 @@ def generate_template(header_file, template_file, width, height, fontsize, resol
                 max = len(line.strip())
             lines.append(line.strip())
         
-        for line in lines:
-            ax.text(x_offset, y_offset, line, fontsize=fontsize)
-
-            y_offset -= 0.1
+        return lines, {}, 0
 
     else:
         comments = fields.comments
@@ -94,23 +77,9 @@ def generate_template(header_file, template_file, width, height, fontsize, resol
         printedText[1] = ['DOB', 'Height', 'Weight']
         printedText[2] = ['Sex']
 
+        return printedText, attributes, 1
 
-        for l in range(0, len(printedText), 1):
         
-            for j in printedText[l]:
-                if j == 'ID':
-                    curr_l = 'ID: '
-                else:
-                    curr_l = ''
-                if j in attributes.keys():
-                    curr_l += str(attributes[j])
-                ax.text(x_offset, y_offset, curr_l, fontsize=fontsize)
-                x_offset += 0.3
-
-            y_offset -= 0.1
-            x_offset = 0.02
-
-    plt.savefig(template_file, dpi=resolution)
 
 
 

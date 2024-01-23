@@ -53,7 +53,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `-se`: Seed controlling all the random parameters; type: int
 - `-r`: Resolution with default being 200; type: int
 - `--pad_inches`: Padding of white border along the image with default padding of 0 inches; type: int
-- `print_header`: Add text from header file on all the generated images; default: False
+- `--print_header`: Add text from header file on all the generated images; default: False
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
