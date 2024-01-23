@@ -5,6 +5,7 @@ from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.ticker import AutoMinorLocator
+from TemplateFiles.generate_template import generate_template
 from helper_functions import convert_inches_to_seconds,convert_inches_to_volts,convert_mm_to_volts,convert_mm_to_seconds
 from math import ceil 
 from PIL import Image
@@ -98,6 +99,7 @@ def ecg_plot(
         lead_index,
         full_mode,
         store_text_bbox,
+        full_header_file,
         units          = '',
         papersize      = '',
         x_gap          = standard_values['x_gap'],
@@ -488,6 +490,8 @@ def ecg_plot(
                 f.write(str(l[4]))
                 f.write('\n')
     
+    template_name = 'custom_template.png'
+    generate_template(full_header_file, template_file=template_name, width=width, height=height, fontsize=lead_fontsize, resolution=resolution)
 
     return x_grid_dots,y_grid_dots
        
