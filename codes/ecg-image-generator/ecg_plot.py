@@ -415,10 +415,7 @@ def ecg_plot(
             for l in range(0, len(printed_text), 1):
         
                 for j in printed_text[l]:
-                    if j == 'ID':
-                        curr_l = 'ID: '
-                    else:
-                        curr_l = ''
+                    curr_l = ''
                     if j in attributes.keys():
                         curr_l += str(attributes[j])
                     ax.text(x_offset, y_offset, curr_l, fontsize=lead_fontsize)

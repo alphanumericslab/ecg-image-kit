@@ -31,11 +31,9 @@ def generate_template(header_file):
         attributes = {}
         attributes['Date'] = fields.base_date
         attributes['Time'] = str(fields.base_time)
-        attributes['Name'] = filename.split('/')[-1]
-        attributes['ID'] = str(str(random.randint(10**(8-1), (10**8)-1)))
+        attributes['Name'] = 'Name: ' + filename.split('/')[-1]
+        attributes['ID'] =  'ID: ' #+ str(str(random.randint(10**(8-1), (10**8)-1)))
 
-        if attributes['Date'] == None:
-            attributes['Date'] = date.today()
         
         dates_bet = attributes['Date'] - test_date1
         total_days = dates_bet.days
@@ -59,19 +57,22 @@ def generate_template(header_file):
                 val = val.replace(" ", "")
                 attributes[str(col)] = val
 
-        if 'Age' in attributes:
-            attributes['DOB'] = attributes['Date'] - timedelta(days=int(attributes['Age'])*365)      
+        if 'DOB' in attributes.keys():
+            attributes['DOB'] = 'DOB: ' + attributes['DOB'] 
+            if 'Age' in attributes.keys():
+                attributes['DOB'] += '(Age: ' + attributes['Age'] + ' yrs)'
         else:
-            attributes['DOB'] = test_date1 + timedelta(days=randay)
-            attributes['Age'] = str(attributes['Date'].year - attributes['DOB'].year) 
-
-        attributes['DOB'] = str(attributes['DOB']) + '(' + str(attributes['Age']) + 'yrs)'
+            attributes['DOB'] = 'Age: ' + attributes['Age'] + ' yrs'
 
         if attributes['Weight'] != '':
-            attributes['Weight'] += ' kgs'
+            attributes['Weight'] = 'Weight: ' + attributes['Weight'] + ' Kgs'
         
-        attributes['Date'] = str(attributes['Date']) + ', ' + attributes['Time']
-    
+        attributes['Height'] = 'Height: ' + attributes['Height']
+        
+        attributes['Date'] = str(attributes['Date'])
+        attributes['Date'] = 'Date: '+  attributes['Date'] + ', ' + attributes['Time']
+        attributes['Sex'] = 'Sex: ' + attributes['Sex']
+        
         printedText = {}
         printedText[0] = ['Name', 'ID', 'Date']
         printedText[1] = ['DOB', 'Height', 'Weight']
