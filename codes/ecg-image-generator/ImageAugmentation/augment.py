@@ -53,7 +53,7 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
         leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
        
     
-    images = [image]
+    images = [image[:, :, :3]]
     rot = random.randint(-rotate, rotate)
     crop_sample = random.uniform(0, crop)
     #Augment in a sequential manner. Create an augmentation object

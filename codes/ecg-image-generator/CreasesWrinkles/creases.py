@@ -252,7 +252,7 @@ def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,cre
     if(ifWrinkles):
     #Seed with a different selection of a wrinkle image
     # read wrinkle image as grayscale and convert to float in range 0 to 1
-        wrinkle_file_name = os.path.join(os.path.join('CreasesWrinkles','wrinkles-dataset') , str(random.choice(range(1,21))) + '.jpg')
+        wrinkle_file_name = os.path.join(os.path.join('CreasesWrinkles','wrinkles-dataset') , random.choice(os.listdir(os.path.join('CreasesWrinkles','wrinkles-dataset'))))
         wrinklesImg = quilt(wrinkle_file_name,250,(1,1),'Cut')
         wrinklesImg=cv2.cvtColor(wrinklesImg, cv2.COLOR_BGR2GRAY)
         wrinklesImg = wrinklesImg.astype("float32") / 255.0

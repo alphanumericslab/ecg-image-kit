@@ -17,7 +17,7 @@ import random
 
 
 # Run script.
-def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Arial.ttf'),standard_colours=True,full_mode='II',bbox = False,columns=-1):
+def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,add_dc_pulse=True,add_bw=True,show_grid=True,add_print=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=True,full_mode='II',bbox = False,columns=-1):
 
     # Extract a reduced-lead set from each pair of full-lead header and recording files.
     full_header_file = header_file
@@ -65,7 +65,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         full_mode = 'None'
 
     template_name = 'custom_template.png'
-    generate_template(full_header_file, font_type=font_type, mode=gen_m,template_file=template_name)
 
     if(recording.shape[0]>recording.shape[1]):
        recording = np.transpose(recording)
@@ -150,7 +149,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         name, ext = os.path.splitext(full_header_file)
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i], style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox)
+        x_grid,y_grid = ecg_plot(ecg_frame[i],full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
 
         rec_head, rec_tail = os.path.split(rec_file)
 
@@ -165,23 +164,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
         else:
             json_dict["lead_bounding_box_file"] = ""
 
-        if(print_txt):
-            img_ecg = Image.open(os.path.join(output_directory,rec_tail+'.png'))
-            
-            img = Image.open(template_name)
-            img = img.resize((int(img_ecg.size[0]/3),int(img_ecg.size[0]*img.size[1]/(3*img.size[0]))))
-            img = np.asarray(img).copy()
-            img[img!=255] = 0
-            img[img==255] = 1
-            img =  np.asarray(img)
-            img_ecg = np.asarray(img_ecg).copy()
-            
-
-            im1 = img_ecg[:img.shape[0],:img.shape[1],:img.shape[2]] * img
-            img_ecg[:img.shape[0],:img.shape[1],:img.shape[2]] = im1
-            im = Image.fromarray(img_ecg)
-            im.save(os.path.join(output_directory,rec_tail+'.png'))
-
         outfile = os.path.join(output_directory,rec_tail+'.png')
         
         json_object = json.dumps(json_dict, indent=4)
@@ -193,5 +175,4 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, start_index = -
 
         outfile_array.append(outfile)
 
-    os.remove(template_name)
     return outfile_array

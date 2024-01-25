@@ -45,11 +45,13 @@ def get_parser():
 
     parser.add_argument('--random_resolution',action="store_true",default=False)
     parser.add_argument('--random_padding',action="store_true",default=False)
+    parser.add_argument('--random_grid_color',action="store_true",default=False)
+    parser.add_argument('--standard_grid_color', type=int, default=5)
     parser.add_argument('--random_dc',type=float,default=0)
     parser.add_argument('--random_grid_present',type=float,default=1)
     parser.add_argument('--random_add_header',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
-    parser.add_argument('--deterministic_lead',action="store_true",default=True)
+    parser.add_argument('--deterministic_lead',action="store_false",default=True)
     parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
     parser.add_argument('--store_config',action="store_true",default=False)
 
@@ -112,7 +114,10 @@ def run_single_file(args):
         font = os.path.join('Fonts',random.choice(os.listdir("Fonts")))
         
         if(args.random_bw == 0):
-            standard_colours = random.choice((True,False))
+            if args.random_grid_color == False:
+                standard_colours = args.standard_grid_color
+            else:
+                standard_colours = -1
         else:
             standard_colours = False
 
