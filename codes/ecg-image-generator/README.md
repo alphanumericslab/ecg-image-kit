@@ -57,6 +57,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
+-   `--deterministic_lead`: Remove lead names from all generated images, default=False.
 - `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `-r`] else every image is generated at the `-r` resolution; default: False
 - `--random_padding`: Generate random padding widths on images, if True pad inches is randomly picked from the range [0, `--pad_inches`], else every image is padded with `--pad_inches`; default: False
 - `--random_dc`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--random_dc` $\in$ [0, 1]. 
@@ -75,14 +76,14 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_add_header 0.8 --random_dc 0.5
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5
      ```
 
      - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
 
-     |                           |                             |
-     | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00026_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00027_lr-0.png) |
+          |                           |                             |
+          | ----------------------------------- | ----------------------------------- |
+          | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00026_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00027_lr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
