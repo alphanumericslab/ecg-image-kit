@@ -75,7 +75,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bouding_box --bbox --random_add_header 0.8 --random_dc 0.5
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5
      ```
 
      - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
