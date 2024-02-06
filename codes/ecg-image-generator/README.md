@@ -78,6 +78,13 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5
      ```
+
+     - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
+
+          |                           |                             |
+          | ----------------------------------- | ----------------------------------- |
+          | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00026_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00027_lr-0.png) |
+
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
 
@@ -236,7 +243,7 @@ Average computational time for generating an ECG image of size 2200 X 1700 pixel
 ## Citation
 Please include references to the following articles in any publications:
 
-1. Kshama Kodthalu Shivashankara, Afagh Mehri Shervedani, Gari D. Clifford, Matthew A. Reyna, Reza Sameni (2024). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. doi: [10.48550/ARXIV.2307.01946](https://doi.org/10.48550/ARXIV.2307.01946)
+1. Kshama Kodthalu Shivashankara, Deepanshi, Afagh Mehri Shervedani, Gari D. Clifford, Matthew A. Reyna, Reza Sameni (2024). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. doi: [10.48550/ARXIV.2307.01946](https://doi.org/10.48550/ARXIV.2307.01946)
 
 2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: https://github.com/alphanumericslab/ecg-image-kit
 
