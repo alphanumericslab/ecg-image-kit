@@ -78,13 +78,6 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5
      ```
-
-     - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
-
-          |                           |                             |
-          | ----------------------------------- | ----------------------------------- |
-          | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00026_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00027_lr-0.png) |
-
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
 
