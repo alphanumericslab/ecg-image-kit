@@ -18,57 +18,47 @@ def get_parser():
     parser.add_argument('--num_leads',type=str,default='twelve')
     parser.add_argument('--num_images',type=int,default = -1)
     
-    parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
-    parser.add_argument('--pad_inches',type=int,required=False,default=0)
-    parser.add_argument('-ph','--print_header', action="store_true",default=False)
-    parser.add_argument('--num_columns',type=int,default = -1)
+    #parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
+    #parser.add_argument('--pad_inches',type=int,required=False,default=0)
+    #parser.add_argument('-ph','--print_header', action="store_true",default=False)
     parser.add_argument('--full_mode', type=str,default='II')
 
-    parser.add_argument('--random_resolution',action="store_true",default=False)
-    parser.add_argument('--random_padding',action="store_true",default=False)
-    parser.add_argument('--random_grid_color',action="store_true",default=False)
-    parser.add_argument('--standard_grid_color', type=int, default=5)
-    parser.add_argument('--random_dc',type=float,default=0)
-    parser.add_argument('--random_grid_present',type=float,default=1)
-    parser.add_argument('--random_add_header',type=float,default=0)
-    parser.add_argument('--random_bw',type=float,default=0)
-    parser.add_argument('--deterministic_lead',action="store_false",default=True)
-    parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
-    parser.add_argument('--store_config',action="store_true",default=False)
+    #parser.add_argument('--random_grid_color',action="store_true",default=False)
+    #parser.add_argument('--standard_grid_color', type=int, default=5)
+    #parser.add_argument('--random_bw',type=float,default=0)
 
     parser.add_argument('-l', '--link', type=str, required=False,default='')
-    parser.add_argument('-n','--num_words',type=int,required=False,default=5)
-    parser.add_argument('--x_offset',dest='x_offset',type=int,default = 30)
-    parser.add_argument('--y_offset',dest='y_offset',type=int,default = 30)
-    parser.add_argument('--hws',dest='handwriting_size_factor',type=float,default = 0.2)
+    #parser.add_argument('-n','--num_words',type=int,required=False,default=5)
+    #parser.add_argument('--x_offset',dest='x_offset',type=int,default = 30)
+    #parser.add_argument('--y_offset',dest='y_offset',type=int,default = 30)
+    #parser.add_argument('--hws',dest='handwriting_size_factor',type=float,default = 0.2)
     
-    parser.add_argument('-ca','--crease_angle',type=int,default=90)
-    parser.add_argument('-nv','--num_creases_vertically',type=int,default=10)
-    parser.add_argument('-nh','--num_creases_horizontally',type=int,default=10)
+    #parser.add_argument('-ca','--crease_angle',type=int,default=90)
+    #parser.add_argument('-nv','--num_creases_vertically',type=int,default=10)
+    #parser.add_argument('-nh','--num_creases_horizontally',type=int,default=10)
 
-    parser.add_argument('-rot','--rotate',type=int,default=0)
-    parser.add_argument('-noise','--noise',type=int,default=50)
-    parser.add_argument('-c','--crop',type=float,default=0.01)
-    parser.add_argument('-t','--temperature',type=int,default=40000)
+    #parser.add_argument('-rot','--rotate',type=int,default=0)
+    #parser.add_argument('-noise','--noise',type=int,default=50)
+    #parser.add_argument('-c','--crop',type=float,default=0.01)
 
-    parser.add_argument('--deterministic_offset',action="store_true",default=False)
-    parser.add_argument('--deterministic_num_words',action="store_true",default=False)
-    parser.add_argument('--deterministic_hw_size',action="store_true",default=False)
+    #parser.add_argument('--deterministic_offset',action="store_true",default=False)
+    #parser.add_argument('--deterministic_num_words',action="store_true",default=False)
+    #parser.add_argument('--deterministic_hw_size',action="store_true",default=False)
 
-    parser.add_argument('--deterministic_angle',action="store_true",default=False)
-    parser.add_argument('--deterministic_vertical',action="store_true",default=False)
-    parser.add_argument('--deterministic_horizontal',action="store_true",default=False)
+    #parser.add_argument('--deterministic_angle',action="store_true",default=False)
+    #parser.add_argument('--deterministic_vertical',action="store_true",default=False)
+    #parser.add_argument('--deterministic_horizontal',action="store_true",default=False)
 
-    parser.add_argument('--deterministic_rot',action="store_true",default=False)
-    parser.add_argument('--deterministic_noise',action="store_true",default=False)
-    parser.add_argument('--deterministic_crop',action="store_true",default=False)
-    parser.add_argument('--deterministic_temp',action="store_true",default=False)
+    #parser.add_argument('--deterministic_rot',action="store_true",default=False)
+    #parser.add_argument('--deterministic_noise',action="store_true",default=False)
+    #parser.add_argument('--deterministic_crop',action="store_true",default=False)
+    #parser.add_argument('--deterministic_temp',action="store_true",default=False)
 
-    parser.add_argument('--fully_random',action='store_true',default=False)
-    parser.add_argument('--hw_text',action='store_true',default=False)
-    parser.add_argument('--wrinkles',action='store_true',default=False)
-    parser.add_argument('--augment',action='store_true',default=False)
-    parser.add_argument('--bbox',action='store_true',default=False)
+    #parser.add_argument('--fully_random',action='store_true',default=False)
+    #parser.add_argument('--hw_text',action='store_true',default=False)
+    #parser.add_argument('--wrinkles',action='store_true',default=False)
+    #parser.add_argument('--augment',action='store_true',default=False)
+    #parser.add_argument('--bbox',action='store_true',default=False)
 
     return parser
 
@@ -76,11 +66,43 @@ def run(args):
         P1 = ['150', '200', '300', '200', '200', '200']  # E.g., resolutions
         P2 = ['0', '0.1', '0.5']  # E.g., padding inches
         P3 = ['0', '1', '1', '0', '1', '1']  # E.g., random DC offset options
+        P4 = [1, 3, 2, 5, 4, 5, 5] # Grid color
+        P5 = [1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1] #add header
+        P6 = [3, 4, 5] #number of handwritten words
+        P7 = [30, 50, 100, 20, 70] #x offset for hw
+        P8 = [50, 30, 70] # y offser for hw
+        P9 = [0.1 , 0.3, 0.2] #handwritten size factor
+        P10 = [90, 60, 20, 50, 40] #crease angle
+        P11 = [5, 7, 9, 8, 10] #num creases horizontally
+        P12 = [4, 9, 8, 10, 5] #num creases vertically
+        P13 = [5, 10, 8] #rotation
+        P14 = [12, 29, 37] #noise
+        P15 = [0.01, 0.0005, 0.02] #crop 
+        P16 = [1, 0, 0, 0, 0] #hw  text
+        P17 = [1, 0, 1, 1, 0] #wrinkles
+        P18 = [0, 1, 1] #augment 
+        P19  = [0, 0, 0, 1, 0] #random black and white
 
         # Creating iterators using cycle for round-robin
         iter_P1 = cycle(P1)
         iter_P2 = cycle(P2)
         iter_P3 = cycle(P3)
+        iter_P4 = cycle(P4)
+        iter_P5 = cycle(P5)
+        iter_P6 = cycle(P6)
+        iter_P7 = cycle(P7)
+        iter_P8 = cycle(P8)
+        iter_P9 = cycle(P9)
+        iter_P10 = cycle(P10)
+        iter_P11 = cycle(P11)
+        iter_P12 = cycle(P12)
+        iter_P13 = cycle(P13)
+        iter_P14 = cycle(P14)
+        iter_P15 = cycle(P15)
+        iter_P16 = cycle(P16)
+        iter_P17 = cycle(P17)
+        iter_P18 = cycle(P18)
+        iter_P19 = cycle(P19)
 
         random.seed(args.seed)
 
@@ -110,53 +132,28 @@ def run(args):
 
                 folder_struct_list = full_header_file.split('/')[:-1]
                 args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
+    
+                random_add_header = next(iter_P5)          
                 
-                resolution = random.choice(range(50,args.resolution+1)) if (args.random_resolution) else args.resolution
-                pad_inches = random.choice(range(0,args.pad_inches+1)) if (args.random_padding) else args.pad_inches
-                
-                papersize = ''
-                lead = args.deterministic_lead
-
-                if args.print_header:
-                    random_add_header = 1
-                else:
-                    random_add_header = args.random_add_header                
-                
-                
-                if(args.fully_random):
-                    hw_text = random.choice((True,False))
-                    wrinkles = random.choice((True,False))
-                    augment = random.choice((True,False))
-                else:
-                    hw_text = args.hw_text
-                    wrinkles = args.wrinkles
-                    augment = args.augment
+                hw_text = next(iter_P16)
+                wrinkles = next(iter_P17)
+                augment = next(iter_P18)
 
                 #Handwritten text addition
                 if(hw_text):
-                    num_words = args.num_words 
-                    x_offset = args.x_offset 
-                    y_offset = args.y_offset 
+                    num_words = next(iter_P6)
+                    x_offset = next(iter_P7)
+                    y_offset = next(iter_P8)
 
                 if(wrinkles):
-                    ifWrinkles = True
-                    ifCreases = True
-                    crease_angle = args.crease_angle if (args.deterministic_angle) else random.choice(range(0,args.crease_angle+1))
-                    num_creases_vertically = args.num_creases_vertically if (args.deterministic_vertical) else random.choice(range(1,args.num_creases_vertically+1))
-                    num_creases_horizontally = args.num_creases_horizontally if (args.deterministic_horizontal) else random.choice(range(1,args.num_creases_horizontally+1))
+                    crease_angle = next(iter_P10)
+                    num_creases_vertically = next(iter_P11)
+                    num_creases_horizontally = next(iter_P12)
 
                 
                 if(augment):
-                    noise = args.noise if (args.deterministic_noise) else random.choice(range(1,args.noise+1))
-                
-                    if(not args.bbox):
-                        do_crop = random.choice((True,False))
-                        if(do_crop):
-                            crop = args.crop
-                        else:
-                            crop = args.crop
-                    else:
-                        crop = 0
+                    noise = next(iter_P14) 
+                    crop = next(iter_P15)
                     blue_temp = random.choice((True,False))
 
                     if(blue_temp):
@@ -165,44 +162,25 @@ def run(args):
                         temp = random.choice(range(10000,20000))
 
                 command = "python gen_ecg_image_from_data.py --input_file " + args.input_file + " --header_file " + args.header_file + " --output_directory " + args.output_directory + " --start_index " + str(args.start_index)
-                command += " --resolution " + str(next(iter_P1)) + " --pad_inches " + str(next(iter_P2)) + " --random_add_header " + str(random_add_header) + " --num_columns " + str(args.num_columns) + " --full_mode " + args.full_mode + " --standard_grid_color " + str(args.standard_grid_color)
-                if lead:
-                    command += " --deterministic_lead "
-                if args.store_text_bounding_box:
-                    command += " --store_text_bounding_box "
-                if args.store_config:
-                    command += " --store_config "
-                if args.random_grid_color:
-                    command += " --random_grid_color "
-                if args.bbox:
-                    command += " --bbox "
-                command += " --random_dc " + str(next(iter_P3)) + " --random_bw " + str(args.random_bw) + " --random_grid_present " + str(args.random_grid_present)
+                command += " --resolution " + str(next(iter_P1)) + " --pad_inches " + str(next(iter_P2)) + " --random_add_header " + str(random_add_header) + " --full_mode " + args.full_mode + " --standard_grid_color " + str(next(iter_P4))
+                command += " --store_text_bounding_box "
+                command += " --store_config "
+                command += " --bbox "
+                command += " --random_dc " + str(next(iter_P3)) + " --random_bw " + str(next(iter_P19)) 
                 if hw_text:
                     command += " --hw_text "
+                    command += " --deterministic_num_words --num_words " + str(num_words)
+                    command += " --deterministic_offset --x_offset " + str(x_offset) + " --y_offset " + str(y_offset)
+                    command += " --link " + str(args.link) + " --handwriting_size_factor " + str(next(iter_P9))
                 if wrinkles:
                     command += " --wrinkles "
+                    command += " --deterministic_angle --crease_angle " + str(crease_angle)
+                    command += " --deterministic_vertical --num_creases_vertically " + str(num_creases_vertically)
+                    command += " --deterministic_horizontal --num_creases_horizontally " + str(num_creases_horizontally)
                 if augment:
-                    command += " --augment "
-                
-                #HW text
-                if args.deterministic_num_words:
-                    command += " --deterministic_num_words --num_words " + str(num_words)
-                if args.deterministic_offset:
-                    command += " --deterministic_offset --x_offset " + str(x_offset) + " --y_offset " + str(y_offset)
-                command += " --link " + str(args.link) + " --handwriting_size_factor " + str(args.handwriting_size_factor)
-
-                #Creases and wrinkles
-                if args.deterministic_angle:
-                    command += " --deterministic_angle --crease_angle " + str(args.crease_angle)
-                if args.deterministic_vertical:
-                    command += " --deterministic_vertical --num_creases_vertically " + str(args.num_creases_vertically)
-                if args.deterministic_horizontal:
-                    command += " --deterministic_horizontal --num_creases_horizontally " + str(args.num_creases_horizontally)
-
-                #Augment
-                if args.deterministic_noise:
-                    command += " --deterministic_noise --noise " + str(args.noise) 
-                command += " --crop " + str(args.crop) + " --rotate " + str(args.rotate)
+                    command += " --augment "               
+                    command += " --deterministic_noise --noise " + str(noise) 
+                    command += " --crop " + str(crop) + " --rotate " + str(next(iter_P13))
 
                  
                 command += '\n'
