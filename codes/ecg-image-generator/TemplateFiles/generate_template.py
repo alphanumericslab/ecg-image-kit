@@ -29,15 +29,18 @@ def generate_template(header_file):
         comments = fields.comments
         
         attributes = {}
-        attributes['Date'] = fields.base_date
-        attributes['Time'] = str(fields.base_time)
+        
+        if fields.base_date is not None:
+            attributes['Date'] = fields.base_date
+        else:
+            attributes['Date'] = ""
+        if fields.base_time is not None:
+            attributes['Time'] = str(fields.base_time)
+        else:
+            attributes['Time'] = ""
+            
         attributes['Name'] = 'Name: ' + filename.split('/')[-1]
         attributes['ID'] =  'ID: ' #+ str(str(random.randint(10**(8-1), (10**8)-1)))
-
-        
-        dates_bet = attributes['Date'] - test_date1
-        total_days = dates_bet.days
-        randay = random.randrange(total_days)
     
         attributes['Height'] = ''
         attributes['Weight'] = ''
