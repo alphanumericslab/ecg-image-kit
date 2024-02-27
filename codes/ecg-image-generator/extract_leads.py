@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 from TemplateFiles.generate_template import generate_template
 from math import ceil 
-from helper_functions import get_adc_gains,get_frequency,get_leads,load_recording,load_header,find_files, truncate_signal, create_signal_dictionary, samples_to_volts, standardize_leads
+from helper_functions import get_adc_gains,get_frequency,get_leads,load_recording,load_header,find_files, truncate_signal, create_signal_dictionary, samples_to_volts, standardize_leads, write_wfdb_file
 from ecg_plot import ecg_plot
 import wfdb
 from PIL import Image, ImageDraw, ImageFont
@@ -89,7 +89,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
         frame = {}
         gain_index = 0
         for key in record_dict:
-                if(len(record_dict[key][start:])<int(rate*lead_length_in_seconds)):
+                if(len(record_dict[key][start:])<int(rate*next_lead_step)):
                     end_flag = True
                 else:
                     end = start + int(rate*lead_length_in_seconds)
@@ -113,7 +113,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             frame = {}
             gain_index = 0
             for key in record_dict:
-                if(len(record_dict[key][start:])<int(rate*lead_length_in_seconds)):
+                if(len(record_dict[key][start:])<int(rate*next_lead_step)):
                     end_flag = True
                 else:
                     end = start + int(rate*lead_length_in_seconds)
@@ -129,10 +129,11 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
                             frame['full'+full_mode] = samples_to_volts(record_dict[key][start:],adc[gain_index])
                             frame['full'+full_mode] = center_function(frame['full'+full_mode])
                     gain_index += 1
+                if end_flag:
+                    break
             if(end_flag==False):
                 ecg_frame.append(frame)
                 start += int(rate*next_lead_step)
-
     outfile_array = []
         
     for i in range(len(ecg_frame)):
@@ -151,6 +152,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
         
         x_grid,y_grid = ecg_plot(ecg_frame[i],full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
 
+        write_wfdb_file(ecg_frame[i], rec_file, rate, header_file, output_directory, full_mode)
         rec_head, rec_tail = os.path.split(rec_file)
 
         json_dict["x_grid"] = x_grid
