@@ -19,7 +19,7 @@ def get_parser():
     parser.add_argument('-hea', '--header_file', type=str, required=True)
     parser.add_argument('-o', '--output_directory', type=str, required=True)
     parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
-    parser.add_argument('-st', '--start_index', type=int, required=True)
+    parser.add_argument('-st', '--start_index', type=int, required=True, default=-1)
     parser.add_argument('--num_leads',type=str,default='twelve')
     
     parser.add_argument('-r','--resolution',type=int,required=False,default = 200)

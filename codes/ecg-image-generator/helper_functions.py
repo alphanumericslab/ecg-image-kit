@@ -8,6 +8,8 @@ import wfdb
 from imgaug import augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
+BIT_NAN_16 = -(2.**15)
+
 def find_records(folder, output_dir):
     header_files = list()
     recording_files = list()
@@ -248,3 +250,38 @@ def convert_inches_to_volts(inches):
 def convert_inches_to_seconds(inches):
     return float(inches*1.016)
 
+def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode):
+    full_header = load_header(header_file)
+    full_leads = get_leads(full_header)
+
+    lead_step = 10.0
+    samples = int(rate * lead_step)
+    array = np.zeros((1, samples))
+
+    leads = []
+    header_name, extn = os.path.splitext(header_file)
+    header = wfdb.rdheader(header_name)
+
+    for i, lead in enumerate(full_leads):
+        adc_gn = header.adc_gain[i]
+        arr = np.full((1, samples), BIT_NAN_16/adc_gn)
+        if(lead == full_mode):
+            length = len(ecg_frame['full' + lead])
+            arr[0][:length] = ecg_frame['full' + lead]
+        else:
+            length = len(ecg_frame[lead])
+            arr[0][:length] = ecg_frame[lead]
+
+        leads.append(lead)
+        array = np.concatenate((array, arr),axis = 0)
+    
+    head, tail  = os.path.split(filename)
+    
+    array = array[1:]
+    wfdb.wrsamp(record_name = tail, 
+                fs = rate, units = header.units,
+                sig_name = leads, p_signal = array.T, fmt = header.fmt,
+                adc_gain = header.adc_gain, baseline = header.baseline, 
+                comments = header.comments, 
+                base_time = header.base_time, base_date = header.base_date, base_datetime = header.base_datetime, 
+                write_dir = write_dir)
