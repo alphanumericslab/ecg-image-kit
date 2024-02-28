@@ -283,5 +283,5 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
                 sig_name = leads, p_signal = array.T, fmt = header.fmt,
                 adc_gain = header.adc_gain, baseline = header.baseline, 
                 comments = header.comments, 
-                base_time = header.base_time, base_date = header.base_date, base_datetime = header.base_datetime, 
+                base_time = header.base_time, base_date = header.base_date, 
                 write_dir = write_dir)

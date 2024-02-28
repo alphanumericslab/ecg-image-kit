@@ -81,7 +81,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
     end_flag = False
     start = 0
     lead_length_in_seconds = 10.0/columns
-    next_lead_step = 10.0
+    abs_lead_step = 10.0
 
     if start_index != -1:
         start = start_index
@@ -89,7 +89,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
         frame = {}
         gain_index = 0
         for key in record_dict:
-                if(len(record_dict[key][start:])<int(rate*next_lead_step)):
+                if(len(record_dict[key][start:])<int(rate*abs_lead_step)):
                     end_flag = True
                 else:
                     end = start + int(rate*lead_length_in_seconds)
@@ -113,7 +113,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             frame = {}
             gain_index = 0
             for key in record_dict:
-                if(len(record_dict[key][start:])<int(rate*next_lead_step)):
+                if(len(record_dict[key][start:])<int(rate*abs_lead_step)):
                     end_flag = True
                 else:
                     end = start + int(rate*lead_length_in_seconds)
@@ -133,7 +133,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
                     break
             if(end_flag==False):
                 ecg_frame.append(frame)
-                start += int(rate*next_lead_step)
+                start += int(rate*abs_lead_step)
     outfile_array = []
         
     for i in range(len(ecg_frame)):
