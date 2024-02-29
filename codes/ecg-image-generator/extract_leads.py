@@ -128,6 +128,12 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             for key in record_dict:
                 if(len(record_dict[key][start:])<int(rate*abs_lead_step)):
                     end_flag = True
+                    nanArray = np.empty(len(record_dict[key][start:]))
+                    nanArray[:] = np.nan
+                    if(full_mode!='None' and key==full_mode):
+                        segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + nanArray.tolist()
+                    if(key!='full'+full_mode):
+                        segmented_ecg_data[key] = segmented_ecg_data[key] + nanArray.tolist()
                 else:
                     end = start + int(rate*lead_length_in_seconds)
 
@@ -157,8 +163,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
                             else:
                                 segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + frame['full'+full_mode].tolist()
                     gain_index += 1
-                if end_flag:
-                    break
             if(end_flag==False):
                 ecg_frame.append(frame)
                 start += int(rate*abs_lead_step)
