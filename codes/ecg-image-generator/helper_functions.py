@@ -255,7 +255,7 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
     full_leads = get_leads(full_header)
 
     lead_step = 10.0
-    samples = int(rate * lead_step)
+    samples = len(ecg_frame[full_mode])
     array = np.zeros((1, samples))
 
     leads = []
@@ -263,16 +263,15 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
     header = wfdb.rdheader(header_name)
 
     for i, lead in enumerate(full_leads):
-        adc_gn = header.adc_gain[i]
-        arr = np.full((1, samples), BIT_NAN_16/adc_gn)
-        if(lead == full_mode):
-            length = len(ecg_frame['full' + lead])
-            arr[0][:length] = ecg_frame['full' + lead]
-        else:
-            length = len(ecg_frame[lead])
-            arr[0][:length] = ecg_frame[lead]
-
         leads.append(lead)
+        if lead == full_mode:
+            lead = 'full' + lead
+        adc_gn = header.adc_gain[i]
+
+        arr = ecg_frame[lead]
+        arr = np.array(arr)
+        arr[arr == np.nan] = BIT_NAN_16/adc_gn
+        arr = arr.reshape((1, arr.shape[0]))
         array = np.concatenate((array, arr),axis = 0)
     
     head, tail  = os.path.split(filename)
