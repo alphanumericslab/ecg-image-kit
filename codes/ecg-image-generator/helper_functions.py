@@ -253,6 +253,7 @@ def convert_inches_to_seconds(inches):
 def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode):
     full_header = load_header(header_file)
     full_leads = get_leads(full_header)
+    full_leads = standardize_leads(full_leads)
 
     lead_step = 10.0
     samples = len(ecg_frame[full_mode])
