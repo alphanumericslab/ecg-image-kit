@@ -82,7 +82,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
           |                           |                             |
           | ----------------------------------- | ----------------------------------- |
-          | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00004_lr-0.png) |
+          | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
