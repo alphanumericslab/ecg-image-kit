@@ -47,6 +47,8 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
      | ----------------------------------- | ----------------------------------- |
      | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
 
+     *Note:* The ECG images generated for the format 3 by 4 (4 columns), the ECG signals for every column have been sampled in a shifted fashion, i.e. the leads in the first column (I, II, III) is from the first 2.5 seconds, the second column (aVR, aVL, aVF) is from the second 2.5 seconds, the third column (V1, V2, V3) is from the third 2.5 seconds segment and the fourth column (V4, V5, V6) is from the fourth 2.5 seconds segment of the respective lead of the ECG signal.
+
 ## Generating distortionless ECG
 The basic mode of the tool creates ECG images without distortions. The mode of operation and generated outputs can be configured using these command-line flags:
 
