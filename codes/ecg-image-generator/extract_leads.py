@@ -70,9 +70,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
     if(recording.shape[0]>recording.shape[1]):
        recording = np.transpose(recording)
 
-    if recording.shape[1]/rate < 10:
-        return []
-
     record_dict = create_signal_dictionary(recording,full_leads)
    
     gain_index = 0
@@ -97,9 +94,15 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
                 nanArray = np.empty(len(record_dict[key][start:]))
                 nanArray[:] = np.nan
                 if(full_mode!='None' and key==full_mode):
-                    segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + nanArray.tolist()
+                    if 'full'+full_mode not in segmented_ecg_data.keys():
+                        segmented_ecg_data['full'+full_mode] = nanArray.tolist()
+                    else:
+                        segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + nanArray.tolist()
                 if(key!='full'+full_mode):
-                    segmented_ecg_data[key] = segmented_ecg_data[key] + nanArray.tolist()
+                    if key not in segmented_ecg_data.keys():
+                        segmented_ecg_data[key] = nanArray.tolist()
+                    else:
+                        segmented_ecg_data[key] = segmented_ecg_data[key] + nanArray.tolist()
             else:
                 shilftedStart = start
                 if columns == 4 and key in format_4_by_3[1]:
@@ -159,9 +162,15 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
                     nanArray = np.empty(len(record_dict[key][start:]))
                     nanArray[:] = np.nan
                     if(full_mode!='None' and key==full_mode):
-                        segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + nanArray.tolist()
+                        if 'full'+full_mode not in segmented_ecg_data.keys():
+                            segmented_ecg_data['full'+full_mode] = nanArray.tolist()
+                        else:
+                            segmented_ecg_data['full'+full_mode] = segmented_ecg_data['full'+full_mode] + nanArray.tolist()
                     if(key!='full'+full_mode):
-                        segmented_ecg_data[key] = segmented_ecg_data[key] + nanArray.tolist()
+                        if key not in segmented_ecg_data.keys():
+                            segmented_ecg_data[key] = nanArray.tolist()
+                        else:
+                            segmented_ecg_data[key] = segmented_ecg_data[key] + nanArray.tolist()
                 else:
                     shilftedStart = start
                     if columns == 4 and key in format_4_by_3[1]:
