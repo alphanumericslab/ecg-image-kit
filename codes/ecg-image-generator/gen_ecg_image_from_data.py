@@ -172,4 +172,7 @@ def run_single_file(args):
         return len(out_array)
 
 if __name__=='__main__':
+    path = os.path.join(os.getcwd(), sys.argv[0])
+    parentPath = os.path.dirname(path)
+    os.chdir(parentPath)
     run_single_file(get_parser().parse_args(sys.argv[1:]))
