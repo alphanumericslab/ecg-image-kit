@@ -250,7 +250,7 @@ def convert_inches_to_volts(inches):
 def convert_inches_to_seconds(inches):
     return float(inches*1.016)
 
-def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode):
+def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode, mask_unplotted_samples):
     full_header = load_header(header_file)
     full_leads = get_leads(full_header)
     full_leads = standardize_leads(full_leads)
@@ -288,4 +288,11 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
     with open(os.path.join(write_dir, tail + '.hea'), "a") as f:
         for line in header.comments:
             f.write("#" + line)
+            f.write("\n")
+
+        if mask_unplotted_samples:
+            f.write("#mask_unplotted_samples: True")
+            f.write("\n")
+        else:
+            f.write("#mask_unplotted_samples: False")
             f.write("\n")

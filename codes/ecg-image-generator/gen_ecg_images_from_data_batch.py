@@ -25,6 +25,7 @@ def get_parser():
     parser.add_argument('-ph','--print_header', action="store_true",default=False)
     parser.add_argument('--num_columns',type=int,default = -1)
     parser.add_argument('--full_mode', type=str,default='II')
+    parser.add_argument('--mask_unplotted_samples', action="store_true", default=False)
 
     parser.add_argument('-l', '--link', type=str, required=False,default='')
     parser.add_argument('-n','--num_words',type=int,required=False,default=5)
