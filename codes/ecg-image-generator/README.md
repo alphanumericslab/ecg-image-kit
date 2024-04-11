@@ -247,8 +247,8 @@ Please include references to the following articles in any publications:
 2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: https://github.com/alphanumericslab/ecg-image-kit
 
 ## Contributors
-- Kshama Kodthalu Shivashankara, School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, US
 - Deepanshi, Department of Biomedical Informatics, Emory University, GA, US
+- Kshama Kodthalu Shivashankara, School of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta, GA, US
 - Matthew A Reyna, Department of Biomedical Informatics, Emory University, GA, US
 - Gari D Clifford, Department of Biomedical Informatics, Emory University, GA, US
 - Reza Sameni (contact person), Department of Biomedical Informatics, Emory University, GA, US
