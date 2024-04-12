@@ -174,7 +174,7 @@ def create_signal_dictionary(signal,full_leads):
 
 def samples_to_volts(signal,adc_gain):
     signal_threshold = 10
-    if(np.max(signal))>10:
+    if(np.max(np.abs(signal)))>10:
         signal = signal/adc_gain
     return signal
 
