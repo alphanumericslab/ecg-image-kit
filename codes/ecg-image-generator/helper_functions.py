@@ -172,11 +172,6 @@ def create_signal_dictionary(signal,full_leads):
         
     return record_dict
 
-def samples_to_volts(signal,adc_gain):
-    signal_threshold = 10
-    if(np.max(signal))>10:
-        signal = signal/adc_gain
-    return signal
 
 def standardize_leads(full_leads):
     full_leads_array = np.asarray(full_leads)
@@ -271,7 +266,7 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
 
         arr = ecg_frame[lead]
         arr = np.array(arr)
-        arr[arr == np.nan] = BIT_NAN_16/adc_gn
+        arr[np.isnan(arr)] = BIT_NAN_16/adc_gn
         arr = arr.reshape((1, arr.shape[0]))
         array = np.concatenate((array, arr),axis = 0)
     
