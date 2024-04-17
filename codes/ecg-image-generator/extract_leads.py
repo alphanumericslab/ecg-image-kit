@@ -259,7 +259,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i], configs=configs, full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
+        x_grid,y_grid = ecg_plot(ecg_frame[i], configs=configs, full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt, json_dict=json_dict)
 
         rec_head, rec_tail = os.path.split(rec_file)
 
@@ -273,7 +273,16 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             json_dict["lead_bounding_box_file"] = os.path.join(output_directory, 'lead_bounding_box', rec_tail + '.txt')
         else:
             json_dict["lead_bounding_box_file"] = ""
+        json_dict["DC pulse"] = bool(dc)
+        json_dict["bw"] = bool(bw)
+        json_dict["gridlines"] = bool(grid)
+        json_dict["Printed text"] = bool(print_txt)
+        json_dict["Number of columns in image"] = columns
+        json_dict["Resolution"] = resolution
+        json_dict["Pad inches"] = pad_inches
+        json_dict["Full Mode lead"] = full_mode
 
+        print(json_dict)
         outfile = os.path.join(output_directory,rec_tail+'.png')
         
         json_object = json.dumps(json_dict, indent=4)

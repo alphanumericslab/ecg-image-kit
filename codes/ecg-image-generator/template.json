@@ -1,6 +1,48 @@
 {
+    "width": 0,
+    "height": 0,
+    "grid line width": 0,
+    "grid line color major": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "grid line color minor": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "ecg plot color": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "lead offset X": 0,
+    "lead offset Y": 0,
+    "leadname fontsize": 0,
     "x_grid": 0,
     "y_grid": 0,
     "text_bounding_box_file": "",
-    "lead_bounding_box_file": ""
+    "lead_bounding_box_file": "",
+    "DC pulse": false,
+    "bw": false,
+    "gridlines": false,
+    "Printed text": false,
+    "Number of columns in image": 0,
+    "Resolution": 0,
+    "Pad inches": 0,
+    "Full Mode lead": "",
+    "handwritten text": false,
+    "num words": 0,
+    "X offset for handwritten text": 0,
+    "Y offset for handwritten text": 0,
+    "wrinkles": false,
+    "crease angle": 0,
+    "num creases horizontally": 0,
+    "num creases vertically": 0,
+    "augment": false,
+    "crop": 0,
+    "temp": 0,
+    "rotate": 0,
+    "noise": 0
 }

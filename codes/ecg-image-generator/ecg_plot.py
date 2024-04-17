@@ -91,7 +91,8 @@ def ecg_plot(
         x_grid = 0,
         standard_colours = False,
         bbox = False,
-        print_txt=False
+        print_txt=False,
+        json_dict=dict()
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -139,6 +140,7 @@ def ecg_plot(
     lead_name_offset = standard_values['lead_name_offset']
     lead_fontsize = standard_values['lead_fontsize']
 
+
     #Set max and min coordinates to mark grid. Offset x_max slightly (i.e by 1 column width)
 
     if papersize=='':
@@ -161,6 +163,8 @@ def ecg_plot(
     y_min = 0
     y_max = height * y_grid_size/y_grid
 
+    json_dict['width'] = width*resolution
+    json_dict['height'] = height*resolution
     #Set figure and subplot sizes
     fig, ax = plt.subplots(figsize=(width, height))
    
@@ -216,7 +220,10 @@ def ecg_plot(
         ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
         
         ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
-        
+        json_dict['grid line width'] = grid_line_width
+        json_dict['grid line color major'] = [x*255. for x in color_major]
+        json_dict['grid line color minor'] = [x*255. for x in color_minor]
+        json_dict['ecg plot color'] = [x*255. for x in color_line]
     else:
         ax.grid(False)
     ax.set_ylim(y_min,y_max)
@@ -234,6 +241,9 @@ def ecg_plot(
     y_offset = (row_height/2)
     x_offset = 0
 
+    json_dict['lead offset X'] = dc_offset
+    json_dict['lead offset Y'] = y_offset
+    json_dict['leadname fontsize'] = lead_fontsize
     text_bbox = []
     lead_bbox = []
 
