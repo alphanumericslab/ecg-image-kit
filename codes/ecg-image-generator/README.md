@@ -71,7 +71,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--random_grid_color`: Generates random colors for the gridlines, If `'--random_bw` > 0, then the color of gridlines for the non black and white ECG images is picked randomly. Default: False.
 - `--store_text_bounding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
 - `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
-- `store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. The json file has following attributes:
+- `--store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. The json file has following attributes:
      - `x_grid`: Number of pixels per 200ms of the grid on the image.
      - `y_grid`: Number of pixels per 0.5mV of the grid on the image.
      - `text_bounding_box_file`: Path to the bounding boxes for the lead names if the `store_text_bounding_box` is True else ''

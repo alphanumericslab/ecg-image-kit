@@ -57,8 +57,6 @@ papersize_values = {'A0' : (33.1,46.8),
                     'letter' : (8.5,11)
                     }
 
-leadNames_12 = ["III", 'aVF', 'V3', 'V6', 'II', 'aVL', 'V2', 'V5', 'I', 'aVR', 'V1', 'V4']
-
 
 def inches_to_dots(value,resolution):
     return (value * resolution)
@@ -66,6 +64,7 @@ def inches_to_dots(value,resolution):
 #Function to plot raw ecg signal
 def ecg_plot(
         ecg, 
+        configs,
         sample_rate, 
         columns,
         rec_file_name,
@@ -116,8 +115,6 @@ def ecg_plot(
     #rows are calculated based on corresponding number of leads and number of columns
 
     matplotlib.use("Agg")
-    randindex = randint(0,99)
-    random_sampler = random.uniform(-0.05,0.004)
 
     #check if the ecg dict is empty
     if ecg == {}:
@@ -188,24 +185,18 @@ def ecg_plot(
         random_colour_index = standard_colours
         color_major = standard_major_colors['colour'+str(random_colour_index)]
         color_minor = standard_minor_colors['colour'+str(random_colour_index)]
-        randcolorindex_grey = randint(0,24)
         grey_random_color = random.uniform(0,0.2)
         color_line  = (grey_random_color,grey_random_color,grey_random_color)
     else:
-        randcolorindex_red = randint(0,24)
         major_random_color_sampler_red = random.uniform(0,0.8)
-        randcolorindex_green = randint(0,24)
         major_random_color_sampler_green = random.uniform(0,0.5)
-        randcolorindex_blue = randint(0,24)
         major_random_color_sampler_blue = random.uniform(0,0.5)
 
-        randcolorindex_minor = randint(0,24)
         minor_offset = random.uniform(0,0.2)
         minor_random_color_sampler_red = major_random_color_sampler_red + minor_offset
         minor_random_color_sampler_green = random.uniform(0,0.5) + minor_offset
         minor_random_color_sampler_blue = random.uniform(0,0.5) + minor_offset
 
-        randcolorindex_grey = randint(0,24)
         grey_random_color = random.uniform(0,0.2)
         color_major = (major_random_color_sampler_red,major_random_color_sampler_green,major_random_color_sampler_blue)
         color_minor = (minor_random_color_sampler_red,minor_random_color_sampler_green,minor_random_color_sampler_blue)
@@ -232,7 +223,6 @@ def ecg_plot(
     ax.set_xlim(x_min,x_max)
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
-    lead_num = 0
     
     #Step size will be number of seconds per sample i.e 1/sampling_rate
     step = (1.0/sample_rate)
@@ -246,7 +236,9 @@ def ecg_plot(
 
     text_bbox = []
     lead_bbox = []
-    
+
+    leadNames_12 = configs['leadNames_12']
+
     for i in np.arange(len(lead_index)):
         if len(lead_index) == 12:
             leadName = leadNames_12[i]
@@ -397,10 +389,6 @@ def ecg_plot(
 
             lead_bbox.append([x1, y1, x2, y2, 1])
 
-
-        start_ind = round((dc_full_lead_offset + x_gap)*x_grid_dots/x_grid_size)
-        end_ind = round((dc_full_lead_offset + x_gap + len(ecg['full'+full_mode])*step)*x_grid_dots/x_grid_size)
-
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
 
@@ -408,7 +396,6 @@ def ecg_plot(
     if print_txt:
         x_offset = 0.05
         y_offset = int(y_max)
-        template_name = 'custom_template.png'
         printed_text, attributes, flag = generate_template(full_header_file)
 
         if flag:

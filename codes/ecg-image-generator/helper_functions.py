@@ -1,4 +1,4 @@
-import os, sys, argparse
+import os, sys, argparse, yaml
 import numpy as np
 from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
@@ -9,6 +9,24 @@ from imgaug import augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
 BIT_NAN_16 = -(2.**15)
+
+def read_config_file(config_file):
+    """Read YAML config file
+
+    Args:
+        config_file (str): Complete path to the config file
+    
+    Returns:
+        configs (dict): Returns dictionary with all the configs
+    """
+    with open(config_file) as f:
+            yamlObject = yaml.safe_load(f)
+
+    args = dict()
+    for key in yamlObject:
+        args[key] = yamlObject[key]
+
+    return args
 
 def find_records(folder, output_dir):
     header_files = list()
@@ -171,7 +189,6 @@ def create_signal_dictionary(signal,full_leads):
         record_dict[full_leads[k]] = signal[k]
         
     return record_dict
-
 
 def standardize_leads(full_leads):
     full_leads_array = np.asarray(full_leads)

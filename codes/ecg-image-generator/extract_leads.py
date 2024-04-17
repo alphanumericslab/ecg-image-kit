@@ -15,10 +15,8 @@ from PIL import Image, ImageDraw, ImageFont
 from random import randint
 import random
 
-format_4_by_3 = [["I", "II", "III"], ["aVR", "aVL", "aVF", "AVR", "AVL", "AVF"], ["V1", "V2", "V3"], ["V4", "V5", "V6"]]
-
 # Run script.
-def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,add_bw,show_grid, add_print, mask_unplotted_samples = False, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=5,full_mode='II',bbox = False,columns=-1):
+def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,add_bw,show_grid, add_print, configs, mask_unplotted_samples = False, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=5,full_mode='II',bbox = False,columns=-1):
 
     # Extract a reduced-lead set from each pair of full-lead header and recording files.
     full_header_file = header_file
@@ -41,7 +39,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
     #Load the full-lead recording file, extract the lead data, and save the reduced-lead recording file.
     recording = load_recording(full_recording_file, full_header,key)
-           
+
     # Get values from header
     rate = get_frequency(full_header)
     adc = get_adc_gains(full_header,full_leads)
@@ -68,8 +66,8 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
     template_name = 'custom_template.png'
 
-    if(recording.shape[0]>recording.shape[1]):
-       recording = np.transpose(recording)
+    if(recording.shape[0] != num_full_leads):
+        recording = np.transpose(recording)
 
     record_dict = create_signal_dictionary(recording,full_leads)
    
@@ -78,9 +76,10 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
     ecg_frame = []
     end_flag = False
     start = 0
-    lead_length_in_seconds = 10.0/columns
-    abs_lead_step = 10.0
-
+    lead_length_in_seconds = configs['paper_len']/columns
+    abs_lead_step = configs['abs_lead_step']
+    format_4_by_3 = configs['format_4_by_3']
+    
     segmented_ecg_data = {}
 
     if start_index != -1:
@@ -260,7 +259,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
         rec_file = name + '-' + str(i)
         
-        x_grid,y_grid = ecg_plot(ecg_frame[i],full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
+        x_grid,y_grid = ecg_plot(ecg_frame[i], configs=configs, full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt)
 
         rec_head, rec_tail = os.path.split(rec_file)
 
