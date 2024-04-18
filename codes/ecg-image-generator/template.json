@@ -22,8 +22,23 @@
     "leadname fontsize": 0,
     "x_grid": 0,
     "y_grid": 0,
-    "text_bounding_box": "",
-    "lead_bounding_box": "",
+    "text_bounding_box": 
+    {
+        "x1": 0,
+        "y1": 0,
+        "x2": 0,
+        "y2": 0,
+        "class": 0,
+        "leadName": ""
+    },
+    "lead_bounding_box":
+    {
+        "x1": 0,
+        "y1": 0,
+        "x2": 0,
+        "y2": 0,
+        "leadName": ""
+    },
     "DC pulse": false,
     "bw": false,
     "gridlines": false,

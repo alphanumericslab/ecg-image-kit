@@ -69,8 +69,8 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
 - `--standard_grid_color`: Color of the grid lines, 1: brown, 2: pink, 3: blue, 4: green, 5(Default): red .Make sure that `standard_grid_color` $\in$ [1, 5], type: int
 - `--random_grid_color`: Generates random colors for the gridlines, If `'--random_bw` > 0, then the color of gridlines for the non black and white ECG images is picked randomly. Default: False.
-- `--store_text_bounding_box`: Store bounding box coordinates for the lead names in a text file in the folder output_directory/text_bouding_box; default: False.
-- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in a text file in the folder output_directory/lead_bouding_box; default: False.
+- `--store_text_bounding_box`: Store bounding box coordinates for the lead names in the json file under the attribute `text_bounding_box`. 
+- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in the json file under the attribute `lead_bounding_box`.
 - `--store_config`: Store config information for each image in a json file, Refer to template.json for the template json file. Default: False. 
 
      **Example:** 

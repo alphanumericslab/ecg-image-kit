@@ -50,7 +50,7 @@ Please include references [[Shivashankara 2023]](#ref-ecg-image-kit-paper) and [
 
 1. <a name="ref-sameni-digital"></a> Reza Sameni. Digital Systems Design. Engineering school. Iran. 2018. ⟨cel-01815308⟩. Online at: https://hal.science/cel-01815308v1
 
-1. <a name="ref-ecg-image-kit-paper"></a> Kshama Kodthalu Shivashankara, Afagh Mehri Shervedani, Matthew A. Reyna, Gari D. Clifford, Reza Sameni (2023). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. arXiv. Online at: https://doi.org/10.48550/ARXIV.2307.01946
+1. <a name="ref-ecg-image-kit-paper"></a> Kshama Kodthalu Shivashankara, Deepanshi, Afagh Mehri Shervedani, Matthew A. Reyna, Gari D. Clifford, Reza Sameni (2023). A Synthetic Electrocardiogram (ECG) Image Generation Toolbox to Facilitate Deep Learning-Based Scanned ECG Digitization. arXiv. Online at: https://doi.org/10.48550/ARXIV.2307.01946
 
 1. <a name="ref-ecg-image-kit"></a> ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, January 2024, Online at: https://github.com/alphanumericslab/ecg-image-kit
 
