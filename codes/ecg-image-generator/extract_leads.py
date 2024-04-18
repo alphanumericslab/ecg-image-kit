@@ -265,14 +265,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
         json_dict["x_grid"] = x_grid
         json_dict["y_grid"] = y_grid
-        if store_text_bbox:
-            json_dict["text_bounding_box_file"] = os.path.join(output_directory, 'text_bounding_box', rec_tail + '.txt')
-        else:
-            json_dict["text_bounding_box_file"] = ""
-        if bbox:
-            json_dict["lead_bounding_box_file"] = os.path.join(output_directory, 'lead_bounding_box', rec_tail + '.txt')
-        else:
-            json_dict["lead_bounding_box_file"] = ""
         json_dict["DC pulse"] = bool(dc)
         json_dict["bw"] = bool(bw)
         json_dict["gridlines"] = bool(grid)
@@ -282,7 +274,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
         json_dict["Pad inches"] = pad_inches
         json_dict["Full Mode lead"] = full_mode
 
-        print(json_dict)
         outfile = os.path.join(output_directory,rec_tail+'.png')
         
         json_object = json.dumps(json_dict, indent=4)

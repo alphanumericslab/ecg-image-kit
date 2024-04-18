@@ -285,8 +285,8 @@ def ecg_plot(
                         x1 = bb.x0*resolution/fig.dpi      
                         y1 = bb.y0*resolution/fig.dpi   
                         x2 = bb.x1*resolution/fig.dpi     
-                        y2 = bb.y1*resolution/fig.dpi              
-                        text_bbox.append([x1, y1, x2, y2, leadName])
+                        y2 = bb.y1*resolution/fig.dpi     
+                        text_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'leadName': leadName})         
                         
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
@@ -336,8 +336,8 @@ def ecg_plot(
                 y1 = min(y1, bb.y0*resolution/fig.dpi)
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
-
-            lead_bbox.append([x1, y1, x2, y2, 0])
+            
+            lead_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'class': 0})
 
         start_ind = round((x_offset + dc_offset + x_gap)*x_grid_dots/x_grid_size)
         end_ind = round((x_offset + dc_offset + x_gap + len(ecg[leadName])*step)*x_grid_dots/x_grid_size)
@@ -357,8 +357,8 @@ def ecg_plot(
                 x1 = bb.x0*resolution/fig.dpi      
                 y1 = bb.y0*resolution/fig.dpi   
                 x2 = bb.x1*resolution/fig.dpi     
-                y2 = bb.y1*resolution/fig.dpi              
-                text_bbox.append([x1, y1, x2, y2, full_mode])
+                y2 = bb.y1*resolution/fig.dpi           
+                text_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'leadName': leadName})   
                 
 
         if(show_dc_pulse):
@@ -397,7 +397,7 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
 
-            lead_bbox.append([x1, y1, x2, y2, 1])
+            lead_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'class': 1})
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
@@ -455,41 +455,9 @@ def ecg_plot(
         plt.clf()
         plt.cla()
 
-    if(store_text_bbox):
-        if(os.path.exists(os.path.join(output_dir, 'text_bounding_box'))  == False):
-            os.mkdir(os.path.join(output_dir, 'text_bounding_box'))
-        
-        with open(os.path.join(output_dir, 'text_bounding_box', tail + '.txt'), 'w') as f:
-            for i, l in enumerate(text_bbox):
-                if pad_inches!=0:
-                    l[0] += left
-                    l[2] += left
-                    l[1] += top
-                    l[3] += top
+    json_dict["text_bouding_box"] = text_bbox
+    json_dict["lead_bounding_box"] = lead_bbox
 
-                for val in l[:4]:
-                    f.write(str(val))
-                    f.write(',')
-                f.write(str(l[4]))
-                f.write('\n')
-    
-    if(bbox):
-        if(os.path.exists(os.path.join(output_dir, 'lead_bounding_box'))  == False):
-            os.mkdir(os.path.join(output_dir, 'lead_bounding_box'))
-        with open(os.path.join(output_dir, 'lead_bounding_box', tail + '.txt'), 'w') as f:
-            for i, l in enumerate(lead_bbox):
-                if pad_inches!=0:
-                    l[0] += left
-                    l[2] += left
-                    l[1] += top
-                    l[3] += top
-
-                for val in l[:4]:
-                    f.write(str(val))
-                    f.write(',')
-                f.write(str(l[4]))
-                f.write('\n')
-    
 
     return x_grid_dots,y_grid_dots
        
