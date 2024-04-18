@@ -358,7 +358,7 @@ def ecg_plot(
                 y1 = bb.y0*resolution/fig.dpi   
                 x2 = bb.x1*resolution/fig.dpi     
                 y2 = bb.y1*resolution/fig.dpi           
-                text_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'leadName': leadName})   
+                text_bbox.append({'x1':x1, 'y1': y1, 'x2': x2, 'y2': y2, 'leadName': full_mode})   
                 
 
         if(show_dc_pulse):
