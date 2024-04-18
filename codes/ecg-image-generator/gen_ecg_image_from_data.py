@@ -190,6 +190,8 @@ def run_single_file(args):
                     temp = random.choice(range(2000,4000))
                 else:
                     temp = random.choice(range(10000,20000))
+
+                rotate = args.rotate
             
                 out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.bbox, store_text_bounding_box = args.store_text_bounding_box)
             
