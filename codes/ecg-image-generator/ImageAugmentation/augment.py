@@ -1,4 +1,4 @@
-import imageio
+import imageio, json
 from PIL import Image
 import argparse
 import imgaug as ia
@@ -14,7 +14,7 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import time
 import random
-from helper_functions import read_bounding_box_txt, write_bounding_box_txt
+from helper_functions import readBoundingBoxes, convert_bounding_boxes_to_dict
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -28,7 +28,7 @@ def get_parser():
     return parser
 
 # Main function for running augmentations
-def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False):
+def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False, json_dict=None):
     filename = input_file
     image = Image.open(filename)
     
@@ -37,19 +37,12 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     lead_bbs = []
     leadNames_bbs = []
     
-    if bbox:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
-        lead_bbs = read_bounding_box_txt(txt_file)
+    if bbox:      
+        lead_bbs, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['lead_bounding_box'])
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
 
     if store_text_bounding_box:
-        
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
-        leadNames_bbs = read_bounding_box_txt(txt_file)
+        leadNames_bbs, _, _ = readBoundingBoxes(json_dict['text_bounding_box'])
         leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
        
     
@@ -83,16 +76,10 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     plt.imsave(fname=f,arr=images_aug[0])
     
     if bbox:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
-        write_bounding_box_txt(augmented_lead_bbs, txt_file)
+        json_dict['lead_bounding_box'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, startTime_bbs, endTime_bbs)
 
     if store_text_bounding_box:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
-        write_bounding_box_txt(augmented_leadName_bbs, txt_file)
+        json_dict['text_bounding_box'] = convert_bounding_boxes_to_dict(augmented_leadName_bbs)
 
     return f
 

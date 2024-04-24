@@ -129,7 +129,12 @@ def run_single_file(args):
         out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.store_text_bounding_box, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.bbox, columns = args.num_columns, seed=args.seed)
         
         for out in out_array:
-            json_dict = dict()
+            if args.store_config:
+                rec_tail, extn = os.path.splitext(out)
+                with open(rec_tail  + '.json', 'r') as file:
+                    json_dict = json.load(file)
+            else:
+                json_dict = None
             if(args.fully_random):
                 hw_text = random.choice((True,False))
                 wrinkles = random.choice((True,False))
@@ -151,10 +156,11 @@ def run_single_file(args):
                 x_offset = 0
                 y_offset = 0
 
-            json_dict['handwritten text'] = bool(hw_text)
-            json_dict['num words'] = num_words
-            json_dict['X offset for handwritten text'] = x_offset
-            json_dict['Y offset for handwritten text'] = y_offset
+            if args.store_config:
+                json_dict['handwritten text'] = bool(hw_text)
+                json_dict['num words'] = num_words
+                json_dict['X offset for handwritten text'] = x_offset
+                json_dict['Y offset for handwritten text'] = y_offset
             
             if(wrinkles):
                 ifWrinkles = True
@@ -168,10 +174,11 @@ def run_single_file(args):
                 num_creases_horizontally = 0
                 num_creases_vertically = 0
 
-            json_dict['wrinkles'] = bool(wrinkles)
-            json_dict['crease angle'] = crease_angle
-            json_dict['num creases horizontally'] = num_creases_horizontally
-            json_dict['num creases vertically'] = num_creases_vertically
+            if args.store_config:
+                json_dict['wrinkles'] = bool(wrinkles)
+                json_dict['crease angle'] = crease_angle
+                json_dict['num creases horizontally'] = num_creases_horizontally
+                json_dict['num creases vertically'] = num_creases_vertically
 
             if(augment):
                 noise = args.noise if (args.deterministic_noise) else random.choice(range(1,args.noise+1))
@@ -191,25 +198,22 @@ def run_single_file(args):
                 else:
                     temp = random.choice(range(10000,20000))
                 rotate = args.rotate
-                out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.bbox, store_text_bounding_box = args.store_text_bounding_box)
+                out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.bbox, store_text_bounding_box = args.store_text_bounding_box, json_dict = json_dict)
             
             else:
                 crop = 0
                 temp = 0
                 rotate = 0
                 noise = 0
-            json_dict['augment'] = bool(augment)
-            json_dict['crop'] = crop
-            json_dict['temp'] = temp
-            json_dict['rotate'] = rotate
-            json_dict['noise'] = noise
+            if args.store_config:
+                json_dict['augment'] = bool(augment)
+                json_dict['crop'] = crop
+                json_dict['temp'] = temp
+                json_dict['rotate'] = rotate
+                json_dict['noise'] = noise
 
             if args.store_config:
-                rec_tail, extn = os.path.splitext(out)
-                with open(rec_tail  + '.json', 'r') as file:
-                    data = json.load(file)
-                data.update(json_dict)
-                json_object = json.dumps(data, indent=4)
+                json_object = json.dumps(json_dict, indent=4)
                 
                 with open(rec_tail + '.json', "w") as f:
                     f.write(json_object)

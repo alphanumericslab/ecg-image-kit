@@ -205,50 +205,54 @@ def standardize_leads(full_leads):
                  full_leads_array[i] = 'aVF'
     return full_leads_array
 
-def read_bounding_box_txt(filename):
+def readBoundingBoxes(boxes):
     bbs = []
+    startTimeStamps = []
+    endTimeStamps = []
+   
+    for i, line in enumerate(boxes):
+        parts = boxes[i]
+        x1 = parts['x1']
+        y1 = parts['y1']
+        x2 = parts['x2']
+        y2 = parts['y2']
+        if 'startTime' in parts.keys():
+           st_time_stamp = parts['startTime']
+           startTimeStamps.append(st_time_stamp)
+  
+        if 'endTime' in parts.keys():
+           end_time_stamp = parts['endTime']
+           endTimeStamps.append(end_time_stamp)
 
-    with open(filename, 'r') as text_file:
-        lines = text_file.readlines()
-    
-    for i, line in enumerate(lines):
-        line = line.split('\n')[0]
-        
-        parts = line.split(',')
-        x1 = float(parts[0])
-        y1 = float(parts[1])
-        x2 = float(parts[2])
-        y2 = float(parts[3])
-        try:
-           label = float(parts[4])
-        except ValueError:
-            label = str(parts[4])
+        label = parts['leadName']
 
         box = BoundingBox(x1=x1, y1=y1, x2=x2, y2=y2, label=label)
         bbs.append(box)
 
-    return bbs
+    return bbs, startTimeStamps, endTimeStamps
 
-def write_bounding_box_txt(bboxes, filename):
-    with open(filename, 'w') as text_file:
-        for i in range(len(bboxes)):
-            box = bboxes.bounding_boxes[i]
-            x1 = box.x1
-            y1 = box.y1
-            x2 = box.x2
-            y2 = box.y2
-            label = box.label
-            text_file.write(str(x1))
-            text_file.write(',')
-            text_file.write(str(y1))
-            text_file.write(',')
-            text_file.write(str(x2))
-            text_file.write(',')
-            text_file.write(str(y2))
-            text_file.write(',')
-            text_file.write(str(label))
-            text_file.write('\n')
+def convert_bounding_boxes_to_dict(bboxes, startTimeList = None, endTimeList = None):
+    bounding_boxes = []
 
+    for i in range(len(bboxes)):
+        new_box = dict()
+        box = bboxes.bounding_boxes[i]
+        x1 = box.x1
+        y1 = box.y1
+        x2 = box.x2
+        y2 = box.y2
+        new_box['x1'] = int(x1)
+        new_box['y1'] = int(y1)
+        new_box['x2'] = int(x2)
+        new_box['y2'] = int(y2)
+        label = box.label
+        new_box['leadName'] = label
+        if startTimeList is not None:
+            new_box['startTime'] = startTimeList[i]
+        if endTimeList is not None:
+            new_box['endTime'] = endTimeList[i]
+        bounding_boxes.append(new_box)
+    return bounding_boxes
 
 def convert_mm_to_volts(mm):
     return float(mm/10)
