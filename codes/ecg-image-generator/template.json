@@ -1,4 +1,6 @@
 {
+    "ECG file": "",
+    "Sampling frequency": 0,
     "width": 0,
     "height": 0,
     "grid line width": 0,
@@ -17,9 +19,7 @@
         0.0,
         0.0
     ],
-    "lead offset X": 0,
-    "lead offset Y": 0,
-    "leadname fontsize": 0,
+
     "x_grid": 0,
     "y_grid": 0,
     "text_bounding_box": 
@@ -37,7 +37,9 @@
         "y1": 0,
         "x2": 0,
         "y2": 0,
-        "leadName": ""
+        "leadName": "",
+        "startTime": 0,
+        "endTime": 0
     },
     "DC pulse": false,
     "bw": false,

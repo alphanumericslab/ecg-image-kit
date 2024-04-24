@@ -92,7 +92,8 @@ def ecg_plot(
         standard_colours = False,
         bbox = False,
         print_txt=False,
-        json_dict=dict()
+        json_dict=dict(),
+        start_index=-1
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -221,9 +222,9 @@ def ecg_plot(
         
         ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
         json_dict['grid line width'] = grid_line_width
-        json_dict['grid line color major'] = [x*255. for x in color_major]
-        json_dict['grid line color minor'] = [x*255. for x in color_minor]
-        json_dict['ecg plot color'] = [x*255. for x in color_line]
+        json_dict['grid line color major'] = [round(x*255., 2) for x in color_major]
+        json_dict['grid line color minor'] = [round(x*255., 2) for x in color_minor]
+        json_dict['ecg plot color'] = [round(x*255., 2) for x in color_line]
     else:
         ax.grid(False)
     ax.set_ylim(y_min,y_max)
@@ -241,9 +242,6 @@ def ecg_plot(
     y_offset = (row_height/2)
     x_offset = 0
 
-    json_dict['lead offset X'] = dc_offset
-    json_dict['lead offset Y'] = y_offset
-    json_dict['leadname fontsize'] = lead_fontsize
     text_bbox = []
     lead_bbox = []
 
@@ -337,10 +335,7 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
             
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName, 'startTime': 0, 'endTime': 0})
-
-        start_ind = round((x_offset + dc_offset + x_gap)*x_grid_dots/x_grid_size)
-        end_ind = round((x_offset + dc_offset + x_gap + len(ecg[leadName])*step)*x_grid_dots/x_grid_size)
+            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName, 'startTime': start_index, 'endTime': start_index + len(ecg[leadName])})
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
@@ -397,7 +392,7 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
 
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode, 'startTime': 0, 'endTime': 0})
+            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode, 'startTime': start_index, 'endTime': start_index + len(ecg['full'+full_mode])})
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
