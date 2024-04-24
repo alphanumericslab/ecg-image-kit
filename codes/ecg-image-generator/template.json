@@ -38,8 +38,8 @@
         "x2": 0,
         "y2": 0,
         "leadName": "",
-        "startTime": 0,
-        "endTime": 0
+        "startSample": 0,
+        "endSample": 0
     },
     "DC pulse": false,
     "bw": false,

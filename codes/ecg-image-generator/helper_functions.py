@@ -216,12 +216,12 @@ def readBoundingBoxes(boxes):
         y1 = parts['y1']
         x2 = parts['x2']
         y2 = parts['y2']
-        if 'startTime' in parts.keys():
-           st_time_stamp = parts['startTime']
+        if 'startSample' in parts.keys():
+           st_time_stamp = parts['startSample']
            startTimeStamps.append(st_time_stamp)
   
-        if 'endTime' in parts.keys():
-           end_time_stamp = parts['endTime']
+        if 'endSample' in parts.keys():
+           end_time_stamp = parts['endSample']
            endTimeStamps.append(end_time_stamp)
 
         label = parts['leadName']
@@ -248,9 +248,9 @@ def convert_bounding_boxes_to_dict(bboxes, startTimeList = None, endTimeList = N
         label = box.label
         new_box['leadName'] = label
         if startTimeList is not None:
-            new_box['startTime'] = startTimeList[i]
+            new_box['startSample'] = startTimeList[i]
         if endTimeList is not None:
-            new_box['endTime'] = endTimeList[i]
+            new_box['endSample'] = endTimeList[i]
         bounding_boxes.append(new_box)
     return bounding_boxes
 

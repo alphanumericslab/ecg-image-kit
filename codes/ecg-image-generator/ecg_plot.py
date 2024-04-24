@@ -334,8 +334,14 @@ def ecg_plot(
                 y1 = min(y1, bb.y0*resolution/fig.dpi)
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
-            
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName, 'startTime': start_index, 'endTime': start_index + len(ecg[leadName])})
+            st = start_index
+            if columns == 4 and leadName in configs['format_4_by_3'][1]:
+                st = start_index + int(sample_rate*configs['paper_len']/columns)
+            elif columns == 4 and leadName in configs['format_4_by_3'][2]:
+                st = start_index + int(2*sample_rate*configs['paper_len']/columns)
+            elif columns == 4 and leadName in configs['format_4_by_3'][3]:
+                st = start_index + int(3*sample_rate*configs['paper_len']/columns)
+            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName, 'startSample': st, 'endSample': st + len(ecg[leadName])})
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
@@ -392,7 +398,7 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
 
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode, 'startTime': start_index, 'endTime': start_index + len(ecg['full'+full_mode])})
+            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode, 'startSample': start_index, 'endSample': start_index + len(ecg['full'+full_mode])})
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
