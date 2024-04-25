@@ -191,7 +191,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/bbox/00006_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/bbox/00002_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/bbox/00006_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/bbox/00002_hr-0.png) |
 
      ### Distortionless images with Bounding box annotations
      |                           |                             |
