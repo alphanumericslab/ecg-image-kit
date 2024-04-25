@@ -283,8 +283,18 @@ def ecg_plot(
                         x1 = bb.x0*resolution/fig.dpi      
                         y1 = bb.y0*resolution/fig.dpi   
                         x2 = bb.x1*resolution/fig.dpi     
-                        y2 = bb.y1*resolution/fig.dpi     
-                        text_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName})         
+                        y2 = bb.y1*resolution/fig.dpi    
+                        box_dict = dict()
+                        x1 = int(x1)
+                        y1 = int(y1)
+                        x2 = int(x2)
+                        y2 = int(y2)
+                        box_dict[0] = [x1, y2]
+                        box_dict[1] = [x2, y2]
+                        box_dict[2] = [x2, y1]
+                        box_dict[3] = [x1, y1]
+                        box_dict['leadName'] = leadName
+                        text_bbox.append(box_dict) 
                         
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
@@ -341,7 +351,19 @@ def ecg_plot(
                 st = start_index + int(2*sample_rate*configs['paper_len']/columns)
             elif columns == 4 and leadName in configs['format_4_by_3'][3]:
                 st = start_index + int(3*sample_rate*configs['paper_len']/columns)
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': leadName, 'startSample': st, 'endSample': st + len(ecg[leadName])})
+            box_dict = dict()
+            x1 = int(x1)
+            y1 = int(y1)
+            x2 = int(x2)
+            y2 = int(y2)
+            box_dict[0] = [x1, y2]
+            box_dict[1] = [x2, y2]
+            box_dict[2] = [x2, y1]
+            box_dict[3] = [x1, y1]
+            box_dict['leadName'] = leadName
+            box_dict['startSample'] = st
+            box_dict['endSample'] = st + len(ecg[leadName])
+            lead_bbox.append(box_dict)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
@@ -359,7 +381,17 @@ def ecg_plot(
                 y1 = bb.y0*resolution/fig.dpi   
                 x2 = bb.x1*resolution/fig.dpi     
                 y2 = bb.y1*resolution/fig.dpi           
-                text_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode})   
+                box_dict = dict()
+                x1 = int(x1)
+                y1 = int(y1)
+                x2 = int(x2)
+                y2 = int(y2)
+                box_dict[0] = [x1, y2]
+                box_dict[1] = [x2, y2]
+                box_dict[2] = [x2, y1]
+                box_dict[3] = [x1, y1]
+                box_dict['leadName'] = full_mode
+                text_bbox.append(box_dict)
                 
 
         if(show_dc_pulse):
@@ -398,7 +430,19 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
 
-            lead_bbox.append({'x1':int(x1), 'y1': int(y1), 'x2': int(x2), 'y2': int(y2), 'leadName': full_mode, 'startSample': start_index, 'endSample': start_index + len(ecg['full'+full_mode])})
+            box_dict = dict()
+            x1 = int(x1)
+            y1 = int(y1)
+            x2 = int(x2)
+            y2 = int(y2)
+            box_dict[0] = [x1, y2]
+            box_dict[1] = [x2, y2]
+            box_dict[2] = [x2, y1]
+            box_dict[3] = [x1, y1]
+            box_dict['leadName'] = full_mode
+            box_dict['startSample'] = start_index
+            box_dict['endSample'] = start_index + len(ecg['full'+full_mode])
+            lead_bbox.append(box_dict)
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
