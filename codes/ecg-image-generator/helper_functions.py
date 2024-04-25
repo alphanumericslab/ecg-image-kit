@@ -1,4 +1,4 @@
-import os, sys, argparse, yaml
+import os, sys, argparse, yaml, math
 import numpy as np
 from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
@@ -205,17 +205,38 @@ def standardize_leads(full_leads):
                  full_leads_array[i] = 'aVF'
     return full_leads_array
 
+def rotate_bounding_box(box, origin, angle):
+    angle = math.radians(angle)
+    transformation = np.ones((2, 2))
+    transformation[0][0] = math.cos(angle)
+    transformation[0][1] = math.sin(angle)
+    transformation[1][0] = -math.sin(angle)
+    transformation[1][1] = math.cos(angle)
+
+    transformed_matrix = np.matmul(box, transformation)
+
+    new_origin = np.ones((1, 2))
+    
+    new_origin[0, 0] = -origin[0]*math.cos(angle) + origin[1]*math.sin(angle)
+    new_origin[0, 1] = -origin[0]*math.sin(angle) - origin[1]*math.cos(angle)
+    origin = np.reshape(origin, (1, 2))
+    transformed_matrix += origin + new_origin 
+
+    return transformed_matrix
+
 def readBoundingBoxes(boxes):
     bbs = []
     startTimeStamps = []
     endTimeStamps = []
-   
+    labels = []
     for i, line in enumerate(boxes):
         parts = boxes[i]
-        x1 = parts['x1']
-        y1 = parts['y1']
-        x2 = parts['x2']
-        y2 = parts['y2']
+        point1 = [parts['0'][0], parts['0'][1]]
+        point2 = [parts['1'][0], parts['1'][1]]
+        point3 = [parts['2'][0], parts['2'][1]]
+        point4 = [parts['3'][0], parts['3'][1]]
+        if 'leadName' in parts.keys():
+            labels.append(parts['leadName'])
         if 'startSample' in parts.keys():
            st_time_stamp = parts['startSample']
            startTimeStamps.append(st_time_stamp)
@@ -224,29 +245,24 @@ def readBoundingBoxes(boxes):
            end_time_stamp = parts['endSample']
            endTimeStamps.append(end_time_stamp)
 
-        label = parts['leadName']
-
-        box = BoundingBox(x1=x1, y1=y1, x2=x2, y2=y2, label=label)
+        box = [point1, point2, point3, point4]
         bbs.append(box)
+    bbs = np.array(bbs)
 
-    return bbs, startTimeStamps, endTimeStamps
+    return bbs, labels, startTimeStamps, endTimeStamps
 
-def convert_bounding_boxes_to_dict(bboxes, startTimeList = None, endTimeList = None):
+def convert_bounding_boxes_to_dict(bboxes, labels=None, startTimeList = None, endTimeList = None):
     bounding_boxes = []
 
-    for i in range(len(bboxes)):
+    for i, box in enumerate(bboxes):
         new_box = dict()
-        box = bboxes.bounding_boxes[i]
-        x1 = box.x1
-        y1 = box.y1
-        x2 = box.x2
-        y2 = box.y2
-        new_box['x1'] = int(x1)
-        new_box['y1'] = int(y1)
-        new_box['x2'] = int(x2)
-        new_box['y2'] = int(y2)
-        label = box.label
-        new_box['leadName'] = label
+        new_box[0] = [int(box[0][0]), int(box[0][1])]
+        new_box[1] = [int(box[1][0]), int(box[1][1])]
+        new_box[2] = [int(box[2][0]), int(box[2][1])]
+        new_box[3] = [int(box[3][0]), int(box[3][1])]
+       
+        if labels is not None:
+            new_box['leadName'] = labels[i]
         if startTimeList is not None:
             new_box['startSample'] = startTimeList[i]
         if endTimeList is not None:

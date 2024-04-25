@@ -14,7 +14,7 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import time
 import random
-from helper_functions import readBoundingBoxes, convert_bounding_boxes_to_dict
+from helper_functions import readBoundingBoxes, convert_bounding_boxes_to_dict, rotate_bounding_box
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -38,15 +38,16 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     leadNames_bbs = []
     
     if bbox:      
-        lead_bbs, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['lead_bounding_box'])
+        lead_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['lead_bounding_box'])
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
 
     if store_text_bounding_box:
-        leadNames_bbs, _, _ = readBoundingBoxes(json_dict['text_bounding_box'])
+        leadNames_bbs, text_labels, _, _ = readBoundingBoxes(json_dict['text_bounding_box'])
         leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
        
     
     images = [image[:, :, :3]]
+    h, w, _ = image.shape
     rot = random.randint(-rotate, rotate)
     crop_sample = random.uniform(0, crop)
     #Augment in a sequential manner. Create an augmentation object
@@ -57,29 +58,21 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
           iaa.ChangeColorTemperature(temperature)
           ])
     
-    seq_bbox = iaa.Sequential([
-          iaa.Affine(rotate=-rot),
-          iaa.Crop(percent=crop_sample)
-          ])
    
     images_aug = seq(images=images)
 
     if bbox:
-        temp, augmented_lead_bbs = seq_bbox(images=images, bounding_boxes=lead_bbs)
+        augmented_lead_bbs = rotate_bounding_box(lead_bbs, [w/2,h/2], -rot)
+        json_dict['lead_bounding_box'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs)
     
     if store_text_bounding_box:
-        temp, augmented_leadName_bbs = seq_bbox(images=images, bounding_boxes=leadNames_bbs)
+        augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [w/2,h/2], -rot)
+        json_dict['text_bounding_box'] = convert_bounding_boxes_to_dict(augmented_leadName_bbs, text_labels)
 
     head, tail = os.path.split(filename)
 
     f = os.path.join(output_directory,tail)
     plt.imsave(fname=f,arr=images_aug[0])
-    
-    if bbox:
-        json_dict['lead_bounding_box'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, startTime_bbs, endTime_bbs)
-
-    if store_text_bounding_box:
-        json_dict['text_bounding_box'] = convert_bounding_boxes_to_dict(augmented_leadName_bbs)
 
     return f
 
