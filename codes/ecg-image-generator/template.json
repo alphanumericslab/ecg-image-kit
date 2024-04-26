@@ -22,24 +22,26 @@
 
     "x_grid": 0,
     "y_grid": 0,
-    "text_bounding_box": 
-    {
-        "0": [0, 0],
-        "1": [0, 0],
-        "2": [0, 0],
-        "3": [0, 0],
-        "leadName": ""
-    },
-    "lead_bounding_box":
-    {
-        "0": [0, 0],
-        "1": [0, 0],
-        "2": [0, 0],
-        "3": [0, 0],
-        "leadName": "",
-        "startSample": 0,
-        "endSample": 0
-    },
+    "text_bounding_box": [
+        {
+            "0": [0, 0],
+            "1": [0, 0],
+            "2": [0, 0],
+            "3": [0, 0],
+            "leadName": ""
+        }
+    ],
+    "lead_bounding_box": [
+        {
+            "0": [0, 0],
+            "1": [0, 0],
+            "2": [0, 0],
+            "3": [0, 0],
+            "leadName": "",
+            "startSample": 0,
+            "endSample": 0
+        }
+    ],
     "DC pulse": false,
     "bw": false,
     "gridlines": false,
