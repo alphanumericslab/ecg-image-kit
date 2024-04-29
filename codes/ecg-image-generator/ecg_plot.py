@@ -164,8 +164,8 @@ def ecg_plot(
     y_min = 0
     y_max = height * y_grid_size/y_grid
 
-    json_dict['width'] = width*resolution
-    json_dict['height'] = height*resolution
+    json_dict['width'] = int(width*resolution)
+    json_dict['height'] = int(height*resolution)
     #Set figure and subplot sizes
     fig, ax = plt.subplots(figsize=(width, height))
    
@@ -271,7 +271,7 @@ def ecg_plot(
 
         #Print lead name at .5 ( or 5 mm distance) from plot
         if(show_lead_name):
-                    t1 = ax.text(x_offset + x_gap, 
+                    t1 = ax.text(x_offset + x_gap + dc_offset, 
                             y_offset-lead_name_offset - 0.2, 
                             leadName, 
                             fontsize=lead_fontsize)
