@@ -157,10 +157,10 @@ def run_single_file(args):
                 y_offset = 0
 
             if args.store_config:
-                json_dict['handwritten text'] = bool(hw_text)
-                json_dict['num words'] = num_words
-                json_dict['X offset for handwritten text'] = x_offset
-                json_dict['Y offset for handwritten text'] = y_offset
+                json_dict['handwritten_text'] = bool(hw_text)
+                json_dict['num_words'] = num_words
+                json_dict['x_offset_for_handwritten_text'] = x_offset
+                json_dict['y_offset_for_handwritten_text'] = y_offset
             
             if(wrinkles):
                 ifWrinkles = True
@@ -176,9 +176,9 @@ def run_single_file(args):
 
             if args.store_config:
                 json_dict['wrinkles'] = bool(wrinkles)
-                json_dict['crease angle'] = crease_angle
-                json_dict['num creases horizontally'] = num_creases_horizontally
-                json_dict['num creases vertically'] = num_creases_vertically
+                json_dict['crease_angle'] = crease_angle
+                json_dict['number_of_creases_horizontally'] = num_creases_horizontally
+                json_dict['number_of_creases_vertically'] = num_creases_vertically
 
             if(augment):
                 noise = args.noise if (args.deterministic_noise) else random.choice(range(1,args.noise+1))

@@ -254,8 +254,7 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
         print_txt = add_print.rvs()
 
         json_dict = {}
-        json_dict['ECG file'] = os.path.splitext(header_file)[0]
-        json_dict['Sampling frequency'] = rate
+        json_dict['sampling_frequency'] = rate
         grid_colour = 'colour'
         if(bw):
             grid_colour = 'bw'
@@ -267,14 +266,14 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
         json_dict["x_grid"] = round(x_grid, 3)
         json_dict["y_grid"] = round(y_grid, 3)
-        json_dict["DC pulse"] = bool(dc)
+        json_dict["dc_pulse"] = bool(dc)
         json_dict["bw"] = bool(bw)
         json_dict["gridlines"] = bool(grid)
-        json_dict["Printed text"] = bool(print_txt)
-        json_dict["Number of columns in image"] = columns
-        json_dict["Resolution"] = resolution
-        json_dict["Pad inches"] = pad_inches
-        json_dict["Full Mode lead"] = full_mode
+        json_dict["printed_text"] = bool(print_txt)
+        json_dict["number_of_columns_in_image"] = columns
+        json_dict["resolution"] = resolution
+        json_dict["pad_inches"] = pad_inches
+        json_dict["full_mode_lead"] = full_mode
 
         outfile = os.path.join(output_directory,rec_tail+'.png')
         

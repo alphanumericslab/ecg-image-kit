@@ -105,7 +105,7 @@ def run(args):
             folder_struct_list = full_header_file.split('/')[:-1]
             args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
             i += run_single_file(args)
-
+            
             if(args.num_images != -1 and i >= args.num_images):
                 break
 

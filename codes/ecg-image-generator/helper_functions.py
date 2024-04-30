@@ -235,14 +235,14 @@ def readBoundingBoxes(boxes):
         point2 = [parts['1'][0], parts['1'][1]]
         point3 = [parts['2'][0], parts['2'][1]]
         point4 = [parts['3'][0], parts['3'][1]]
-        if 'leadName' in parts.keys():
-            labels.append(parts['leadName'])
-        if 'startSample' in parts.keys():
-           st_time_stamp = parts['startSample']
+        if 'lead_name' in parts.keys():
+            labels.append(parts['lead_name'])
+        if 'start_sample' in parts.keys():
+           st_time_stamp = parts['start_sample']
            startTimeStamps.append(st_time_stamp)
   
-        if 'endSample' in parts.keys():
-           end_time_stamp = parts['endSample']
+        if 'end_sample' in parts.keys():
+           end_time_stamp = parts['end_sample']
            endTimeStamps.append(end_time_stamp)
 
         box = [point1, point2, point3, point4]
@@ -262,11 +262,11 @@ def convert_bounding_boxes_to_dict(bboxes, labels=None, startTimeList = None, en
         new_box[3] = [int(box[3][0]), int(box[3][1])]
        
         if labels is not None:
-            new_box['leadName'] = labels[i]
+            new_box['lead_name'] = labels[i]
         if startTimeList is not None:
-            new_box['startSample'] = startTimeList[i]
+            new_box['start_sample'] = startTimeList[i]
         if endTimeList is not None:
-            new_box['endSample'] = endTimeList[i]
+            new_box['end_sample'] = endTimeList[i]
         bounding_boxes.append(new_box)
     return bounding_boxes
 

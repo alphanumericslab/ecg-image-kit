@@ -221,10 +221,9 @@ def ecg_plot(
         ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
         
         ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
-        json_dict['grid line width'] = grid_line_width
-        json_dict['grid line color major'] = [round(x*255., 2) for x in color_major]
-        json_dict['grid line color minor'] = [round(x*255., 2) for x in color_minor]
-        json_dict['ecg plot color'] = [round(x*255., 2) for x in color_line]
+        json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
+        json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
+        json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
     else:
         ax.grid(False)
     ax.set_ylim(y_min,y_max)
@@ -293,7 +292,7 @@ def ecg_plot(
                         box_dict[1] = [x2, y2]
                         box_dict[2] = [x2, y1]
                         box_dict[3] = [x1, y1]
-                        box_dict['leadName'] = leadName
+                        box_dict['lead_name'] = leadName
                         text_bbox.append(box_dict) 
                         
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
@@ -360,9 +359,9 @@ def ecg_plot(
             box_dict[1] = [x2, y2]
             box_dict[2] = [x2, y1]
             box_dict[3] = [x1, y1]
-            box_dict['leadName'] = leadName
-            box_dict['startSample'] = st
-            box_dict['endSample'] = st + len(ecg[leadName])
+            box_dict['lead_name'] = leadName
+            box_dict['start_sample'] = st
+            box_dict['end_sample'] = st + len(ecg[leadName])
             lead_bbox.append(box_dict)
 
     #Plotting longest lead for 12 seconds
@@ -390,7 +389,7 @@ def ecg_plot(
                 box_dict[1] = [x2, y2]
                 box_dict[2] = [x2, y1]
                 box_dict[3] = [x1, y1]
-                box_dict['leadName'] = full_mode
+                box_dict['lead_name'] = full_mode
                 text_bbox.append(box_dict)
                 
 
@@ -439,9 +438,9 @@ def ecg_plot(
             box_dict[1] = [x2, y2]
             box_dict[2] = [x2, y1]
             box_dict[3] = [x1, y1]
-            box_dict['leadName'] = full_mode
-            box_dict['startSample'] = start_index
-            box_dict['endSample'] = start_index + len(ecg['full'+full_mode])
+            box_dict['lead_name'] = full_mode
+            box_dict['start_sample'] = start_index
+            box_dict['end_sample'] = start_index + len(ecg['full'+full_mode])
             lead_bbox.append(box_dict)
 
     head, tail = os.path.split(rec_file_name)
