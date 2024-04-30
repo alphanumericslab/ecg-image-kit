@@ -56,7 +56,7 @@ def get_parser():
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_false",default=True)
     parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
-    parser.add_argument('--store_config',action="store_true",default=False)
+    parser.add_argument('--store_config', type=int,default=0)
 
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
     parser.add_argument('--deterministic_num_words',action="store_true",default=False)
@@ -156,7 +156,7 @@ def run_single_file(args):
                 x_offset = 0
                 y_offset = 0
 
-            if args.store_config:
+            if args.store_config == 2:
                 json_dict['handwritten_text'] = bool(hw_text)
                 json_dict['num_words'] = num_words
                 json_dict['x_offset_for_handwritten_text'] = x_offset
@@ -174,7 +174,7 @@ def run_single_file(args):
                 num_creases_horizontally = 0
                 num_creases_vertically = 0
 
-            if args.store_config:
+            if args.store_config == 2:
                 json_dict['wrinkles'] = bool(wrinkles)
                 json_dict['crease_angle'] = crease_angle
                 json_dict['number_of_creases_horizontally'] = num_creases_horizontally
@@ -205,7 +205,7 @@ def run_single_file(args):
                 temp = 0
                 rotate = 0
                 noise = 0
-            if args.store_config:
+            if args.store_config == 2:
                 json_dict['augment'] = bool(augment)
                 json_dict['crop'] = crop
                 json_dict['temp'] = temp

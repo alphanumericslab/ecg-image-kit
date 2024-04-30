@@ -93,7 +93,8 @@ def ecg_plot(
         bbox = False,
         print_txt=False,
         json_dict=dict(),
-        start_index=-1
+        start_index=-1,
+        store_configs=0
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -221,9 +222,11 @@ def ecg_plot(
         ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
         
         ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
-        json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
-        json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
-        json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
+        
+        if store_configs == 2:
+            json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
+            json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
+            json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
     else:
         ax.grid(False)
     ax.set_ylim(y_min,y_max)

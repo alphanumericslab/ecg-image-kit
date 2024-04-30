@@ -260,20 +260,22 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             grid_colour = 'bw'
 
         rec_file = name + '-' + str(i)
-        x_grid,y_grid = ecg_plot(ecg_frame[i], configs=configs, full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt, json_dict=json_dict, start_index=start)
+        x_grid,y_grid = ecg_plot(ecg_frame[i], configs=configs, full_header_file=full_header_file, style=grid_colour, sample_rate = rate,columns=columns,rec_file_name = rec_file, output_dir = output_directory, resolution = resolution, pad_inches = pad_inches, lead_index=full_leads, full_mode = full_mode, store_text_bbox = store_text_bbox, show_lead_name=add_lead_names,show_dc_pulse=dc,papersize=papersize,show_grid=(grid),standard_colours=standard_colours,bbox=bbox, print_txt=print_txt, json_dict=json_dict, start_index=start, store_configs=store_configs)
 
         rec_head, rec_tail = os.path.split(rec_file)
 
         json_dict["x_grid"] = round(x_grid, 3)
         json_dict["y_grid"] = round(y_grid, 3)
-        json_dict["dc_pulse"] = bool(dc)
-        json_dict["bw"] = bool(bw)
-        json_dict["gridlines"] = bool(grid)
-        json_dict["printed_text"] = bool(print_txt)
-        json_dict["number_of_columns_in_image"] = columns
         json_dict["resolution"] = resolution
         json_dict["pad_inches"] = pad_inches
-        json_dict["full_mode_lead"] = full_mode
+
+        if store_configs == 2:
+            json_dict["dc_pulse"] = bool(dc)
+            json_dict["bw"] = bool(bw)
+            json_dict["gridlines"] = bool(grid)
+            json_dict["printed_text"] = bool(print_txt)
+            json_dict["number_of_columns_in_image"] = columns
+            json_dict["full_mode_lead"] = full_mode
 
         outfile = os.path.join(output_directory,rec_tail+'.png')
         

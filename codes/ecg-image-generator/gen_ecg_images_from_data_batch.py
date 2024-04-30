@@ -53,7 +53,7 @@ def get_parser():
     parser.add_argument('--random_bw',type=float,default=0)
     parser.add_argument('--deterministic_lead',action="store_false",default=True)
     parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
-    parser.add_argument('--store_config',action="store_true",default=False)
+    parser.add_argument('--store_config', type=int, default=0)
 
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
     parser.add_argument('--deterministic_num_words',action="store_true",default=False)
