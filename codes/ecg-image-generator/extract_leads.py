@@ -264,18 +264,18 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
 
         rec_head, rec_tail = os.path.split(rec_file)
 
-        json_dict["x_grid"] = round(x_grid, 3)
-        json_dict["y_grid"] = round(y_grid, 3)
-        json_dict["resolution"] = resolution
-        json_dict["pad_inches"] = pad_inches
+        json_dict["x_grid"] = {'val': round(x_grid, 3), 'unit': 'px'}
+        json_dict["y_grid"] = {'val': round(y_grid, 3), 'unit': 'px'}
+        json_dict["resolution"] = {'val': resolution, 'unit': 'inches'}
+        json_dict["pad_inches"] = {'val': pad_inches, 'unit': 'inches'}
 
         if store_configs == 2:
-            json_dict["dc_pulse"] = bool(dc)
-            json_dict["bw"] = bool(bw)
-            json_dict["gridlines"] = bool(grid)
-            json_dict["printed_text"] = bool(print_txt)
-            json_dict["number_of_columns_in_image"] = columns
-            json_dict["full_mode_lead"] = full_mode
+            json_dict["dc_pulse"] = {'val': bool(dc), 'unit': ''}
+            json_dict["bw"] = {'val': bool(bw), 'unit': ''}
+            json_dict["gridlines"] = {'val' : bool(grid), 'unit': ''}
+            json_dict["printed_text"] = {'val': bool(print_txt), 'unit': ''}
+            json_dict["number_of_columns_in_image"] = {'val' : columns, 'unit': ''}
+            json_dict["full_mode_lead"] = {'val': full_mode, 'unit': ''}
 
         outfile = os.path.join(output_directory,rec_tail+'.png')
         

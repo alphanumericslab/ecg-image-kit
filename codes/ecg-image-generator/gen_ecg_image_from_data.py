@@ -157,10 +157,10 @@ def run_single_file(args):
                 y_offset = 0
 
             if args.store_config == 2:
-                json_dict['handwritten_text'] = bool(hw_text)
-                json_dict['num_words'] = num_words
-                json_dict['x_offset_for_handwritten_text'] = x_offset
-                json_dict['y_offset_for_handwritten_text'] = y_offset
+                json_dict['handwritten_text'] = {'val': bool(hw_text), 'unit': ''}
+                json_dict['num_words'] = {'val': num_words, 'unit': ''}
+                json_dict['x_offset_for_handwritten_text'] = {'val': x_offset, 'unit': 'px'}
+                json_dict['y_offset_for_handwritten_text'] = {'val': y_offset, 'unit': 'px'}
             
             if(wrinkles):
                 ifWrinkles = True
@@ -175,10 +175,10 @@ def run_single_file(args):
                 num_creases_vertically = 0
 
             if args.store_config == 2:
-                json_dict['wrinkles'] = bool(wrinkles)
-                json_dict['crease_angle'] = crease_angle
-                json_dict['number_of_creases_horizontally'] = num_creases_horizontally
-                json_dict['number_of_creases_vertically'] = num_creases_vertically
+                json_dict['wrinkles'] = {'val': bool(wrinkles), 'unit': ''}
+                json_dict['crease_angle'] = {'val': crease_angle, 'unit': 'degrees'}
+                json_dict['number_of_creases_horizontally'] = {'val': num_creases_horizontally, 'unit': ''}
+                json_dict['number_of_creases_vertically'] = {'val': num_creases_vertically, 'unit': ''}
 
             if(augment):
                 noise = args.noise if (args.deterministic_noise) else random.choice(range(1,args.noise+1))
@@ -206,11 +206,11 @@ def run_single_file(args):
                 rotate = 0
                 noise = 0
             if args.store_config == 2:
-                json_dict['augment'] = bool(augment)
-                json_dict['crop'] = crop
-                json_dict['temp'] = temp
-                json_dict['rotate'] = rotate
-                json_dict['noise'] = noise
+                json_dict['augment'] = {'val': bool(augment), 'unit': ''}
+                json_dict['crop'] = {'val': crop, 'unit': '%'}
+                json_dict['temperature'] = {'val': temp, 'unit': ''}
+                json_dict['rotate'] = {'val': rotate, 'unit': 'degrees'}
+                json_dict['noise'] = {'val': noise, 'unit': ''}
 
             if args.store_config:
                 json_object = json.dumps(json_dict, indent=4)
