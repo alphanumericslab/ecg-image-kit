@@ -94,7 +94,8 @@ def ecg_plot(
         print_txt=False,
         json_dict=dict(),
         start_index=-1,
-        store_configs=0
+        store_configs=0,
+        lead_length_in_seconds=10
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -123,7 +124,7 @@ def ecg_plot(
     if ecg == {}:
         return 
 
-    secs = len(list(ecg.items())[0][1])/sample_rate
+    secs = lead_length_in_seconds
 
     leads = len(lead_index)
 
