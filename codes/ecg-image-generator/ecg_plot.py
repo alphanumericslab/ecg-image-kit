@@ -169,7 +169,7 @@ def ecg_plot(
     json_dict['width'] = {'val': int(width*resolution), 'unit': 'px'}
     json_dict['height'] = {'val': int(height*resolution), 'unit': 'px'}
     #Set figure and subplot sizes
-    fig, ax = plt.subplots(figsize=(width, height))
+    fig, ax = plt.subplots(figsize=(width, height), dpi=resolution)
    
     fig.subplots_adjust(
         hspace = 0, 
@@ -364,12 +364,10 @@ def ecg_plot(
             box_dict[2] = [x2, y1]
             box_dict[3] = [x1, y1]
         
-        x_range = np.arange(0,len(ecg[leadName])*step,step) + x_offset + dc_offset + x_gap
-        box_dict['start_sample'] = st
-        box_dict['end_sample'] = st + len(ecg[leadName])
-        box_dict['lead_name'] = leadName
-        box_dict['plotted_samples'] = [(x_range[i], ecg[leadName][i] + y_offset) for i in range(len(ecg[leadName]))]
-        lead_bbox.append(box_dict)
+            box_dict['start_sample'] = st
+            box_dict['end_sample'] = st + len(ecg[leadName])
+            box_dict['lead_name'] = leadName
+            lead_bbox.append(box_dict)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
