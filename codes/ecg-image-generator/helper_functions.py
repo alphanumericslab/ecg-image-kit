@@ -224,51 +224,75 @@ def rotate_bounding_box(box, origin, angle):
 
     return transformed_matrix
 
-def readBoundingBoxes(boxes):
-    bbs = []
+def readBoundingBoxes(leads):
+
+    lead_bbs = []
+    text_bbs = []
     startTimeStamps = []
     endTimeStamps = []
     labels = []
-    for i, line in enumerate(boxes):
-        parts = boxes[i]
-        point1 = [parts['0'][0], parts['0'][1]]
-        point2 = [parts['1'][0], parts['1'][1]]
-        point3 = [parts['2'][0], parts['2'][1]]
-        point4 = [parts['3'][0], parts['3'][1]]
-        if 'lead_name' in parts.keys():
-            labels.append(parts['lead_name'])
-        if 'start_sample' in parts.keys():
-           st_time_stamp = parts['start_sample']
-           startTimeStamps.append(st_time_stamp)
-  
-        if 'end_sample' in parts.keys():
-           end_time_stamp = parts['end_sample']
-           endTimeStamps.append(end_time_stamp)
+    for i, line in enumerate(leads):
+        labels.append(leads[i]['lead_name'])
+        st_time_stamp = leads[i]['start_sample']
+        startTimeStamps.append(st_time_stamp)
+        end_time_stamp = leads[i]['end_sample']
+        endTimeStamps.append(end_time_stamp)
 
-        box = [point1, point2, point3, point4]
-        bbs.append(box)
-    bbs = np.array(bbs)
+        key = "lead_bounding_box"
+        if key in leads[i].keys():
+            parts = leads[i][key]
+            point1 = [parts['0'][0], parts['0'][1]]
+            point2 = [parts['1'][0], parts['1'][1]]
+            point3 = [parts['2'][0], parts['2'][1]]
+            point4 = [parts['3'][0], parts['3'][1]]
+            box = [point1, point2, point3, point4]
+            lead_bbs.append(box)
 
-    return bbs, labels, startTimeStamps, endTimeStamps
+        key = "text_bounding_box"
+        if key in leads[i].keys():
+            parts = leads[i][key]
+            point1 = [parts['0'][0], parts['0'][1]]
+            point2 = [parts['1'][0], parts['1'][1]]
+            point3 = [parts['2'][0], parts['2'][1]]
+            point4 = [parts['3'][0], parts['3'][1]]
+            box = [point1, point2, point3, point4]
+            text_bbs.append(box)
 
-def convert_bounding_boxes_to_dict(bboxes, labels=None, startTimeList = None, endTimeList = None):
-    bounding_boxes = []
+    lead_bbs = np.array(lead_bbs)
+    text_bbs = np.array(text_bbs)
+    return lead_bbs, text_bbs, labels, startTimeStamps, endTimeStamps
 
-    for i, box in enumerate(bboxes):
-        new_box = dict()
-        new_box[0] = [int(box[0][0]), int(box[0][1])]
-        new_box[1] = [int(box[1][0]), int(box[1][1])]
-        new_box[2] = [int(box[2][0]), int(box[2][1])]
-        new_box[3] = [int(box[3][0]), int(box[3][1])]
-       
-        if labels is not None:
-            new_box['lead_name'] = labels[i]
-        if startTimeList is not None:
-            new_box['start_sample'] = startTimeList[i]
-        if endTimeList is not None:
-            new_box['end_sample'] = endTimeList[i]
-        bounding_boxes.append(new_box)
-    return bounding_boxes
+def convert_bounding_boxes_to_dict(lead_bboxes, text_bboxes, labels, startTimeList = None, endTimeList = None):
+    leads_ds = []
+
+    for i in range(len(labels)):
+        current_lead_ds = dict()
+        if len(lead_bboxes) != 0:
+            new_box = dict()
+            box = lead_bboxes[i]
+            new_box[0] = [int(box[0][0]), int(box[0][1])]
+            new_box[1] = [int(box[1][0]), int(box[1][1])]
+            new_box[2] = [int(box[2][0]), int(box[2][1])]
+            new_box[3] = [int(box[3][0]), int(box[3][1])]
+            current_lead_ds["lead_bounding_box"] = new_box
+
+        if len(text_bboxes) != 0:
+            new_box = dict()
+            box = text_bboxes[i]
+            new_box[0] = [int(box[0][0]), int(box[0][1])]
+            new_box[1] = [int(box[1][0]), int(box[1][1])]
+            new_box[2] = [int(box[2][0]), int(box[2][1])]
+            new_box[3] = [int(box[3][0]), int(box[3][1])]
+            current_lead_ds["text_bounding_box"] = new_box
+
+        current_lead_ds["lead_name"] = labels[i]
+        current_lead_ds["start_sample"] = startTimeList[i]
+        current_lead_ds["end_sample"] = endTimeList[i]
+        
+        leads_ds.append(current_lead_ds)
+
+    return leads_ds
+
 
 def convert_mm_to_volts(mm):
     return float(mm/10)

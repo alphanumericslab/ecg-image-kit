@@ -37,14 +37,13 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     lead_bbs = []
     leadNames_bbs = []
     
-    if bbox:      
-        lead_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['lead_bounding_box'])
+    if bbox or store_text_bounding_box:      
+        lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['leads'])
+    
+    if bbox:
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
-
     if store_text_bounding_box:
-        leadNames_bbs, text_labels, _, _ = readBoundingBoxes(json_dict['text_bounding_box'])
         leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
-       
     
     images = [image[:, :, :3]]
     h, w, _ = image.shape
@@ -63,11 +62,15 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
 
     if bbox:
         augmented_lead_bbs = rotate_bounding_box(lead_bbs, [w/2,h/2], -rot)
-        json_dict['lead_bounding_box'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs)
-    
+    else:
+        augmented_lead_bbs = []    
     if store_text_bounding_box:
         augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [w/2,h/2], -rot)
-        json_dict['text_bounding_box'] = convert_bounding_boxes_to_dict(augmented_leadName_bbs, text_labels)
+    else:
+        augmented_leadName_bbs = []   
+
+    if bbox or store_text_bounding_box:
+        json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs)
 
     head, tail = os.path.split(filename)
 

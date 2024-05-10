@@ -26,7 +26,7 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
           pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_sm-0.4.0.tar.gz
           ```
           
-          Note that the requirements file has been compiled for python versions >= 3.8.11 and < 3.11
+          Note that the requirements file has been compiled for python versions >= 3.9 and < 3.11
 
 
 ## Running the pipeline
@@ -39,7 +39,8 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
     
 - The `gen_ecg_images_from_data_batch.py` script produces the following outputs in each iteration:
     * **Synthetic ECG image:** Includes ECG signals from all leads, gridlines, and the name of each ECG lead.
-    * **Text and lead bounding box (optional):** A CSV file detailing the grid size (`xgrid` and `ygrid`) for every generated image. This information can be used as ground truth for training machine learning and deep learning models.
+    * **ECG header and data files:** New header and data files for each image that is generated. Note that if an input ECG file is generating multiple images, the code outputs only one header and data file. The header and data file might be different from the corresponding files, based on the input parameters. For eg:  If `--mask_unplotted_samples` is set, the unplotted samples are masked with Nan. See the section on `Generating distortionless images` for more details on the input parameters.
+    * **Config JSON file (optional):** A JSON file detailing several parameters used to generate images, box, text and image annotations. See below for more details.
 
 - Below are sample synthetic ECG images generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset.
 

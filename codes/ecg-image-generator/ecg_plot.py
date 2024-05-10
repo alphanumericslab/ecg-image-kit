@@ -212,24 +212,7 @@ def ecg_plot(
 
     #Set grid
     #Standard ecg has grid size of 0.5 mV and 0.2 seconds. Set ticks accordingly
-    if(show_grid):
-        ax.set_xticks(np.arange(x_min,x_max,x_grid_size))    
-        ax.set_yticks(np.arange(y_min,y_max,y_grid_size))
-        ax.minorticks_on()
-        
-        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
-
-        #set grid line style
-        ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
-        
-        ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
-        
-        if store_configs == 2:
-            json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
-            json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
-            json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
-    else:
-        ax.grid(False)
+    
     ax.set_ylim(y_min,y_max)
     ax.set_xlim(x_min,x_max)
     ax.tick_params(axis='x', colors='white')
@@ -245,12 +228,13 @@ def ecg_plot(
     y_offset = (row_height/2)
     x_offset = 0
 
-    text_bbox = []
-    lead_bbox = []
+    leads_ds = []
 
     leadNames_12 = configs['leadNames_12']
 
     for i in np.arange(len(lead_index)):
+        current_lead_ds = dict()
+
         if len(lead_index) == 12:
             leadName = leadNames_12[i]
         else:
@@ -274,31 +258,32 @@ def ecg_plot(
 
         #Print lead name at .5 ( or 5 mm distance) from plot
         if(show_lead_name):
-                    t1 = ax.text(x_offset + x_gap + dc_offset, 
-                            y_offset-lead_name_offset - 0.2, 
-                            leadName, 
-                            fontsize=lead_fontsize)
-                    
-                    if (store_text_bbox):
-                        renderer1 = fig.canvas.get_renderer()
-                        transf = ax.transData.inverted()
-                        bb = t1.get_window_extent()    
-                        x1 = bb.x0*resolution/fig.dpi      
-                        y1 = bb.y0*resolution/fig.dpi   
-                        x2 = bb.x1*resolution/fig.dpi     
-                        y2 = bb.y1*resolution/fig.dpi    
-                        box_dict = dict()
-                        x1 = int(x1)
-                        y1 = int(y1)
-                        x2 = int(x2)
-                        y2 = int(y2)
-                        box_dict[0] = [x1, y2]
-                        box_dict[1] = [x2, y2]
-                        box_dict[2] = [x2, y1]
-                        box_dict[3] = [x1, y1]
-                        box_dict['lead_name'] = leadName
-                        text_bbox.append(box_dict) 
-                        
+            t1 = ax.text(x_offset + x_gap + dc_offset, 
+                    y_offset-lead_name_offset - 0.2, 
+                    leadName, 
+                    fontsize=lead_fontsize)
+            
+            if (store_text_bbox):
+                renderer1 = fig.canvas.get_renderer()
+                transf = ax.transData.inverted()
+                bb = t1.get_window_extent()    
+                x1 = bb.x0*resolution/fig.dpi      
+                y1 = bb.y0*resolution/fig.dpi   
+                x2 = bb.x1*resolution/fig.dpi     
+                y2 = bb.y1*resolution/fig.dpi    
+                box_dict = dict()
+                x1 = int(x1)
+                y1 = int(y1)
+                x2 = int(x2)
+                y2 = int(y2)
+                box_dict[0] = [x1, y2]
+                box_dict[1] = [x2, y2]
+                box_dict[2] = [x2, y1]
+                box_dict[3] = [x1, y1]
+                current_lead_ds["text_bounding_box"] = box_dict
+
+        current_lead_ds["lead_name"] = leadName
+
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
             if(show_dc_pulse):
@@ -347,13 +332,6 @@ def ecg_plot(
                 y1 = min(y1, bb.y0*resolution/fig.dpi)
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
-            st = start_index
-            if columns == 4 and leadName in configs['format_4_by_3'][1]:
-                st = start_index + int(sample_rate*configs['paper_len']/columns)
-            elif columns == 4 and leadName in configs['format_4_by_3'][2]:
-                st = start_index + int(2*sample_rate*configs['paper_len']/columns)
-            elif columns == 4 and leadName in configs['format_4_by_3'][3]:
-                st = start_index + int(3*sample_rate*configs['paper_len']/columns)
             box_dict = dict()
             x1 = int(x1)
             y1 = int(y1)
@@ -363,14 +341,23 @@ def ecg_plot(
             box_dict[1] = [x2, y2]
             box_dict[2] = [x2, y1]
             box_dict[3] = [x1, y1]
+            current_lead_ds["lead_bounding_box"] = box_dict
         
-            box_dict['start_sample'] = st
-            box_dict['end_sample'] = st + len(ecg[leadName])
-            box_dict['lead_name'] = leadName
-            lead_bbox.append(box_dict)
+        st = start_index
+        if columns == 4 and leadName in configs['format_4_by_3'][1]:
+            st = start_index + int(sample_rate*configs['paper_len']/columns)
+        elif columns == 4 and leadName in configs['format_4_by_3'][2]:
+            st = start_index + int(2*sample_rate*configs['paper_len']/columns)
+        elif columns == 4 and leadName in configs['format_4_by_3'][3]:
+            st = start_index + int(3*sample_rate*configs['paper_len']/columns)
+        current_lead_ds["start_sample"] = st
+        current_lead_ds["end_sample"]= st + len(ecg[leadName])
+
+        leads_ds.append(current_lead_ds)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
+        current_lead_ds = dict()
         if(show_lead_name):
             t1 = ax.text(x_gap, 
                     row_height/2-lead_name_offset, 
@@ -394,9 +381,8 @@ def ecg_plot(
                 box_dict[1] = [x2, y2]
                 box_dict[2] = [x2, y1]
                 box_dict[3] = [x1, y1]
-                box_dict['lead_name'] = full_mode
-                text_bbox.append(box_dict)
-                
+                current_lead_ds["text_bounding_box"] = box_dict                
+            current_lead_ds["lead_name"] = full_mode
 
         if(show_dc_pulse):
             t1 = ax.plot(x_range + x_gap,
@@ -443,10 +429,11 @@ def ecg_plot(
             box_dict[1] = [x2, y2]
             box_dict[2] = [x2, y1]
             box_dict[3] = [x1, y1]
-            box_dict['lead_name'] = full_mode
-            box_dict['start_sample'] = start_index
-            box_dict['end_sample'] = start_index + len(ecg['full'+full_mode])
-            lead_bbox.append(box_dict)
+            current_lead_ds["lead_bounding_box"] = box_dict
+        current_lead_ds["start_sample"] = start_index
+        current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
+            
+        leads_ds.append(current_lead_ds)
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
@@ -478,6 +465,25 @@ def ecg_plot(
     ax.text(2, 0.5, '25mm/s', fontsize=lead_fontsize)
     ax.text(4, 0.5, '10mm/mV', fontsize=lead_fontsize)
     
+    if(show_grid):
+        ax.set_xticks(np.arange(x_min,x_max,x_grid_size))    
+        ax.set_yticks(np.arange(y_min,y_max,y_grid_size))
+        ax.minorticks_on()
+        
+        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+
+        #set grid line style
+        ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
+        
+        ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
+        
+        if store_configs == 2:
+            json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
+            json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
+            json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
+    else:
+        ax.grid(False)
+
     plt.savefig(os.path.join(output_dir,tail +'.png'),dpi=resolution)
     plt.close(fig)
     plt.clf()
@@ -504,9 +510,7 @@ def ecg_plot(
         plt.clf()
         plt.cla()
 
-    json_dict["text_bounding_box"] = text_bbox
-    json_dict["lead_bounding_box"] = lead_bbox
-
+    json_dict["leads"] = leads_ds
 
     return x_grid_dots,y_grid_dots
        
