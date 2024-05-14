@@ -23,7 +23,7 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
      2. If you will be using the handwritten text distortions feature, install [sciSpacy](https://github.com/allenai/scispacy) with the following command:
 
           ```
-          pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_sm-0.4.0.tar.gz
+          pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.0/en_core_sci_sm-0.5.0.tar.gz
           ```
           
           Note that the requirements file has been compiled for python versions >= 3.9 and < 3.11
@@ -31,7 +31,7 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
 
 ## Running the pipeline
 - The python script to generate the ECG images requires two mandatory parameters: the path to the input directory with the ECG time-series data and its header file (in [PhysioNet's WFDB](https://www.physionet.org/content/wfdb/) format) and the path to the output directory to store the synthetic ECG images. Here is an example case of running the python script with only the mandatory arguments:
-
+ 
     
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> --print_header
