@@ -166,8 +166,8 @@ def ecg_plot(
     y_min = 0
     y_max = height * y_grid_size/y_grid
 
-    json_dict['width'] = {'val': int(width*resolution), 'unit': 'px'}
-    json_dict['height'] = {'val': int(height*resolution), 'unit': 'px'}
+    json_dict['width'] = int(width*resolution)
+    json_dict['height'] = int(height*resolution)
     #Set figure and subplot sizes
     fig, ax = plt.subplots(figsize=(width, height), dpi=resolution)
    
@@ -407,6 +407,8 @@ def ecg_plot(
                     linewidth=line_width, 
                     color=color_line
                     )
+        x_vals = np.arange(0,len(ecg['full'+full_mode])*step,step) + x_gap + dc_full_lead_offset
+        y_vals = ecg['full'+full_mode] + row_height/2-lead_name_offset + 0.8
 
         if (bbox):
             renderer1 = fig.canvas.get_renderer()
@@ -432,7 +434,8 @@ def ecg_plot(
             current_lead_ds["lead_bounding_box"] = box_dict
         current_lead_ds["start_sample"] = start_index
         current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
-            
+
+        current_lead_ds["plotted_pixels"] = [list(ax.transData.transform((xi, yi))) for xi, yi in zip(x_vals, y_vals)]
         leads_ds.append(current_lead_ds)
 
     head, tail = os.path.split(rec_file_name)
