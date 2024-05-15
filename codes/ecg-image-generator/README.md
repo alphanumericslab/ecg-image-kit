@@ -70,13 +70,13 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
 - `--standard_grid_color`: Color of the grid lines, 1: brown, 2: pink, 3: blue, 4: green, 5(Default): red .Make sure that `standard_grid_color` $\in$ [1, 5], type: int
 - `--random_grid_color`: Generates random colors for the gridlines, If `'--random_bw` > 0, then the color of gridlines for the non black and white ECG images is picked randomly. Default: False.
-- `--store_text_bounding_box`: Store bounding box coordinates for the lead names in the json file under the attribute `text_bounding_box`. 
-- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in the json file under the attribute `lead_bounding_box`.
 - `--store_config`: Store config information for each image in a json file, type = int, Default: 0. If `--store_config` is set to 1, the config file has high level attributes, refer template1.json. If  `--store_config` is set to 2, config file will have more detailed information, refer template2.json.
+- `--store_text_bounding_box`: Store bounding box coordinates for the lead names in the json file under the attribute `text_bounding_box` in the config JSON file generated for every record (conditional); Add `--store-config` parameter to the command you are running. Note: Add `--store-config` parameter to the command you are running to save the config file with bounding box information. 
+- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in the json file under the attribute `lead_bounding_box` in the config JSON file generated for every record (conditional). Note: Add `--store-config` parameter to the command you are running to save the config file with bounding box information. 
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5 --store_config 1
      ```
 
 ## Adding distortions to the synethic images
