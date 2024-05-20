@@ -13,17 +13,7 @@ def generate_template(header_file):
     fields = wfdb.rdheader(filename)
 
     if fields.comments == []:
-        template_file_content = open(os.path.join('TemplateFiles','TextFile1.txt'), 'r')
-        Lines = template_file_content.readlines()
-        lines = []
-        max = 0
-        for line in Lines:
-            if(len(line.strip()) > max):
-                maxIdx = line.strip()
-                max = len(line.strip())
-            lines.append(line.strip())
-        
-        return lines, {}, 0
+        return [], {}, 0
 
     else:
         comments = fields.comments
