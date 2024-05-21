@@ -13,7 +13,26 @@ def generate_template(header_file):
     fields = wfdb.rdheader(filename)
 
     if fields.comments == []:
-        return [], {}, 0
+        attributes = {}
+
+        if fields.base_date is not None:
+            attributes['Date'] = fields.base_date
+        else:
+            attributes['Date'] = ""
+        if fields.base_time is not None:
+            attributes['Time'] = str(fields.base_time)
+        else:
+            attributes['Time'] = ""
+        attributes['ID'] = 'ID: ' + filename.split('/')[-1]
+        attributes['Name'] =  'Name: ' 
+        if attributes['Date'] != "":
+            attributes['Date'] = 'Date:'  + str(attributes['Date'])
+        if attributes['Time'] != "":
+            attributes['Date'] += ', ' + attributes['Time']
+        printedText = {}
+        printedText[0] = ['ID', 'Name', 'Date']
+
+        return printedText, attributes, 1
 
     else:
         comments = fields.comments
@@ -29,8 +48,8 @@ def generate_template(header_file):
         else:
             attributes['Time'] = ""
             
-        attributes['Name'] = 'Name: ' + filename.split('/')[-1]
-        attributes['ID'] =  'ID: ' #+ str(str(random.randint(10**(8-1), (10**8)-1)))
+        attributes['ID'] = 'ID: ' + filename.split('/')[-1]
+        attributes['Name'] =  'Name: ' #+ str(str(random.randint(10**(8-1), (10**8)-1)))
     
         attributes['Height'] = ''
         attributes['Weight'] = ''
@@ -67,7 +86,7 @@ def generate_template(header_file):
         attributes['Sex'] = 'Sex: ' + attributes['Sex']
         
         printedText = {}
-        printedText[0] = ['Name', 'ID', 'Date']
+        printedText[0] = ['ID', 'Name', 'Date']
         printedText[1] = ['DOB', 'Height', 'Weight']
         printedText[2] = ['Sex']
 
