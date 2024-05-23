@@ -1,19 +1,13 @@
-import os, sys, argparse
+import os
 import numpy as np
 import random
-from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.ticker import AutoMinorLocator
 from TemplateFiles.generate_template import generate_template
-from helper_functions import convert_inches_to_seconds,convert_inches_to_volts,convert_mm_to_volts,convert_mm_to_seconds
 from math import ceil 
 from PIL import Image
-from numpy import asarray
-from random import randint
-import matplotlib.patches as patches
 import csv
-import matplotlib.patches as patches
 
 standard_values = {'y_grid_size' : 0.5,
                    'x_grid_size' : 0.2,
@@ -276,10 +270,10 @@ def ecg_plot(
                 y1 = int(y1)
                 x2 = int(x2)
                 y2 = int(y2)
-                box_dict[0] = [json_dict['height'] - y2, x1]
-                box_dict[1] = [json_dict['height'] - y2, x2]
-                box_dict[2] = [json_dict['height'] - y1, x2]
-                box_dict[3] = [json_dict['height'] - y1, x1]
+                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
                 current_lead_ds["text_bounding_box"] = box_dict
 
         current_lead_ds["lead_name"] = leadName
@@ -341,10 +335,10 @@ def ecg_plot(
             y1 = int(y1)
             x2 = int(x2)
             y2 = int(y2)
-            box_dict[0] = [json_dict['height'] - y2, x1]
-            box_dict[1] = [json_dict['height'] - y2, x2]
-            box_dict[2] = [json_dict['height'] - y1, x2]
-            box_dict[3] = [json_dict['height'] - y1, x1]
+            box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+            box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+            box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+            box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
             current_lead_ds["lead_bounding_box"] = box_dict
         
         st = start_index
@@ -361,7 +355,7 @@ def ecg_plot(
             xi, yi = x_vals[j], y_vals[j]
             xi, yi = ax.transData.transform((xi, yi))
             yi = json_dict['height'] - yi
-            current_lead_ds['plotted_pixels'].append([yi, xi])
+            current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
 
         leads_ds.append(current_lead_ds)
 
@@ -393,10 +387,10 @@ def ecg_plot(
                 y1 = int(y1)
                 x2 = int(x2)
                 y2 = int(y2)
-                box_dict[0] = [json_dict['height'] - y2, x1]
-                box_dict[1] = [json_dict['height'] - y2, x2]
-                box_dict[2] = [json_dict['height'] - y1, x2]
-                box_dict[3] = [json_dict['height'] - y1, x1]
+                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                box_dict[3] = [round(json_dict['height'] - y1), round(x1, 2)]
                 current_lead_ds["text_bounding_box"] = box_dict                
             current_lead_ds["lead_name"] = full_mode
 
@@ -443,10 +437,10 @@ def ecg_plot(
             y1 = int(y1)
             x2 = int(x2)
             y2 = int(y2)
-            box_dict[0] = [json_dict['height'] - y2, x1]
-            box_dict[1] = [json_dict['height'] - y2, x2]
-            box_dict[2] = [json_dict['height'] - y1, x2]
-            box_dict[3] = [json_dict['height'] - y1, x1]
+            box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+            box_dict[1] = [round(json_dict['height'] - y2), round(x2, 2)]
+            box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+            box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
             current_lead_ds["lead_bounding_box"] = box_dict
         current_lead_ds["start_sample"] = start_index
         current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
@@ -455,7 +449,7 @@ def ecg_plot(
             xi, yi = x_vals[i], y_vals[i]
             xi, yi = ax.transData.transform((xi, yi))
             yi = json_dict['height'] - yi
-            current_lead_ds['plotted_pixels'].append([yi, xi])
+            current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
         leads_ds.append(current_lead_ds)
 
 
