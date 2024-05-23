@@ -341,3 +341,7 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
                 base_time = header.base_time, base_date = header.base_date, 
                 write_dir = write_dir)
     
+    with open(os.path.join(write_dir, tail + '.hea'), "a") as f:
+        for line in header.comments:
+            f.write("#" + line)
+            f.write("\n")
