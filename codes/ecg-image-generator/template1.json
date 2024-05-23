@@ -22,7 +22,12 @@
             },
             "lead_name": "",
             "start_sample": 0,
-            "end_sample": 0
+            "end_sample": 0,
+            "plotted_pixels":
+            [
+                [0, 0],
+                [0, 0]
+            ]
         } 
     ]
 }
