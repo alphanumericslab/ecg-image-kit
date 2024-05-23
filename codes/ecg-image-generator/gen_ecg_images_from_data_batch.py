@@ -18,7 +18,7 @@ def get_parser():
     parser.add_argument('-o', '--output_directory', type=str, required=True)
     parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
     parser.add_argument('--num_leads',type=str,default='twelve')
-    parser.add_argument('--num_images',type=int,default = -1)
+    parser.add_argument('--max_num_images',type=int,default = -1)
     parser.add_argument('--config_file', type=str, default='config.yaml')
     
     parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
@@ -47,12 +47,12 @@ def get_parser():
     parser.add_argument('--random_padding',action="store_true",default=False)
     parser.add_argument('--random_grid_color',action="store_true",default=False)
     parser.add_argument('--standard_grid_color', type=int, default=5)
-    parser.add_argument('--random_dc',type=float,default=0)
+    parser.add_argument('--calibration_pulse',type=float,default=0)
     parser.add_argument('--random_grid_present',type=float,default=1)
-    parser.add_argument('--random_add_header',type=float,default=0)
+    parser.add_argument('--random_print_header',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
-    parser.add_argument('--deterministic_lead',action="store_false",default=True)
-    parser.add_argument('--store_text_bounding_box',action="store_true",default=False)
+    parser.add_argument('--remove_lead_names',action="store_false",default=True)
+    parser.add_argument('--lead_name_bbox',action="store_true",default=False)
     parser.add_argument('--store_config', type=int, default=0)
 
     parser.add_argument('--deterministic_offset',action="store_true",default=False)
@@ -72,7 +72,7 @@ def get_parser():
     parser.add_argument('--hw_text',action='store_true',default=False)
     parser.add_argument('--wrinkles',action='store_true',default=False)
     parser.add_argument('--augment',action='store_true',default=False)
-    parser.add_argument('--bbox',action='store_true',default=False)
+    parser.add_argument('--lead_bbox',action='store_true',default=False)
 
     return parser
 
@@ -106,7 +106,7 @@ def run(args):
             args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
             i += run_single_file(args)
             
-            if(args.num_images != -1 and i >= args.num_images):
+            if(args.max_num_images != -1 and i >= args.max_num_images):
                 break
 
 if __name__=='__main__':

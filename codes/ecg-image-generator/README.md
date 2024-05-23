@@ -60,23 +60,23 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--mask_unplotted_samples`: Mask the samples not plotted in the images in the generated WFDB signal file; default: False. For example: for the 3x4 format, the code plots 2.5 seconds of each lead on the image and saves the complete signal in the WFDB file. If the flag is set, the code will mask the part of the signal not plotted in the image (In this case, t > 2.5seconds) with Nan values in the modified WFDB file. 
-- `--num_images`: Number of ECG images to be generated; default: all files in the input directory; type: int
--   `--deterministic_lead`: Remove lead names from all generated images, default=False.
-- `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `-r`] else every image is generated at the `-r` resolution; default: False
+- `--max_num_images`: Number of ECG images to be generated, if max_num_images is less than the number of files in the input directory it will generate maximum number of images and the order is dependent on the OS library; default: all files in the input directory; type: int
+-   `--remove_lead_names`: Remove lead names from all generated images, default=False.
+- `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `r`] else every image is generated at the `-r` resolution; default: False
 - `--random_padding`: Generate random padding widths on images, if True pad inches is randomly picked from the range [0, `--pad_inches`], else every image is padded with `--pad_inches`; default: False
-- `--random_dc`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--random_dc` $\in$ [0, 1]. 
+- `--calibration_pulse`: Add ECG calibration pulse to a random number of generated images. The parameter is the probability of the images having the calibration pulse; type: Float, default: 0 (no calibration pulse). Set to 1 to add the pulse to all images. Make sure that `--calibration_pulse` $\in$ [0, 1]. 
 - `--random_grid_present`: Probability of the generated images having the ECG paper grid; type: Float, default: 1 (adds the grid to all images). Make sure that `--random_grid_present` $\in$ [0, 1]. When 0, the images do not have the background grid.
-- `--random_add_header`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_add_header` $\in$ [0, 1]. If `--print_header` is True, code prints text on all the images regardless of the `--random_add_header` attribute.
+- `--random_print_header`: Probability of adding printed text to a random set of images; type: Float, default: 0 (no text added). Make sure that `--random_print_header` $\in$ [0, 1]. If `--print_header` is True, code prints text on all the images regardless of the `--random_print_header` attribute.
 - `--random_bw`: Make random set of images black and white controlled by this parameter; type: Float, default: 0 (generates colored ECG). Make sure that `--random_bw` $\in$ [0, 1].
 - `--standard_grid_color`: Color of the grid lines, 1: brown, 2: pink, 3: blue, 4: green, 5(Default): red .Make sure that `standard_grid_color` $\in$ [1, 5], type: int
 - `--random_grid_color`: Generates random colors for the gridlines, If `'--random_bw` > 0, then the color of gridlines for the non black and white ECG images is picked randomly. Default: False.
 - `--store_config`: Store config information for each image in a json file, type = int, Default: 0. If `--store_config` is set to 1, the config file has high level attributes, refer template1.json. If  `--store_config` is set to 2, config file will have more detailed information, refer template2.json.
-- `--store_text_bounding_box`: Store bounding box coordinates for the lead names in the json file under the attribute `text_bounding_box` in the config JSON file generated for every record (conditional); Add `--store_config` parameter to the command you are running. Note: Add `--store_config` parameter to the command you are running to save the config file with bounding box information. 
-- `--bbox`:  Store bounding box coordinates for every individual ECG lead signal in the json file under the attribute `lead_bounding_box` in the config JSON file generated for every record (conditional). Note: Add `--store_config` parameter to the command you are running to save the config file with bounding box information. 
+- `--lead_name_bbox`: Store bounding box coordinates for the lead names in the json file under the attribute `text_bounding_box` in the config JSON file generated for every record (conditional); Add `--store_config` parameter to the command you are running. Note: Add `--store_config` parameter to the command you are running to save the config file with bounding box information. 
+- `--lead_bbox`:  Store bounding box coordinates for every individual ECG lead signal in the json file under the attribute `lead_bounding_box` in the config JSON file generated for every record (conditional). Note: Add `--store_config` parameter to the command you are running to save the config file with bounding box information. 
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --store_text_bounding_box --bbox --random_add_header 0.8 --random_dc 0.5 --store_config 1
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_add_header 0.8 --calibration_pulse 0.5 --store_config 1
      ```
 
 ## Adding distortions to the synethic images
@@ -187,7 +187,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:**
 
      ```
-     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --random_add_header 0.8 -se 20 --store_text_bounding_box  --resolution 300 --random_padding --pad_inches 1 --bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 
+     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --random_add_header 0.8 -se 20 --lead_name_bbox  --resolution 300 --random_padding --pad_inches 1 --lead_bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 
      ```
 
      |                            |                             |
