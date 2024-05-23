@@ -276,10 +276,10 @@ def ecg_plot(
                 y1 = int(y1)
                 x2 = int(x2)
                 y2 = int(y2)
-                box_dict[0] = [x1, y2]
-                box_dict[1] = [x2, y2]
-                box_dict[2] = [x2, y1]
-                box_dict[3] = [x1, y1]
+                box_dict[0] = [json_dict['height'] - y2, x1]
+                box_dict[1] = [json_dict['height'] - y2, x2]
+                box_dict[2] = [json_dict['height'] - y1, x2]
+                box_dict[3] = [json_dict['height'] - y1, x1]
                 current_lead_ds["text_bounding_box"] = box_dict
 
         current_lead_ds["lead_name"] = leadName
@@ -301,7 +301,7 @@ def ecg_plot(
                     x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
                     
                 
-        elif(columns == 4 and i == 0 or i == 4 or i == 8):
+        elif(i%columns == 0):
             if(show_dc_pulse):
                 #Plot dc pulse for 0.2 seconds with 2 trailing and leading zeros to get the pulse
                 t1 = ax.plot(np.arange(0,sample_rate*standard_values['dc_offset_length']*step + 4*step,step) + x_offset + x_gap,
@@ -321,6 +321,10 @@ def ecg_plot(
                 linewidth=line_width, 
                 color=color_line
                 )
+        
+        x_vals = np.arange(0,len(ecg[leadName])*step,step) + x_offset + dc_offset + x_gap
+        y_vals = ecg[leadName] + y_offset
+
         if (bbox):
             renderer1 = fig.canvas.get_renderer()
             transf = ax.transData.inverted()
@@ -337,10 +341,10 @@ def ecg_plot(
             y1 = int(y1)
             x2 = int(x2)
             y2 = int(y2)
-            box_dict[0] = [x1, y2]
-            box_dict[1] = [x2, y2]
-            box_dict[2] = [x2, y1]
-            box_dict[3] = [x1, y1]
+            box_dict[0] = [json_dict['height'] - y2, x1]
+            box_dict[1] = [json_dict['height'] - y2, x2]
+            box_dict[2] = [json_dict['height'] - y1, x2]
+            box_dict[3] = [json_dict['height'] - y1, x1]
             current_lead_ds["lead_bounding_box"] = box_dict
         
         st = start_index
@@ -352,8 +356,20 @@ def ecg_plot(
             st = start_index + int(3*sample_rate*configs['paper_len']/columns)
         current_lead_ds["start_sample"] = st
         current_lead_ds["end_sample"]= st + len(ecg[leadName])
+        current_lead_ds["plotted_pixels"] = []
+        for j in range(len(x_vals)):
+            xi, yi = x_vals[j], y_vals[j]
+            xi, yi = ax.transData.transform((xi, yi))
+            yi = json_dict['height'] - yi
+            current_lead_ds['plotted_pixels'].append([yi, xi])
 
         leads_ds.append(current_lead_ds)
+
+        if columns > 1 and (i+1)%columns != 0:
+            sep_x = [len(ecg[leadName])*step + x_offset + dc_offset + x_gap] * round(8*y_grid_dots)
+            sep_x = np.array(sep_x)
+            sep_y = np.linspace(y_offset - 4*y_grid_dots*step, y_offset + 4*y_grid_dots*step, len(sep_x))
+            ax.plot(sep_x, sep_y, linewidth=line_width * 3, color=color_line)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
@@ -377,10 +393,10 @@ def ecg_plot(
                 y1 = int(y1)
                 x2 = int(x2)
                 y2 = int(y2)
-                box_dict[0] = [x1, y2]
-                box_dict[1] = [x2, y2]
-                box_dict[2] = [x2, y1]
-                box_dict[3] = [x1, y1]
+                box_dict[0] = [json_dict['height'] - y2, x1]
+                box_dict[1] = [json_dict['height'] - y2, x2]
+                box_dict[2] = [json_dict['height'] - y1, x2]
+                box_dict[3] = [json_dict['height'] - y1, x1]
                 current_lead_ds["text_bounding_box"] = box_dict                
             current_lead_ds["lead_name"] = full_mode
 
@@ -407,6 +423,8 @@ def ecg_plot(
                     linewidth=line_width, 
                     color=color_line
                     )
+        x_vals = np.arange(0,len(ecg['full'+full_mode])*step,step) + x_gap + dc_full_lead_offset
+        y_vals = ecg['full'+full_mode] + row_height/2-lead_name_offset + 0.8
 
         if (bbox):
             renderer1 = fig.canvas.get_renderer()
@@ -425,15 +443,22 @@ def ecg_plot(
             y1 = int(y1)
             x2 = int(x2)
             y2 = int(y2)
-            box_dict[0] = [x1, y2]
-            box_dict[1] = [x2, y2]
-            box_dict[2] = [x2, y1]
-            box_dict[3] = [x1, y1]
+            box_dict[0] = [json_dict['height'] - y2, x1]
+            box_dict[1] = [json_dict['height'] - y2, x2]
+            box_dict[2] = [json_dict['height'] - y1, x2]
+            box_dict[3] = [json_dict['height'] - y1, x1]
             current_lead_ds["lead_bounding_box"] = box_dict
         current_lead_ds["start_sample"] = start_index
         current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
-
+        current_lead_ds['plotted_pixels'] = []
+        for i in range(len(x_vals)):
+            xi, yi = x_vals[i], y_vals[i]
+            xi, yi = ax.transData.transform((xi, yi))
+            yi = json_dict['height'] - yi
+            current_lead_ds['plotted_pixels'].append([yi, xi])
         leads_ds.append(current_lead_ds)
+
+
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)

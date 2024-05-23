@@ -207,36 +207,38 @@ def standardize_leads(full_leads):
 
 def rotate_bounding_box(box, origin, angle):
     angle = math.radians(angle)
+
     transformation = np.ones((2, 2))
     transformation[0][0] = math.cos(angle)
     transformation[0][1] = math.sin(angle)
     transformation[1][0] = -math.sin(angle)
     transformation[1][1] = math.cos(angle)
 
-    transformed_matrix = np.matmul(box, transformation)
-
     new_origin = np.ones((1, 2))
-    
     new_origin[0, 0] = -origin[0]*math.cos(angle) + origin[1]*math.sin(angle)
     new_origin[0, 1] = -origin[0]*math.sin(angle) - origin[1]*math.cos(angle)
     origin = np.reshape(origin, (1, 2))
-    transformed_matrix += origin + new_origin 
 
-    return transformed_matrix
+    transformed_box = np.matmul(box, transformation)    
+    transformed_box += origin + new_origin 
 
-def readBoundingBoxes(leads):
+    return transformed_box
+
+def read_leads(leads):
 
     lead_bbs = []
     text_bbs = []
     startTimeStamps = []
     endTimeStamps = []
     labels = []
+    plotted_pixels = []
     for i, line in enumerate(leads):
         labels.append(leads[i]['lead_name'])
         st_time_stamp = leads[i]['start_sample']
         startTimeStamps.append(st_time_stamp)
         end_time_stamp = leads[i]['end_sample']
         endTimeStamps.append(end_time_stamp)
+        plotted_pixels.append(leads[i]['plotted_pixels'])
 
         key = "lead_bounding_box"
         if key in leads[i].keys():
@@ -258,11 +260,14 @@ def readBoundingBoxes(leads):
             box = [point1, point2, point3, point4]
             text_bbs.append(box)
 
-    lead_bbs = np.array(lead_bbs)
-    text_bbs = np.array(text_bbs)
-    return lead_bbs, text_bbs, labels, startTimeStamps, endTimeStamps
+    if len(lead_bbs) != 0:
+        lead_bbs = np.array(lead_bbs)
+    if len(text_bbs) != 0:
+        text_bbs = np.array(text_bbs)
 
-def convert_bounding_boxes_to_dict(lead_bboxes, text_bboxes, labels, startTimeList = None, endTimeList = None):
+    return lead_bbs, text_bbs, labels, startTimeStamps, endTimeStamps, plotted_pixels
+
+def convert_bounding_boxes_to_dict(lead_bboxes, text_bboxes, labels, startTimeList = None, endTimeList = None, plotted_pixels_dict=None):
     leads_ds = []
 
     for i in range(len(labels)):
@@ -270,25 +275,25 @@ def convert_bounding_boxes_to_dict(lead_bboxes, text_bboxes, labels, startTimeLi
         if len(lead_bboxes) != 0:
             new_box = dict()
             box = lead_bboxes[i]
-            new_box[0] = [int(box[0][0]), int(box[0][1])]
-            new_box[1] = [int(box[1][0]), int(box[1][1])]
-            new_box[2] = [int(box[2][0]), int(box[2][1])]
-            new_box[3] = [int(box[3][0]), int(box[3][1])]
+            new_box[0] = [round(box[0][0]), round(box[0][1])]
+            new_box[1] = [round(box[1][0]), round(box[1][1])]
+            new_box[2] = [round(box[2][0]), round(box[2][1])]
+            new_box[3] = [round(box[3][0]), round(box[3][1])]
             current_lead_ds["lead_bounding_box"] = new_box
 
         if len(text_bboxes) != 0:
             new_box = dict()
             box = text_bboxes[i]
-            new_box[0] = [int(box[0][0]), int(box[0][1])]
-            new_box[1] = [int(box[1][0]), int(box[1][1])]
-            new_box[2] = [int(box[2][0]), int(box[2][1])]
-            new_box[3] = [int(box[3][0]), int(box[3][1])]
+            new_box[0] = [round(box[0][0]), round(box[0][1])]
+            new_box[1] = [round(box[1][0]), round(box[1][1])]
+            new_box[2] = [round(box[2][0]), round(box[2][1])]
+            new_box[3] = [round(box[3][0]), round(box[3][1])]
             current_lead_ds["text_bounding_box"] = new_box
 
         current_lead_ds["lead_name"] = labels[i]
         current_lead_ds["start_sample"] = startTimeList[i]
         current_lead_ds["end_sample"] = endTimeList[i]
-        
+        current_lead_ds["plotted_pixels"] = [[plotted_pixels_dict[i][j][0], plotted_pixels_dict[i][j][1]] for j in range(len(plotted_pixels_dict[i]))]
         leads_ds.append(current_lead_ds)
 
     return leads_ds
@@ -340,8 +345,45 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
                 adc_gain = header.adc_gain, baseline = header.baseline, 
                 base_time = header.base_time, base_date = header.base_date, 
                 write_dir = write_dir)
-    
+
     with open(os.path.join(write_dir, tail + '.hea'), "a") as f:
         for line in header.comments:
             f.write("#" + line)
             f.write("\n")
+
+
+def get_lead_pixel_coordinate(leads):
+
+    pixel_coordinates = dict()
+
+    for i in range(len(leads)):
+        leadName = leads[i]["lead_name"]
+        plotted_pixels = np.array(leads[i]["plotted_pixels"])
+        pixel_coordinates[leadName] = plotted_pixels
+
+    return pixel_coordinates
+
+
+def rotate_points(pixel_coordinates, origin, angle):
+    rotates_pixel_coords = []
+    angle = math.radians(angle)
+    transformation = np.ones((2, 2))
+    transformation[0][0] = math.cos(angle)
+    transformation[0][1] = math.sin(angle)
+    transformation[1][0] = -math.sin(angle)
+    transformation[1][1] = math.cos(angle)
+
+    new_origin = np.ones((1, 2))
+    
+    new_origin[0, 0] = -origin[0]*math.cos(angle) + origin[1]*math.sin(angle)
+    new_origin[0, 1] = -origin[0]*math.sin(angle) - origin[1]*math.cos(angle)
+    origin = np.reshape(origin, (1, 2))
+    
+
+    for i in range(len(pixel_coordinates)):
+        pixels_array = pixel_coordinates[i]
+        transformed_matrix = np.matmul(pixels_array, transformation)
+        transformed_matrix += origin + new_origin 
+        rotates_pixel_coords.append(np.round(transformed_matrix, 2))
+        
+    return rotates_pixel_coords

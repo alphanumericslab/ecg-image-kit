@@ -4,6 +4,7 @@ import argparse
 import imgaug as ia
 from imgaug import augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
+from helper_functions import read_leads, convert_bounding_boxes_to_dict, rotate_bounding_box, get_lead_pixel_coordinate, rotate_points
 import numpy as np
 import matplotlib.pyplot as plt
 import os, sys, argparse
@@ -14,7 +15,6 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import time
 import random
-from helper_functions import readBoundingBoxes, convert_bounding_boxes_to_dict, rotate_bounding_box
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -37,8 +37,8 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     lead_bbs = []
     leadNames_bbs = []
     
-    if bbox or store_text_bounding_box:      
-        lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs = readBoundingBoxes(json_dict['leads'])
+         
+    lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, plotted_pixels = read_leads(json_dict['leads'])
     
     if bbox:
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
@@ -57,20 +57,21 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
           iaa.ChangeColorTemperature(temperature)
           ])
     
-   
     images_aug = seq(images=images)
 
     if bbox:
-        augmented_lead_bbs = rotate_bounding_box(lead_bbs, [w/2,h/2], -rot)
+        augmented_lead_bbs = rotate_bounding_box(lead_bbs, [h/2,w/2], -rot)
     else:
         augmented_lead_bbs = []    
     if store_text_bounding_box:
-        augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [w/2,h/2], -rot)
+        augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [h/2,w/2], -rot)
     else:
         augmented_leadName_bbs = []   
 
+    rotated_pixel_coordinates = rotate_points(plotted_pixels, [h/2, w/2], -rot)
+
     if bbox or store_text_bounding_box:
-        json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs)
+        json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, rotated_pixel_coordinates)
 
     head, tail = os.path.split(filename)
 
