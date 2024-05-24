@@ -58,13 +58,13 @@ In this repo, we use YOLOv7 to detect different leads in the ECG image. The code
 
     Some example images and ground truth Txt file can be found here : [Data/train_imgs](Data/train_imgs/) and  [Data/GT_txt](Data/GT_txt/)
 
-    Add the train and validation path, number of object classes and the names of classes to the data config file at: [yolov7/data/custom_data.yaml]([yolov7/data/custom_data.yaml). Make sure the order of classes is in line with the list of [0, number of objects - 1].
+    Add the train and validation path, number of object classes and the names of classes to the data config file at: [yolov7/data/custom_data.yaml](yolov7/data/custom_data.yaml). Make sure the order of classes is in line with the list of [0, number of objects - 1].
 
 ### Training Configs
 
-- Calibrate the hyperparameters of your choice by changing the values in the file : [data/hyp.scratch.custom.yaml](data/hyp.scratch.custom.yaml)
+- Calibrate the hyperparameters of your choice by changing the values in the file : [yolov7/data/hyp.scratch.custom.yaml](yolov7/data/hyp.scratch.custom.yaml)
 
-- The model architecture, output shape and other training attributes can be changed through the config file: [cfg/training/yolov7_custom.yaml](cfg/training/yolov7_custom.yaml) 
+- The model architecture, output shape and other training attributes can be changed through the config file: [yolov7/cfg/training/yolov7_custom.yaml](yolov7/cfg/training/yolov7_custom.yaml) 
 
 
 ### Training the model
