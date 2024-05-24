@@ -46,7 +46,7 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_lr-0.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/00005_hr-0.png) | ![GT Image](SampleData/PTB_XL_op/00011_hr-0.png) |
 
      *Note:* The ECG images generated for the format 3 by 4 (4 columns), the ECG signals for every column have been sampled in a shifted fashion, i.e. the leads in the first column (I, II, III) is from the first 2.5 seconds, the second column (aVR, aVL, aVF) is from the second 2.5 seconds, the third column (V1, V2, V3) is from the third 2.5 seconds segment and the fourth column (V4, V5, V6) is from the fourth 2.5 seconds segment of the respective lead of the ECG signal.
 
@@ -60,6 +60,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
 - `--mask_unplotted_samples`: Mask the samples not plotted in the images in the generated WFDB signal file; default: False. For example: for the 3x4 format, the code plots 2.5 seconds of each lead on the image and saves the complete signal in the WFDB file. If the flag is set, the code will mask the part of the signal not plotted in the image (In this case, t > 2.5seconds) with Nan values in the modified WFDB file. 
+- `--add_qr_code`: Add QR code to all the generated images, default: False.
 - `--max_num_images`: Number of ECG images to be generated, if max_num_images is less than the number of files in the input directory it will generate maximum number of images and the order is dependent on the OS library; default: all files in the input directory; type: int
 -   `--remove_lead_names`: Remove lead names from all generated images, default=False.
 - `--random_resolution`: Generate random resolutions of images, if True resolution is randomly picked from the range [50, `r`] else every image is generated at the `-r` resolution; default: False
@@ -76,7 +77,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_add_header 0.8 --calibration_pulse 0.5 --store_config 1
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_add_header 0.8 --calibration_pulse 0.5 --store_config 1 --add_qr_code
      ```
 
 ## Adding distortions to the synethic images
@@ -100,14 +101,14 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:** 
 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --hw_text -n 4 --x_offset 30 --y_offset 20 -se 10 --random_grid_color
+     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --hw_text -n 4 --x_offset 30 --y_offset 20 -se 10 --random_grid_color --add_qr_code
      ```
 
      - Below are sample synthetic ECG images with handwritten text generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00002_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00004_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00006_hr-0.png) |
 
 
      Adding text artifacts is a computationally expensive process and should be run with GPU machines for large scale dataset generation.
@@ -127,14 +128,14 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:**
      
      ```bash
-     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --wrinkles -ca 45 -se 10 --random_grid_color
+     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --wrinkles -ca 45 -se 10 --random_grid_color --add_qr_code
      ```
 
      - Wrinkle and creases distortion on synthetic images generated from the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/)
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00009_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00003_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00002_hr-0.png) |
 
 - ### Augmentation and noise
      Add `--augment` to the python command to add augmentations to the images. Furthermore following attributes specific to the wrinkles can be adjusted: 
@@ -158,7 +159,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00003_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00002_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00004_hr-0.png) |
 
      ### Adding Rotation and Crop Augmentation 
      ```bash
@@ -167,7 +168,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00002_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00005_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00003_hr-0.png) |
 
 
 - ### Adding all the distortions together:
@@ -182,7 +183,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/00002_lr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00001_lr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/00002_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/00003_hr-0.png) |
 
      **Example:**
 
@@ -192,12 +193,12 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/bbox/00004_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/bbox/00005_hr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/bbox/00002_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/bbox/00003_hr-0.png) |
 
      ### Distortionless images with Bounding box annotations
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00001_lr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00004_lr-0.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/box_plots/00002_hr-0.png) | ![GT Image](SampleData/PTB_XL_op/box_plots/00003_hr-0.png) |
 
      *Note*: The red and green boxes here have been plotted from the corresponding text files for each lead and lead-name text.
 
