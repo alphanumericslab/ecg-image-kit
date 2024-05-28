@@ -6,7 +6,6 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import wfdb
 from imgaug import augmenters as iaa
-from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
 BIT_NAN_16 = -(2.**15)
 
