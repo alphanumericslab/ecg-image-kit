@@ -1,6 +1,8 @@
 import os, sys, argparse, json
 import random
 import csv
+import qrcode
+from PIL import Image
 import numpy as np
 from scipy.stats import bernoulli
 from helper_functions import find_files
@@ -128,7 +130,7 @@ def run_single_file(args):
 
         configs = read_config_file(os.path.join(os.getcwd(), args.config_file))
 
-        out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, encoding=args.encoding, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.lead_name_bbox, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.lead_bbox, columns = args.num_columns, seed=args.seed, add_qr_code=args.add_qr_code)
+        out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.lead_name_bbox, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.lead_bbox, columns = args.num_columns, seed=args.seed)
         
         for out in out_array:
             if args.store_config:
@@ -219,6 +221,29 @@ def run_single_file(args):
                 
                 with open(rec_tail + '.json', "w") as f:
                     f.write(json_object)
+
+
+            if args.add_qr_code:
+                img = np.array(Image.open(out))
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    box_size=5,
+                    border=4,
+                )
+                qr.add_data(args.encoding)
+                qr.make(fit=True)
+
+                qr_img = np.array(qr.make_image(fill_color="black", back_color="white"))
+                qr_img_color = np.zeros((qr_img.shape[0], qr_img.shape[1], 3))
+                qr_img_color[:,:,0] = qr_img*255.
+                qr_img_color[:,:,1] = qr_img*255.
+                qr_img_color[:,:,2] = qr_img*255.
+                
+                img[:qr_img.shape[0], -qr_img.shape[1]:, :3] = qr_img_color
+                img = Image.fromarray(img)
+                img.save(out)
+
 
         return len(out_array)
 

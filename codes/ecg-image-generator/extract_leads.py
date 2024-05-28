@@ -2,7 +2,6 @@
 # Load libraries.
 import os, sys, argparse
 import json
-import qrcode
 import numpy as np
 from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
@@ -17,7 +16,7 @@ from random import randint
 import random
 
 # Run script.
-def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,add_bw,show_grid, add_print, configs, encoding, mask_unplotted_samples = False, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=5,full_mode='II',bbox = False,columns=-1, add_qr_code=False):
+def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,add_bw,show_grid, add_print, configs, mask_unplotted_samples = False, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=5,full_mode='II',bbox = False,columns=-1):
 
     # Extract a reduced-lead set from each pair of full-lead header and recording files.
     full_header_file = header_file
@@ -286,27 +285,6 @@ def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,ad
             json_dict["full_mode_lead"] =full_mode
 
         outfile = os.path.join(output_directory,rec_tail+'.png')
-
-        if add_qr_code:
-            img = np.array(Image.open(outfile))
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=5,
-                border=4,
-            )
-            qr.add_data(encoding)
-            qr.make(fit=True)
-
-            qr_img = np.array(qr.make_image(fill_color="black", back_color="white"))
-            qr_img_color = np.zeros((qr_img.shape[0], qr_img.shape[1], 3))
-            qr_img_color[:,:,0] = qr_img*255.
-            qr_img_color[:,:,1] = qr_img*255.
-            qr_img_color[:,:,2] = qr_img*255.
-            
-            img[:qr_img.shape[0], -qr_img.shape[1]:, :3] = qr_img_color
-            img = Image.fromarray(img)
-            img.save(outfile)
 
         json_object = json.dumps(json_dict, indent=4)
 

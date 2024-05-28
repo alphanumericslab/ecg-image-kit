@@ -2,10 +2,6 @@ import os, sys, argparse
 import random
 import csv
 from helper_functions import find_records
-from extract_leads import get_paper_ecg
-from HandwrittenText.generate import get_handwritten
-from CreasesWrinkles.creases import get_creased
-from ImageAugmentation.augment import get_augment
 from gen_ecg_image_from_data import run_single_file
 import warnings
 
@@ -105,7 +101,7 @@ def run(args):
             
             folder_struct_list = full_header_file.split('/')[:-1]
             args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
-            args.encoding = os.path.splitext(filename)[0]
+            args.encoding = os.path.split(os.path.splitext(filename)[0])[1]
             
             i += run_single_file(args)
             
