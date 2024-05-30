@@ -46,7 +46,7 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
 
      |                           |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![Sythentic ECG image](SampleData/PTB_XL_op/00005_hr-0.png) | ![GT Image](SampleData/PTB_XL_op/00011_hr-0.png) |
+     | ![Sythentic ECG image](SampleData/PTB_XL_op/00002_hr-0.png) | ![GT Image](SampleData/PTB_XL_op/00003_hr-0.png) |
 
      *Note:* The ECG images generated for the format 3 by 4 (4 columns), the ECG signals for every column have been sampled in a shifted fashion, i.e. the leads in the first column (I, II, III) is from the first 2.5 seconds, the second column (aVR, aVL, aVF) is from the second 2.5 seconds, the third column (V1, V2, V3) is from the third 2.5 seconds segment and the fourth column (V4, V5, V6) is from the fourth 2.5 seconds segment of the respective lead of the ECG signal.
 
@@ -108,7 +108,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00004_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00006_hr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00004_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/HandwrittenText/00002_hr-0.png) |
 
 
      Adding text artifacts is a computationally expensive process and should be run with GPU machines for large scale dataset generation.
@@ -135,7 +135,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00003_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00002_hr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00003_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Wrinkles_Creases/00001_hr-0.png) |
 
 - ### Augmentation and noise
      Add `--augment` to the python command to add augmentations to the images. Furthermore following attributes specific to the wrinkles can be adjusted: 
@@ -168,7 +168,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      |                            |                             |
      | ----------------------------------- | ----------------------------------- |
-     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00003_hr-0.png) |
+     | ![12 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00001_hr-0.png) | ![2 lead Image with handwritten text](SampleData/DistortionData/Augmentation/00006_hr-0.png) |
 
 
 - ### Adding all the distortions together:
@@ -176,7 +176,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:**
 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 -se 10 --print_header
+     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 -se 10 --print_header --add_qr_code
      ```
 
      - All distortions on synthetic images generated from the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/)
