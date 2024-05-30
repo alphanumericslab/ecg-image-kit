@@ -369,7 +369,7 @@ def ecg_plot(
     if(full_mode!='None'):
         current_lead_ds = dict()
         if(show_lead_name):
-            t1 = ax.text(x_gap, 
+            t1 = ax.text(x_gap + dc_offset, 
                     row_height/2-lead_name_offset, 
                     full_mode, 
                     fontsize=lead_fontsize)

@@ -44,7 +44,7 @@ def get_parser():
     parser.add_argument('--random_padding',action="store_true",default=False)
     parser.add_argument('--random_grid_color',action="store_true",default=False)
     parser.add_argument('--standard_grid_color', type=int, default=5)
-    parser.add_argument('--calibration_pulse',type=float,default=0)
+    parser.add_argument('--calibration_pulse',type=float,default=1)
     parser.add_argument('--random_grid_present',type=float,default=1)
     parser.add_argument('--random_print_header',type=float,default=0)
     parser.add_argument('--random_bw',type=float,default=0)
