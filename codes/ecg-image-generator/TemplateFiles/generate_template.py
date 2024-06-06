@@ -78,8 +78,6 @@ def generate_template(header_file):
 
         if attributes['Weight'] != '':
             attributes['Weight'] = 'Weight: ' + attributes['Weight'] + ' kg'
-        
-        attributes['Height'] = 'Height: ' + attributes['Height']
 
         if attributes['Height'] != '':
             attributes['Height'] = 'Height: ' + attributes['Height'] + ' cm'
