@@ -316,7 +316,11 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
     full_leads = standardize_leads(full_leads)
 
     lead_step = 10.0
-    samples = len(ecg_frame[full_mode])
+    if full_mode != 'None':
+        samples = len(ecg_frame[full_mode[0]])
+    else:
+        samples = len(ecg_frame[full_leads[0]])
+    
     array = np.zeros((1, samples))
 
     leads = []
@@ -325,7 +329,7 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
 
     for i, lead in enumerate(full_leads):
         leads.append(lead)
-        if lead == full_mode:
+        if lead in full_mode:
             lead = 'full' + lead
         adc_gn = header.adc_gain[i]
 
