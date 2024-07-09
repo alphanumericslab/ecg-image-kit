@@ -6,6 +6,7 @@ from itertools import cycle
 from scipy.stats import bernoulli
 from helper_functions import find_records
 import warnings
+import wfdb
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 warnings.filterwarnings("ignore")
@@ -21,7 +22,7 @@ def get_parser():
     #parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
     #parser.add_argument('--pad_inches',type=int,required=False,default=0)
     #parser.add_argument('-ph','--print_header', action="store_true",default=False)
-    parser.add_argument('--full_mode', type=str,default='II')
+    #parser.add_argument('--full_mode', type=str,default='II')
 
     #parser.add_argument('--random_grid_color',action="store_true",default=False)
     #parser.add_argument('--standard_grid_color', type=int, default=5)
@@ -63,11 +64,11 @@ def get_parser():
     return parser
 
 def run(args):
-        P1 = ['150', '200', '300', '200', '200', '200']  # E.g., resolutions
+        P1 = ['150', '300', '200', '250']  # E.g., resolutions
         P2 = ['0', '0.1', '0.5']  # E.g., padding inches
-        P3 = ['0', '1', '1', '0', '1', '1']  # E.g., random DC offset options
-        P4 = [1, 3, 2, 5, 4, 5, 5] # Grid color
-        P5 = [1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1] #add header
+        P3 = ['0', '1']  # E.g., random DC offset options
+        P4 = [1, 3, 2, 5, 4] # Grid color
+        P5 = [1, 0] #add header
         P6 = [3, 4, 5] #number of handwritten words
         P7 = [30, 50, 100, 20, 70] #x offset for hw
         P8 = [50, 30, 70] # y offser for hw
@@ -78,10 +79,12 @@ def run(args):
         P13 = [5, 10, 8] #rotation
         P14 = [12, 29, 37] #noise
         P15 = [0.01, 0.0005, 0.02] #crop 
-        P16 = [1, 0, 0, 0, 0] #hw  text
-        P17 = [1, 0, 1, 1, 0] #wrinkles
-        P18 = [0, 1, 1] #augment 
-        P19  = [0, 0, 0, 1, 0] #random black and white
+        P16 = [1, 0] #hw  text
+        P17 = [1, 0] #wrinkles
+        P18 = [0, 1] #augment 
+        P19  = [1, 0] #random black and white
+        P20 =   [2, 4, 3] #num_columns
+        P21 = [1, 2, 3, 4] #long leads
 
         # Creating iterators using cycle for round-robin
         iter_P1 = cycle(P1)
@@ -103,6 +106,8 @@ def run(args):
         iter_P17 = cycle(P17)
         iter_P18 = cycle(P18)
         iter_P19 = cycle(P19)
+        iter_P20 = cycle(P20)
+        iter_P21 = cycle(P21)
 
         random.seed(args.seed)
 
@@ -129,6 +134,8 @@ def run(args):
                 args.input_file = os.path.join(args.input_directory, filename)
                 args.header_file = os.path.join(args.input_directory, header)
                 args.start_index = -1
+                _, fields = wfdb.rdsamp(os.path.splitext(args.header_file)[0])
+                currentLeads = random.sample(fields['sig_name'], next(iter_P21))
 
                 folder_struct_list = full_header_file.split('/')[:-1]
                 args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
@@ -162,11 +169,15 @@ def run(args):
                         temp = random.choice(range(10000,20000))
 
                 command = "python gen_ecg_image_from_data.py --input_file " + args.input_file + " --header_file " + args.header_file + " --output_directory " + args.output_directory + " --start_index " + str(args.start_index)
-                command += " --resolution " + str(next(iter_P1)) + " --pad_inches " + str(next(iter_P2)) + " --random_add_header " + str(random_add_header) + " --full_mode " + args.full_mode + " --standard_grid_color " + str(next(iter_P4))
-                command += " --store_text_bounding_box "
-                command += " --store_config "
-                command += " --bbox "
+                command += " --resolution " + str(next(iter_P1)) + " --pad_inches " + str(next(iter_P2)) + " --random_add_header " + str(random_add_header) + " --standard_grid_color " + str(next(iter_P4))
+                command += " --lead_bbox "
+                command += " --store_config " + str(1)
+                command += " --lead_name_bbox "
                 command += " --random_dc " + str(next(iter_P3)) + " --random_bw " + str(next(iter_P19)) 
+                command += " --num_columns " + str(next(iter_P20)) 
+                command += " --full_mode " 
+                for lead in currentLeads:
+                    command += lead + " "
                 if hw_text:
                     command += " --hw_text "
                     command += " --deterministic_num_words --num_words " + str(num_words)
