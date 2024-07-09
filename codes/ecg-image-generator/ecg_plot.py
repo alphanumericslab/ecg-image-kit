@@ -1,18 +1,13 @@
-import os, sys, argparse
+import os
 import numpy as np
 import random
-from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.ticker import AutoMinorLocator
-from helper_functions import convert_inches_to_seconds,convert_inches_to_volts,convert_mm_to_volts,convert_mm_to_seconds
+from TemplateFiles.generate_template import generate_template
 from math import ceil 
 from PIL import Image
-from numpy import asarray
-from random import randint
-import matplotlib.patches as patches
 import csv
-import matplotlib.patches as patches
 
 standard_values = {'y_grid_size' : 0.5,
                    'x_grid_size' : 0.2,
@@ -33,44 +28,20 @@ standard_values = {'y_grid_size' : 0.5,
                    'height' : 8.5
                    }
 
-#standard_major_colors = {'colour1' : (1,0.6823,0.776),
-                          #'colour2' : (1,0.796,0.866),
-                          #'colour3' : (0.933,0.8235,0.8),
-                          #'colour4' : (0.996,0.807,0.8039),
-                          #'colour5' : (0.611,0.627,0.647), 
-                          #'colour6' : (0.4901,0.498,0.513), 
-                          #'colour7' : (0.4274,0.196,0.1843),
-                          #'colour8' : (0.992,0.7529,0.7254),
-                          #'colour9' : (0.9215,0.9372,0.9725)
-    #}
-
-standard_major_colors = {'colour1' : (1,0.6823,0.776),
-                          'colour2' : (1,0.796,0.866),
-                          'colour3' : (0.933,0.8235,0.8),
-                          'colour4' : (0.996,0.807,0.8039),
-                          'colour5' : (0.4274,0.196,0.1843),
-                          'colour6' : (0.992,0.7529,0.7254)
+standard_major_colors = {'colour1' : (0.4274,0.196,0.1843), #brown
+                          'colour2' : (1,0.796,0.866), #pink
+                          'colour3' : (0.0,0.0, 0.4), #blue
+                          'colour4' : (0,0.3,0.0), #green
+                          'colour5' : (1,0,0) #red
     }
 
 
-standard_minor_colors = {'colour1' : (0.9843,0.9019,0.9529),
+standard_minor_colors = {'colour1' : (0.5882,0.4196,0.3960),
                          'colour2' : (0.996,0.9294,0.9725),
-                         'colour3' : (0.9529,0.8745,0.8549),
-                         'colour4' : (0.996,0.9529,0.9529),
-                         'colour5' : (0.5882,0.4196,0.3960),
-                         'colour6' : (0.996,0.8745,0.8588)
+                         'colour3' : (0.0,0, 0.7),
+                         'colour4' : (0,0.8,0.3),
+                         'colour5' : (0.996,0.8745,0.8588)
     }
-
-#standard_minor_colors = {'colour1' : (0.9843,0.9019,0.9529),
-                         #'colour2' : (0.996,0.9294,0.9725),
-                         #'colour3' : (0.9529,0.8745,0.8549),
-                         #'colour4' : (0.996,0.9529,0.9529),
-                         #'colour5' : (0.7607,0.7725,0.7843),
-                         #'colour6' : (0.6039,0.6235,0.6274),
-                         #'colour7' : (0.5882,0.4196,0.3960),
-                         #'colour8' : (0.996,0.8745,0.8588),
-                         #'colour9' : (0.9568,0.9686,0.9843)
-    #}
 
 papersize_values = {'A0' : (33.1,46.8),
                     'A1' : (33.1,23.39),
@@ -80,8 +51,6 @@ papersize_values = {'A0' : (33.1,46.8),
                     'letter' : (8.5,11)
                     }
 
-leadNames_12 = ["III", 'aVF', 'V3', 'V6', 'II', 'aVL', 'V2', 'V5', 'I', 'aVR', 'V1', 'V4']
-
 
 def inches_to_dots(value,resolution):
     return (value * resolution)
@@ -89,6 +58,7 @@ def inches_to_dots(value,resolution):
 #Function to plot raw ecg signal
 def ecg_plot(
         ecg, 
+        configs,
         sample_rate, 
         columns,
         rec_file_name,
@@ -98,6 +68,7 @@ def ecg_plot(
         lead_index,
         full_mode,
         store_text_bbox,
+        full_header_file,
         units          = '',
         papersize      = '',
         x_gap          = standard_values['x_gap'],
@@ -113,7 +84,12 @@ def ecg_plot(
         y_grid = 0,
         x_grid = 0,
         standard_colours = False,
-        bbox = False
+        bbox = False,
+        print_txt=False,
+        json_dict=dict(),
+        start_index=-1,
+        store_configs=0,
+        lead_length_in_seconds=10
         ):
     #Inputs :
     #ecg - Dictionary of ecg signal with lead names as keys
@@ -137,14 +113,12 @@ def ecg_plot(
     #rows are calculated based on corresponding number of leads and number of columns
 
     matplotlib.use("Agg")
-    randindex = randint(0,99)
-    random_sampler = random.uniform(-0.05,0.004)
 
     #check if the ecg dict is empty
     if ecg == {}:
         return 
 
-    secs = len(list(ecg.items())[0][1])/sample_rate
+    secs = lead_length_in_seconds
 
     leads = len(lead_index)
 
@@ -162,6 +136,7 @@ def ecg_plot(
     grid_line_width = standard_values['grid_line_width']
     lead_name_offset = standard_values['lead_name_offset']
     lead_fontsize = standard_values['lead_fontsize']
+
 
     #Set max and min coordinates to mark grid. Offset x_max slightly (i.e by 1 column width)
 
@@ -185,8 +160,10 @@ def ecg_plot(
     y_min = 0
     y_max = height * y_grid_size/y_grid
 
+    json_dict['width'] = int(width*resolution)
+    json_dict['height'] = int(height*resolution)
     #Set figure and subplot sizes
-    fig, ax = plt.subplots(figsize=(width, height))
+    fig, ax = plt.subplots(figsize=(width, height), dpi=resolution)
    
     fig.subplots_adjust(
         hspace = 0, 
@@ -200,33 +177,27 @@ def ecg_plot(
     fig.suptitle(title)
 
     #Mark grid based on whether we want black and white or colour
-
+    
     if (style == 'bw'):
         color_major = (0.4,0.4,0.4)
         color_minor = (0.75, 0.75, 0.75)
         color_line  = (0,0,0)
-    elif(standard_colours):
-        random_colour_index = randint(1,6)
+    elif(standard_colours > 0):
+        random_colour_index = standard_colours
         color_major = standard_major_colors['colour'+str(random_colour_index)]
         color_minor = standard_minor_colors['colour'+str(random_colour_index)]
-        randcolorindex_grey = randint(0,24)
         grey_random_color = random.uniform(0,0.2)
         color_line  = (grey_random_color,grey_random_color,grey_random_color)
     else:
-        randcolorindex_red = randint(0,24)
         major_random_color_sampler_red = random.uniform(0,0.8)
-        randcolorindex_green = randint(0,24)
         major_random_color_sampler_green = random.uniform(0,0.5)
-        randcolorindex_blue = randint(0,24)
         major_random_color_sampler_blue = random.uniform(0,0.5)
 
-        randcolorindex_minor = randint(0,24)
         minor_offset = random.uniform(0,0.2)
         minor_random_color_sampler_red = major_random_color_sampler_red + minor_offset
         minor_random_color_sampler_green = random.uniform(0,0.5) + minor_offset
         minor_random_color_sampler_blue = random.uniform(0,0.5) + minor_offset
 
-        randcolorindex_grey = randint(0,24)
         grey_random_color = random.uniform(0,0.2)
         color_major = (major_random_color_sampler_red,major_random_color_sampler_green,major_random_color_sampler_blue)
         color_minor = (minor_random_color_sampler_red,minor_random_color_sampler_green,minor_random_color_sampler_blue)
@@ -235,25 +206,11 @@ def ecg_plot(
 
     #Set grid
     #Standard ecg has grid size of 0.5 mV and 0.2 seconds. Set ticks accordingly
-    if(show_grid):
-        ax.set_xticks(np.arange(x_min,x_max,x_grid_size))    
-        ax.set_yticks(np.arange(y_min,y_max,y_grid_size))
-        ax.minorticks_on()
-        
-        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
-
-        #set grid line style
-        ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
-        
-        ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
-        
-    else:
-        ax.grid(False)
+    
     ax.set_ylim(y_min,y_max)
     ax.set_xlim(x_min,x_max)
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
-    lead_num = 0
     
     #Step size will be number of seconds per sample i.e 1/sampling_rate
     step = (1.0/sample_rate)
@@ -265,10 +222,13 @@ def ecg_plot(
     y_offset = (row_height/2)
     x_offset = 0
 
-    text_bbox = []
-    lead_bbox = []
+    leads_ds = []
+
+    leadNames_12 = configs['leadNames_12']
 
     for i in np.arange(len(lead_index)):
+        current_lead_ds = dict()
+
         if len(lead_index) == 12:
             leadName = leadNames_12[i]
         else:
@@ -292,21 +252,32 @@ def ecg_plot(
 
         #Print lead name at .5 ( or 5 mm distance) from plot
         if(show_lead_name):
-                    t1 = ax.text(x_offset + x_gap, 
-                            y_offset-lead_name_offset - 0.2, 
-                            leadName, 
-                            fontsize=lead_fontsize)
-                    
-                    if (store_text_bbox):
-                        renderer1 = fig.canvas.get_renderer()
-                        transf = ax.transData.inverted()
-                        bb = t1.get_window_extent()    
-                        x1 = bb.x0*resolution/fig.dpi      
-                        y1 = bb.y0*resolution/fig.dpi   
-                        x2 = bb.x1*resolution/fig.dpi     
-                        y2 = bb.y1*resolution/fig.dpi              
-                        text_bbox.append([x1, y1, x2, y2, leadName])
-                        
+            t1 = ax.text(x_offset + x_gap + dc_offset, 
+                    y_offset-lead_name_offset - 0.2, 
+                    leadName, 
+                    fontsize=lead_fontsize)
+            
+            if (store_text_bbox):
+                renderer1 = fig.canvas.get_renderer()
+                transf = ax.transData.inverted()
+                bb = t1.get_window_extent()    
+                x1 = bb.x0*resolution/fig.dpi      
+                y1 = bb.y0*resolution/fig.dpi   
+                x2 = bb.x1*resolution/fig.dpi     
+                y2 = bb.y1*resolution/fig.dpi    
+                box_dict = dict()
+                x1 = int(x1)
+                y1 = int(y1)
+                x2 = int(x2)
+                y2 = int(y2)
+                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
+                current_lead_ds["text_bounding_box"] = box_dict
+
+        current_lead_ds["lead_name"] = leadName
+
         #If we are plotting the first row-1 plots, we plot the dc pulse prior to adding the waveform
         if(columns == 1 and i in np.arange(0,rows)):
             if(show_dc_pulse):
@@ -324,7 +295,7 @@ def ecg_plot(
                     x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
                     
                 
-        elif(columns == 4 and i == 0 or i == 4 or i == 8):
+        elif(i%columns == 0):
             if(show_dc_pulse):
                 #Plot dc pulse for 0.2 seconds with 2 trailing and leading zeros to get the pulse
                 t1 = ax.plot(np.arange(0,sample_rate*standard_values['dc_offset_length']*step + 4*step,step) + x_offset + x_gap,
@@ -344,6 +315,10 @@ def ecg_plot(
                 linewidth=line_width, 
                 color=color_line
                 )
+        
+        x_vals = np.arange(0,len(ecg[leadName])*step,step) + x_offset + dc_offset + x_gap
+        y_vals = ecg[leadName] + y_offset
+
         if (bbox):
             renderer1 = fig.canvas.get_renderer()
             transf = ax.transData.inverted()
@@ -355,18 +330,46 @@ def ecg_plot(
                 y1 = min(y1, bb.y0*resolution/fig.dpi)
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
+            box_dict = dict()
+            x1 = int(x1)
+            y1 = int(y1)
+            x2 = int(x2)
+            y2 = int(y2)
+            box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+            box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+            box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+            box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
+            current_lead_ds["lead_bounding_box"] = box_dict
+        
+        st = start_index
+        if columns == 4 and leadName in configs['format_4_by_3'][1]:
+            st = start_index + int(sample_rate*configs['paper_len']/columns)
+        elif columns == 4 and leadName in configs['format_4_by_3'][2]:
+            st = start_index + int(2*sample_rate*configs['paper_len']/columns)
+        elif columns == 4 and leadName in configs['format_4_by_3'][3]:
+            st = start_index + int(3*sample_rate*configs['paper_len']/columns)
+        current_lead_ds["start_sample"] = st
+        current_lead_ds["end_sample"]= st + len(ecg[leadName])
+        current_lead_ds["plotted_pixels"] = []
+        for j in range(len(x_vals)):
+            xi, yi = x_vals[j], y_vals[j]
+            xi, yi = ax.transData.transform((xi, yi))
+            yi = json_dict['height'] - yi
+            current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
 
-            lead_bbox.append([x1, y1, x2, y2, 0])
+        leads_ds.append(current_lead_ds)
 
-        start_ind = round((x_offset + dc_offset + x_gap)*x_grid_dots/x_grid_size)
-        end_ind = round((x_offset + dc_offset + x_gap + len(ecg[leadName])*step)*x_grid_dots/x_grid_size)
-
-
+        if columns > 1 and (i+1)%columns != 0:
+            sep_x = [len(ecg[leadName])*step + x_offset + dc_offset + x_gap] * round(8*y_grid_dots)
+            sep_x = np.array(sep_x)
+            sep_y = np.linspace(y_offset - 4*y_grid_dots*step, y_offset + 4*y_grid_dots*step, len(sep_x))
+            ax.plot(sep_x, sep_y, linewidth=line_width * 3, color=color_line)
 
     #Plotting longest lead for 12 seconds
     if(full_mode!='None'):
+        current_lead_ds = dict()
         if(show_lead_name):
-            t1 = ax.text(x_gap, 
+            t1 = ax.text(x_gap + dc_offset, 
                     row_height/2-lead_name_offset, 
                     full_mode, 
                     fontsize=lead_fontsize)
@@ -378,9 +381,18 @@ def ecg_plot(
                 x1 = bb.x0*resolution/fig.dpi      
                 y1 = bb.y0*resolution/fig.dpi   
                 x2 = bb.x1*resolution/fig.dpi     
-                y2 = bb.y1*resolution/fig.dpi              
-                text_bbox.append([x1, y1, x2, y2, leadName])
-                
+                y2 = bb.y1*resolution/fig.dpi           
+                box_dict = dict()
+                x1 = int(x1)
+                y1 = int(y1)
+                x2 = int(x2)
+                y2 = int(y2)
+                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                box_dict[3] = [round(json_dict['height'] - y1), round(x1, 2)]
+                current_lead_ds["text_bounding_box"] = box_dict                
+            current_lead_ds["lead_name"] = full_mode
 
         if(show_dc_pulse):
             t1 = ax.plot(x_range + x_gap,
@@ -405,6 +417,8 @@ def ecg_plot(
                     linewidth=line_width, 
                     color=color_line
                     )
+        x_vals = np.arange(0,len(ecg['full'+full_mode])*step,step) + x_gap + dc_full_lead_offset
+        y_vals = ecg['full'+full_mode] + row_height/2-lead_name_offset + 0.8
 
         if (bbox):
             renderer1 = fig.canvas.get_renderer()
@@ -418,15 +432,77 @@ def ecg_plot(
                 y2 = max(y2, bb.y1*resolution/fig.dpi)
                 x2 = bb.x1*resolution/fig.dpi
 
-            lead_bbox.append([x1, y1, x2, y2, 1])
+            box_dict = dict()
+            x1 = int(x1)
+            y1 = int(y1)
+            x2 = int(x2)
+            y2 = int(y2)
+            box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+            box_dict[1] = [round(json_dict['height'] - y2), round(x2, 2)]
+            box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+            box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
+            current_lead_ds["lead_bounding_box"] = box_dict
+        current_lead_ds["start_sample"] = start_index
+        current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
+        current_lead_ds['plotted_pixels'] = []
+        for i in range(len(x_vals)):
+            xi, yi = x_vals[i], y_vals[i]
+            xi, yi = ax.transData.transform((xi, yi))
+            yi = json_dict['height'] - yi
+            current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
+        leads_ds.append(current_lead_ds)
 
 
-        start_ind = round((dc_full_lead_offset + x_gap)*x_grid_dots/x_grid_size)
-        end_ind = round((dc_full_lead_offset + x_gap + len(ecg['full'+full_mode])*step)*x_grid_dots/x_grid_size)
 
     head, tail = os.path.split(rec_file_name)
     rec_file_name = os.path.join(output_dir, tail)
-                  
+
+    #printed template file
+    if print_txt:
+        x_offset = 0.05
+        y_offset = int(y_max)
+        printed_text, attributes, flag = generate_template(full_header_file)
+
+        if flag:
+            for l in range(0, len(printed_text), 1):
+        
+                for j in printed_text[l]:
+                    curr_l = ''
+                    if j in attributes.keys():
+                        curr_l += str(attributes[j])
+                    ax.text(x_offset, y_offset, curr_l, fontsize=lead_fontsize)
+                    x_offset += 3
+
+                y_offset -= 0.5
+                x_offset = 0.05
+        else:
+            for line in printed_text:
+                ax.text(x_offset, y_offset, line, fontsize=lead_fontsize)
+                y_offset -= 0.5
+
+    #change x and y res
+    ax.text(2, 0.5, '25mm/s', fontsize=lead_fontsize)
+    ax.text(4, 0.5, '10mm/mV', fontsize=lead_fontsize)
+    
+    if(show_grid):
+        ax.set_xticks(np.arange(x_min,x_max,x_grid_size))    
+        ax.set_yticks(np.arange(y_min,y_max,y_grid_size))
+        ax.minorticks_on()
+        
+        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+
+        #set grid line style
+        ax.grid(which='major', linestyle='-', linewidth=grid_line_width, color=color_major)
+        
+        ax.grid(which='minor', linestyle='-', linewidth=grid_line_width, color=color_minor)
+        
+        if store_configs == 2:
+            json_dict['grid_line_color_major'] = [round(x*255., 2) for x in color_major]
+            json_dict['grid_line_color_minor'] = [round(x*255., 2) for x in color_minor]
+            json_dict['ecg_plot_color'] = [round(x*255., 2) for x in color_line]
+    else:
+        ax.grid(False)
+
     plt.savefig(os.path.join(output_dir,tail +'.png'),dpi=resolution)
     plt.close(fig)
     plt.clf()
@@ -453,41 +529,7 @@ def ecg_plot(
         plt.clf()
         plt.cla()
 
-    if(store_text_bbox):
-        if(os.path.exists(os.path.join(output_dir, 'text_bounding_box'))  == False):
-            os.mkdir(os.path.join(output_dir, 'text_bounding_box'))
-        
-        with open(os.path.join(output_dir, 'text_bounding_box', tail + '.txt'), 'w') as f:
-            for i, l in enumerate(text_bbox):
-                if pad_inches!=0:
-                    l[0] += left
-                    l[2] += left
-                    l[1] += top
-                    l[3] += top
-
-                for val in l[:4]:
-                    f.write(str(val))
-                    f.write(',')
-                f.write(str(l[4]))
-                f.write('\n')
-    
-    if(bbox):
-        if(os.path.exists(os.path.join(output_dir, 'lead_bounding_box'))  == False):
-            os.mkdir(os.path.join(output_dir, 'lead_bounding_box'))
-        with open(os.path.join(output_dir, 'lead_bounding_box', tail + '.txt'), 'w') as f:
-            for i, l in enumerate(lead_bbox):
-                if pad_inches!=0:
-                    l[0] += left
-                    l[2] += left
-                    l[1] += top
-                    l[3] += top
-
-                for val in l[:4]:
-                    f.write(str(val))
-                    f.write(',')
-                f.write(str(l[4]))
-                f.write('\n')
-    
+    json_dict["leads"] = leads_ds
 
     return x_grid_dots,y_grid_dots
        

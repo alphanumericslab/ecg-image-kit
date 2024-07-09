@@ -1,9 +1,10 @@
-import imageio
+import imageio, json
 from PIL import Image
 import argparse
 import imgaug as ia
 from imgaug import augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
+from helper_functions import read_leads, convert_bounding_boxes_to_dict, rotate_bounding_box, get_lead_pixel_coordinate, rotate_points
 import numpy as np
 import matplotlib.pyplot as plt
 import os, sys, argparse
@@ -14,7 +15,6 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import time
 import random
-from helper_functions import read_bounding_box_txt, write_bounding_box_txt
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -28,7 +28,7 @@ def get_parser():
     return parser
 
 # Main function for running augmentations
-def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False):
+def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False, json_dict=None):
     filename = input_file
     image = Image.open(filename)
     
@@ -37,23 +37,16 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     lead_bbs = []
     leadNames_bbs = []
     
-    if bbox:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
-        lead_bbs = read_bounding_box_txt(txt_file)
-        lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
-
-    if store_text_bounding_box:
-        
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
-        leadNames_bbs = read_bounding_box_txt(txt_file)
-        leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
-       
+         
+    lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, plotted_pixels = read_leads(json_dict['leads'])
     
-    images = [image]
+    if bbox:
+        lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
+    if store_text_bounding_box:
+        leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
+    
+    images = [image[:, :, :3]]
+    h, w, _ = image.shape
     rot = random.randint(-rotate, rotate)
     crop_sample = random.uniform(0, crop)
     #Augment in a sequential manner. Create an augmentation object
@@ -64,35 +57,26 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
           iaa.ChangeColorTemperature(temperature)
           ])
     
-    seq_bbox = iaa.Sequential([
-          iaa.Affine(rotate=-rot),
-          iaa.Crop(percent=crop_sample)
-          ])
-   
     images_aug = seq(images=images)
 
     if bbox:
-        temp, augmented_lead_bbs = seq_bbox(images=images, bounding_boxes=lead_bbs)
-    
+        augmented_lead_bbs = rotate_bounding_box(lead_bbs, [h/2,w/2], -rot)
+    else:
+        augmented_lead_bbs = []    
     if store_text_bounding_box:
-        temp, augmented_leadName_bbs = seq_bbox(images=images, bounding_boxes=leadNames_bbs)
+        augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [h/2,w/2], -rot)
+    else:
+        augmented_leadName_bbs = []   
+
+    rotated_pixel_coordinates = rotate_points(plotted_pixels, [h/2, w/2], -rot)
+
+    if bbox or store_text_bounding_box:
+        json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, rotated_pixel_coordinates)
 
     head, tail = os.path.split(filename)
 
     f = os.path.join(output_directory,tail)
     plt.imsave(fname=f,arr=images_aug[0])
-    
-    if bbox:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'lead_bounding_box', f + '.txt')
-        write_bounding_box_txt(augmented_lead_bbs, txt_file)
-
-    if store_text_bounding_box:
-        head, tail = os.path.split(filename)
-        f, extn = os.path.splitext(tail)
-        txt_file = os.path.join(head, 'text_bounding_box', f + '.txt')
-        write_bounding_box_txt(augmented_leadName_bbs, txt_file)
 
     return f
 

@@ -1,6 +1,14 @@
 # `ecg-image-digitizer`
 ***Software tools for ECG image processing and digitization***
 
+## Python
+
+### Functions
+
+| File | Description |
+|---|---|
+[ROI](roi)| ECG lead detection with YOLOv7 |
+
 ## MATLAB
 
 ### Functions
@@ -28,7 +36,7 @@ Please include references to the following articles in any publications:
 1. Kshama Kodthalu Shivashankara, Deepanshi, Afagh Mehri Shervedani, Matthew A. Reyna, Gari D. Clifford, Reza Sameni (2024). ECG-image-kit: a synthetic image generation toolbox to facilitate deep learning-based electrocardiogram digitization. In Physiological Measurement. IOP Publishing. doi: [10.1088/1361-6579/ad4954](https://doi.org/10.1088/1361-6579/ad4954)
 
 
-2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: https://github.com/alphanumericslab/ecg-image-kit
+2. ECG-Image-Kit: A Toolkit for Synthesis, Analysis, and Digitization of Electrocardiogram Images, (2024). URL: [https://github.com/alphanumericslab/ecg-image-kit](https://github.com/alphanumericslab/ecg-image-kit)
 
 ## Contributors
 - Deepanshi, Department of Biomedical Informatics, Emory University, GA, US
@@ -39,6 +47,7 @@ Please include references to the following articles in any publications:
 
 ## Contact
 Please direct any inquiries, bug reports or requests for joining the team to: [ecg-image-kit@dbmi.emory.edu](ecg-image-kit@dbmi.emory.edu).
+
 
 ![Static Badge](https://img.shields.io/badge/ecg_image-kit-blue)
 
