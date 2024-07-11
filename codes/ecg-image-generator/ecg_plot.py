@@ -321,6 +321,8 @@ def ecg_plot(
     y_offset = row_height/2 + (len(full_mode) - 1) * row_height
 
     leadNames_12 = configs['leadNames_12']
+    tickLength = configs['tickLength']
+    tickSize_step = configs['tickSize_step']
 
     for i in np.arange(len(lead_index)):
         current_lead_ds = dict()
@@ -456,9 +458,9 @@ def ecg_plot(
         leads_ds.append(current_lead_ds)
 
         if columns > 1 and (i+1)%columns != 0:
-            sep_x = [len(ecg[leadName])*step + x_offset + dc_offset + x_gap] * round(8*y_grid_dots)
+            sep_x = [len(ecg[leadName])*step + x_offset + dc_offset + x_gap] * round(tickLength*y_grid_dots)
             sep_x = np.array(sep_x)
-            sep_y = np.linspace(y_offset - 4*y_grid_dots*step, y_offset + 4*y_grid_dots*step, len(sep_x))
+            sep_y = np.linspace(y_offset - tickLength/2*y_grid_dots*tickSize_step, y_offset + tickSize_step*y_grid_dots*tickLength/2, len(sep_x))
             ax.plot(sep_x, sep_y, linewidth=line_width * 3, color=color_line)
 
     
