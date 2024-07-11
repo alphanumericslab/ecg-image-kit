@@ -362,7 +362,7 @@ def ecg_plot(
         if columns > 1 and (i+1)%columns != 0:
             sep_x = [len(ecg[leadName])*step + x_offset + dc_offset + x_gap] * round(8*y_grid_dots)
             sep_x = np.array(sep_x)
-            sep_y = np.linspace(y_offset - 4*y_grid_dots*step, y_offset + 4*y_grid_dots*step, len(sep_x))
+            sep_y = np.linspace(y_offset - 4*y_grid_dots*0.002, y_offset + 4*y_grid_dots*0.002, len(sep_x))
             ax.plot(sep_x, sep_y, linewidth=line_width * 3, color=color_line)
 
     #Plotting longest lead for 12 seconds
