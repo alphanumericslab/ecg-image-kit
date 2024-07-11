@@ -6,6 +6,7 @@ from matplotlib.ticker import AutoMinorLocator
 from math import ceil 
 import wfdb
 from imgaug import augmenters as iaa
+from itertools import cycle
 
 BIT_NAN_16 = -(2.**15)
 
@@ -384,3 +385,34 @@ def rotate_points(pixel_coordinates, origin, angle):
         rotates_pixel_coords.append(np.round(transformed_matrix, 2))
         
     return rotates_pixel_coords
+
+
+def get_cycles(configs):
+    """ Generate Cycles for all the parameter lists in configs Dict
+
+    Args:
+        configs (dict): Dict with lists to cycle over for all the parameters in allParams
+
+    Raises:
+        ValueError: If the keys in allParams are not found in the configs Dict
+
+    Returns:
+        List[itertools.cycle]: list of itertools cycle object
+    """
+    
+    allParams = ['resolution', 'padding', 'calibration_pulse', 'gridcolor', 'print_header', 
+                'num_words', 'x_offset_hw', 'y_offset_hw', 'hw_size_factor', 'crease_angle',
+                'num_crease_horizontal', 'num_crease_vertical', 'rotation', 'noise', 'crop',
+                'hw_text', 'wrinkles', 'augment', 'bw', 'num_columns', 'num_long_leads'
+                ]
+    # Creating iterators using cycle for round-robin
+
+    cycleList = []
+    for i, key in enumerate(allParams):
+        if key not in configs:
+            raise ValueError(f'{key} key is not present in your config file, please re-check your config file and re-run the code! Refer configs_batch.yaml file for more information on required keys and syntax!')
+
+        cycleList.append(cycle(configs[key]))
+    
+
+    return cycleList 

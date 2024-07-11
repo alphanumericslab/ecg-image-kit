@@ -1,0 +1,21 @@
+resolution : ['150', '300', '200', '250']  # E.g., resolutions
+padding : ['0', '1', '2']  # E.g., padding inches
+calibration_pulse : ['0', '1']  # E.g., random DC offset options
+gridcolor : [1, 3, 2, 5, 4] # Grid color
+print_header : [1, 0] #add header
+num_words : [3, 4, 5] #number of handwritten words
+x_offset_hw : [30, 50, 100, 70, 80] #x offset for hw
+y_offset_hw : [50, 80, 90, 40] # y offser for hw
+hw_size_factor : [0.25 , 0.3, 0.2] #handwritten size factor
+crease_angle : [90, 60, 20, 50, 40] #crease angle
+num_crease_horizontal : [5, 7, 9, 8, 10] #num creases horizontally
+num_crease_vertical : [4, 9, 8, 10, 5] #num creases vertically
+rotation : [5, 10, 8] #rotation
+noise : [12, 29, 37] #noise
+crop : [0.01, 0.0005, 0.02] #crop 
+hw_text : [1, 0, 0, 0, 1] #hw  text
+wrinkles : [1, 0, 1, 1, 0] #wrinkles
+augment : [0, 1] #augment 
+bw  : [0, 1, 0, 0, 1] #random black and white
+num_columns :   [2, 4, 3] #num_columns
+num_long_leads : [1, 2, 3, 4] #long leads

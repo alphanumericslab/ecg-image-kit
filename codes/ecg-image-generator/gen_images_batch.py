@@ -3,8 +3,7 @@ import random
 import csv
 import subprocess
 from itertools import cycle
-from scipy.stats import bernoulli
-from helper_functions import find_records
+from helper_functions import find_records, read_config_file, get_cycles
 import warnings
 import wfdb
 import pickle
@@ -13,59 +12,40 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings("ignore")
 
 def get_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input_directory', type=str, required=True)
-    parser.add_argument('-o', '--output_directory', type=str, required=True)
-    parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
-    parser.add_argument('-l', '--link', type=str, required=False,default='')
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-i', '--input_directory', type=str, required=True)
+        parser.add_argument('-o', '--output_directory', type=str, required=True)
+        parser.add_argument('-se', '--seed', type=int, required=False, default = -1)
+        parser.add_argument('-l', '--link', type=str, required=False,default='')
+        parser.add_argument('-c', '--config_file', type=str, default='')
+        return parser
 
-    return parser
-
-def run(args):
-        P1 = ['150', '300', '200', '250']  # E.g., resolutions
-        P2 = ['0', '1', '2']  # E.g., padding inches
-        P3 = ['0', '1']  # E.g., random DC offset options
-        P4 = [1, 3, 2, 5, 4] # Grid color
-        P5 = [1, 0] #add header
-        P6 = [3, 4, 5] #number of handwritten words
-        P7 = [30, 50, 100, 70, 80] #x offset for hw
-        P8 = [50, 80, 90, 40] # y offser for hw
-        P9 = [0.4 , 0.3, 0.2] #handwritten size factor
-        P10 = [90, 60, 20, 50, 40] #crease angle
-        P11 = [5, 7, 9, 8, 10] #num creases horizontally
-        P12 = [4, 9, 8, 10, 5] #num creases vertically
-        P13 = [5, 10, 8] #rotation
-        P14 = [12, 29, 37] #noise
-        P15 = [0.01, 0.0005, 0.02] #crop 
-        P16 = [1, 0] #hw  text
-        P17 = [1, 0] #wrinkles
-        P18 = [0, 1] #augment 
-        P19  = [1, 0, 1, 1, 0] #random black and white
-        P20 =   [2, 4, 3] #num_columns
-        P21 = [1, 2, 3, 4] #long leads
+def generate_pickle_file(args, configs):
+    
+        cycleLists = get_cycles(configs)
 
         # Creating iterators using cycle for round-robin
-        iter_P1 = cycle(P1)
-        iter_P2 = cycle(P2)
-        iter_P3 = cycle(P3)
-        iter_P4 = cycle(P4)
-        iter_P5 = cycle(P5)
-        iter_P6 = cycle(P6)
-        iter_P7 = cycle(P7)
-        iter_P8 = cycle(P8)
-        iter_P9 = cycle(P9)
-        iter_P10 = cycle(P10)
-        iter_P11 = cycle(P11)
-        iter_P12 = cycle(P12)
-        iter_P13 = cycle(P13)
-        iter_P14 = cycle(P14)
-        iter_P15 = cycle(P15)
-        iter_P16 = cycle(P16)
-        iter_P17 = cycle(P17)
-        iter_P18 = cycle(P18)
-        iter_P19 = cycle(P19)
-        iter_P20 = cycle(P20)
-        iter_P21 = cycle(P21)
+        iter_P1 = cycleLists[0]
+        iter_P2 = cycleLists[1]
+        iter_P3 = cycleLists[2]
+        iter_P4 = cycleLists[3]
+        iter_P5 = cycleLists[4]
+        iter_P6 = cycleLists[5]
+        iter_P7 = cycleLists[6]
+        iter_P8 = cycleLists[7]
+        iter_P9 = cycleLists[8]
+        iter_P10 = cycleLists[9]
+        iter_P11 = cycleLists[10]
+        iter_P12 = cycleLists[11]
+        iter_P13 = cycleLists[12]
+        iter_P14 = cycleLists[13]
+        iter_P15 = cycleLists[14]
+        iter_P16 = cycleLists[15]
+        iter_P17 = cycleLists[16]
+        iter_P18 = cycleLists[17]
+        iter_P19 = cycleLists[18]
+        iter_P20 = cycleLists[19]
+        iter_P21 = cycleLists[20]
 
         random.seed(args.seed)
 
@@ -185,8 +165,15 @@ def run(args):
 
         with open(os.path.join(output_dir, 'textfile.pkl'), 'wb') as f:  
             pickle.dump(all_commands, f)
-                #subprocess.call(command, shell=True)   
-                  
+
+def run(args):
+        if args.config_file == '':
+            args.config_file = os.path.join(os.getcwd(), 'configs_batch.yaml')
+
+        configs = read_config_file(args.config_file)
+
+        generate_pickle_file(args, configs)
+    
 
 if __name__=='__main__':
     run(get_parser().parse_args(sys.argv[1:]))
