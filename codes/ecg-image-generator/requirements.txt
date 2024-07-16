@@ -21,3 +21,4 @@ pandas==2.2.2
 wfdb==4.1.2
 pyyaml
 qrcode==7.4.2
+tqdm

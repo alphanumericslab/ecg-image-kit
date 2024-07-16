@@ -4,6 +4,9 @@ import csv
 from helper_functions import find_records
 from gen_ecg_image_from_data import run_single_file
 import warnings
+from multiprocessing import Pool
+import time
+from tqdm import tqdm
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 warnings.filterwarnings("ignore")
@@ -70,51 +73,79 @@ def get_parser():
     parser.add_argument('--wrinkles',action='store_true',default=False)
     parser.add_argument('--augment',action='store_true',default=False)
     parser.add_argument('--lead_bbox',action='store_true',default=False)
+    parser.add_argument('--store_mask',action='store_true',default=False)
+    parser.add_argument('--cpu_count', type=int, default=os.cpu_count())
 
     return parser
 
+def run_single_file_wrapper(args_tuple):
+    # Unpack the arguments
+    args, full_header_file, full_recording_file = args_tuple
+
+    # Obtain the filename, header, and other arguments
+    filename = full_recording_file
+    header = full_header_file
+    args.input_file = os.path.join(args.input_directory, filename)
+    args.header_file = os.path.join(args.input_directory, header)
+    args.start_index = -1
+    folder_struct_list = full_header_file.split('/')[:-1]
+    args.output_directory = os.path.join(args.original_output_dir, '/'.join(folder_struct_list))
+    args.encoding = os.path.split(os.path.splitext(filename)[0])[1]
+
+    # Run a single file and return the value outputted
+    return run_single_file(args)
+
 def run(args):
-        random.seed(args.seed)
+    random.seed(args.seed)
+    if os.path.isabs(args.input_directory) == False:
+        args.input_directory = os.path.normpath(os.path.join(os.getcwd(), args.input_directory))
+    if os.path.isabs(args.output_directory) == False:
+        args.original_output_dir = os.path.normpath(os.path.join(os.getcwd(), args.output_directory))
+    else:
+        args.original_output_dir = args.output_directory
 
-        if os.path.isabs(args.input_directory) == False:
-            args.input_directory = os.path.normpath(os.path.join(os.getcwd(), args.input_directory))
-        if os.path.isabs(args.output_directory) == False:
-            original_output_dir = os.path.normpath(os.path.join(os.getcwd(), args.output_directory))
-        else:
-            original_output_dir = args.output_directory
-        
-        if os.path.exists(args.input_directory) == False or os.path.isdir(args.input_directory) == False:
-            raise Exception("The input directory does not exist, Please re-check the input arguments!")
+    if not os.path.exists(args.input_directory) or not os.path.isdir(args.input_directory):
+        raise Exception("The input directory does not exist, Please re-check the input arguments!")
 
-        if os.path.exists(original_output_dir) == False:
-            os.makedirs(original_output_dir)
+    if not os.path.exists(args.original_output_dir):
+        os.makedirs(args.original_output_dir)
 
-        i = 0
-        full_header_files, full_recording_files = find_records(args.input_directory, original_output_dir)
-        
-        # If fully_random is True, then set hw_text to True
-        # if args.fully_random:
-        #     args.hw_text = True
+    full_header_files, full_recording_files = find_records(args.input_directory, args.original_output_dir)
+    
+    # Ensure this argument is always False for this script otherwise it will crash
+    args.hw_text = False
 
-        for full_header_file, full_recording_file in zip(full_header_files, full_recording_files):
-            print(f"{i}/{len(full_header_files)}")
-            filename = full_recording_file
-            header = full_header_file
-            args.input_file = os.path.join(args.input_directory, filename)
-            args.header_file = os.path.join(args.input_directory, header)
-            args.start_index = -1
-            
-            folder_struct_list = full_header_file.split('/')[:-1]
-            args.output_directory = os.path.join(original_output_dir, '/'.join(folder_struct_list))
-            args.encoding = os.path.split(os.path.splitext(filename)[0])[1]
-            
-            i += run_single_file(args)
-            
-            if(args.max_num_images != -1 and i >= args.max_num_images):
-                break
+    # Create a list of tuples containing the arguments for each file
+    args_list = [(args, full_header_files[i], full_recording_files[i]) for i in range(len(full_header_files))]
+    
+    # Create a pool of workers equal to the number of CPU cores
+    with Pool(processes=args.cpu_count) as pool:
+        # Use tqdm to create a progress bar for the map function
+        for _ in tqdm(pool.imap_unordered(run_single_file_wrapper, args_list), total=len(args_list)):
+            pass
 
 if __name__=='__main__':
+    start_time = time.time()
     path = os.path.join(os.getcwd(), sys.argv[0])
     parentPath = os.path.dirname(path)
     os.chdir(parentPath)
     run(get_parser().parse_args(sys.argv[1:]))
+
+    end_time = time.time()
+
+    # Calculate the execution time
+    execution_time = end_time - start_time
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Create the output file path
+    output_file = os.path.join(cwd, "execution_time.txt")
+
+    # Write the execution time to the file
+    with open(output_file, "a") as f:
+        f.write(f"Execution time for {sys.argv[2]} to  {sys.argv[4]}: {execution_time} seconds")
+        f.write("\n")
+
+    print(f"Execution time: {execution_time} seconds")
+    print(f"Execution time written to {output_file}")
