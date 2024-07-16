@@ -1,4 +1,4 @@
-name: physionet_test
+name: myenv
 channels:
   - defaults
 dependencies:

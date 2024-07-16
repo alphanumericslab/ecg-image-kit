@@ -4,6 +4,7 @@ import csv
 from helper_functions import find_records
 from gen_ecg_image_from_data import run_single_file
 import warnings
+import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 warnings.filterwarnings("ignore")
@@ -114,7 +115,27 @@ def run(args):
                 break
 
 if __name__=='__main__':
+    start_time = time.time()
     path = os.path.join(os.getcwd(), sys.argv[0])
     parentPath = os.path.dirname(path)
     os.chdir(parentPath)
     run(get_parser().parse_args(sys.argv[1:]))
+
+    end_time = time.time()
+
+    # Calculate the execution time
+    execution_time = end_time - start_time
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Create the output file path
+    output_file = os.path.join(cwd, "execution_time.txt")
+
+    # Write the execution time to the file
+    with open(output_file, "a") as f:
+        f.write(f"Execution time for {sys.argv[2]} to  {sys.argv[4]}: {execution_time} seconds")
+        f.write("\n")
+
+    print(f"Execution time: {execution_time} seconds")
+    print(f"Execution time written to {output_file}")
