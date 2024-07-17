@@ -140,7 +140,11 @@ def run_single_file(args):
             else:
                 json_dict = None
             if(args.fully_random):
-                hw_text = random.choice((True,False))
+                if not args.hw_text:
+                    hw_text = False
+                else:
+                    hw_text = random.choice((True,False))
+
                 wrinkles = random.choice((True,False))
                 augment = random.choice((True,False))
             else:
