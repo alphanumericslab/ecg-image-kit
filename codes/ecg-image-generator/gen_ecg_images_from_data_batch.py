@@ -94,8 +94,8 @@ def run(args):
         full_header_files, full_recording_files = find_records(args.input_directory, original_output_dir)
         
         # If fully_random is True, then set hw_text to True
-        # if args.fully_random:
-        #     args.hw_text = True
+        if args.fully_random:
+            args.hw_text = True
 
         for full_header_file, full_recording_file in zip(full_header_files, full_recording_files):
             print(f"{i}/{len(full_header_files)}")
