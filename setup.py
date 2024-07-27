@@ -5,11 +5,12 @@ with open('requirements.txt') as f:
 
 setup(
     name="ecg_image_kit",
-    version="0.0.16",
+    version="0.0.19",
     description="A toolkit for synthesis, analysis, and digitization of electrocardiogram images",
     long_description=open('README.md').read(),  # Assuming you have a README.md file
     long_description_content_type='text/markdown',  # Specify the format of the long description
-    packages=find_packages(),  # Automatically find packages in the directory
+    packages=find_packages(where='src'),  # Automatically find packages in the directory
+    package_dir={'': 'src'},
     include_package_data=True,  # Include files specified in MANIFEST.in
     install_requires=required_packages,  # Install dependencies from requirements.txt
     license="MIT",  # Specify your license

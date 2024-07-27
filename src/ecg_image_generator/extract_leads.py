@@ -6,14 +6,15 @@ import numpy as np
 from scipy.io import savemat, loadmat
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
-from TemplateFiles.generate_template import generate_template
+from ecg_image_generator.TemplateFiles.generate_template import generate_template
 from math import ceil 
-from helper_functions import get_adc_gains,get_frequency,get_leads,load_recording,load_header,find_files, truncate_signal, create_signal_dictionary, standardize_leads, write_wfdb_file
-from ecg_plot import ecg_plot
+from  ecg_image_generator.helper_functions import get_adc_gains,get_frequency,get_leads,load_recording,load_header,find_files, truncate_signal, create_signal_dictionary, standardize_leads, write_wfdb_file
+from  ecg_image_generator.ecg_plot import ecg_plot
 import wfdb
 from PIL import Image, ImageDraw, ImageFont
 from random import randint
 import random
+
 
 # Run script.
 def get_paper_ecg(input_file,header_file,output_directory, seed, add_dc_pulse,add_bw,show_grid, add_print, configs, mask_unplotted_samples = False, start_index = -1, store_configs=False, store_text_bbox=True,key='val',resolution=100,units='inches',papersize='',add_lead_names=True,pad_inches=1,template_file=os.path.join('TemplateFiles','TextFile1.txt'),font_type=os.path.join('Fonts','Times_New_Roman.ttf'),standard_colours=5,full_mode='II',bbox = False,columns=-1):

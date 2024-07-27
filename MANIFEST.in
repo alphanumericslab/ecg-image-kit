@@ -1,3 +1,6 @@
 include requirements.txt
 include README.md
 include LICENSE
+include src/ecg_image_generator/TemplateFiles/generate_template.py
+include src/ecg_image_generator/TemplateFiles/template_text_file.txt
+include src/ecg_image_generator/TemplateFiles/TextFile1.txt

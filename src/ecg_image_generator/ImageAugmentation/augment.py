@@ -4,7 +4,7 @@ import argparse
 import imgaug as ia
 from imgaug import augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
-from helper_functions import read_leads, convert_bounding_boxes_to_dict, rotate_bounding_box, get_lead_pixel_coordinate, rotate_points
+from ecg_image_generator.helper_functions import read_leads, convert_bounding_boxes_to_dict, rotate_bounding_box, get_lead_pixel_coordinate, rotate_points
 import numpy as np
 import matplotlib.pyplot as plt
 import os, sys, argparse

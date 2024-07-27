@@ -5,13 +5,14 @@ import qrcode
 from PIL import Image
 import numpy as np
 from scipy.stats import bernoulli
-from helper_functions import find_files
-from extract_leads import get_paper_ecg
-from HandwrittenText.generate import get_handwritten
-from CreasesWrinkles.creases import get_creased
-from ImageAugmentation.augment import get_augment
+from ecg_image_generator.helper_functions import find_files
+from ecg_image_generator.extract_leads import get_paper_ecg
+from ecg_image_generator.HandwrittenText.generate import get_handwritten
+from ecg_image_generator.CreasesWrinkles.creases import get_creased
+from ecg_image_generator.ImageAugmentation.augment import get_augment
 import warnings
-from helper_functions import read_config_file
+from ecg_image_generator.helper_functions import read_config_file
+
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 warnings.filterwarnings("ignore")

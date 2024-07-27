@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.ticker import AutoMinorLocator
-from TemplateFiles.generate_template import generate_template
+from ecg_image_generator.TemplateFiles.generate_template import generate_template
 from math import ceil 
 from PIL import Image
 import csv

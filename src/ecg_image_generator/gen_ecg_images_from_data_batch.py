@@ -1,8 +1,8 @@
 import os, sys, argparse
 import random
 import csv
-from helper_functions import find_records
-from gen_ecg_image_from_data import run_single_file
+from ecg_image_generator.helper_functions import find_records
+from ecg_image_generator.gen_ecg_image_from_data import run_single_file
 import warnings
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
