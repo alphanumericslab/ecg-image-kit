@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecg-image-kit"
+version = "0.0.12"
+description = "A toolkit for synthesis, analysis, and digitization of electrocardiogram images"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+keywords = ["your", "keywords", "here"]
+
+
+requires-python = ">=3.9"
+
+
+[project.urls]
+Homepage = "https://github.com/alphanumericslab/ecg-image-kit"
+Issues = "https://github.com/alphanumericslab/ecg-image-kit/issues"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
