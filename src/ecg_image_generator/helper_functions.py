@@ -380,3 +380,22 @@ def rotate_points(pixel_coordinates, origin, angle):
         rotates_pixel_coords.append(np.round(transformed_matrix, 2))
         
     return rotates_pixel_coords
+
+
+def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', config_file='config.yaml', 
+                        resolution = 200, pad_inches=0, print_header=0, num_columns =-1, full_mode='II', mask_unplotted_samples = False,
+                        add_qr_code = False, link='', num_words=5, x_offset=30, y_offset=30, hws = 0.2, crease_angle = 90, 
+                        num_creases_vertically=10, num_creases_horizontally=10, rotate = 0, noise=50, crop = 0.01, temperature=40000,
+                        random_resolution=False, random_padding=False, random_grid_color=False, standard_grid_color=5, calibration_pulse=1, 
+                        random_grid_present=1, random_print_header=0, random_bw=0, remove_lead_names=True, lead_name_bbox=False, store_config=0, 
+                        deterministic_offset=False, deterministic_num_words=False, deterministic_hw_size=False, deterministic_angle=False,
+                        deterministic_vertical=False, deterministic_horizontal=False, deterministic_rot=False, deterministic_noise=False, deterministic_crop=False,
+                        deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False):
+    
+
+    args.seed = seed
+    args.num_leads = num_leads
+    args.config_file = config_file
+    args.resolution = resolution
+    args.pad_inches = pad_inches
+
