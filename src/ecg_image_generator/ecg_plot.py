@@ -125,8 +125,8 @@ def ecg_plot(
     rows  = int(ceil(leads/columns))
 
     if(full_mode!='None'):
-        rows+=1
-        leads+=1
+        rows += len(full_mode) 
+        leads += len(full_mode)
     
     #Grid calibration
     #Each big grid corresponds to 0.2 seconds and 0.5 mV
@@ -153,7 +153,7 @@ def ecg_plot(
     x_grid_dots = x_grid*resolution
  
     #row_height = height * y_grid_size/(y_grid*(rows+2))
-    row_height = (height * y_grid_size/y_grid)/(rows+2)
+    row_height = (height * y_grid_size/y_grid)/(rows+3)
     x_max = width * x_grid_size / x_grid
     x_min = 0
     x_gap = np.floor(((x_max - (columns*secs))/2)/0.2)*0.2
@@ -219,10 +219,106 @@ def ecg_plot(
     if(show_dc_pulse):
         dc_offset = sample_rate*standard_values['dc_offset_length']*step
     #Iterate through each lead in lead_index array.
-    y_offset = (row_height/2)
+    y_offset = row_height/2
     x_offset = 0
-
+    
     leads_ds = []
+
+    #Plotting longest lead for 10 seconds
+    if(full_mode!='None'):
+        for key in full_mode:
+            current_lead_ds = dict()
+            
+            if(show_lead_name):
+                t1 = ax.text(x_gap + dc_offset, 
+                        y_offset-lead_name_offset, 
+                        key, 
+                        fontsize=lead_fontsize)
+                
+                if (store_text_bbox):
+                    renderer1 = fig.canvas.get_renderer()
+                    transf = ax.transData.inverted()
+                    bb = t1.get_window_extent(renderer = fig.canvas.renderer)
+                    x1 = bb.x0*resolution/fig.dpi      
+                    y1 = bb.y0*resolution/fig.dpi   
+                    x2 = bb.x1*resolution/fig.dpi     
+                    y2 = bb.y1*resolution/fig.dpi           
+                    box_dict = dict()
+                    x1 = int(x1)
+                    y1 = int(y1)
+                    x2 = int(x2)
+                    y2 = int(y2)
+                    box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                    box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
+                    box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                    box_dict[3] = [round(json_dict['height'] - y1), round(x1, 2)]
+                    current_lead_ds["text_bounding_box"] = box_dict                
+                current_lead_ds["lead_name"] = key
+
+            if(show_dc_pulse):
+                x_range = np.arange(0,sample_rate*standard_values['dc_offset_length']*step + 4*step,step)
+                dc_pulse = np.ones(len(x_range))
+                dc_pulse = np.concatenate(((0,0),dc_pulse[2:-2],(0,0)))
+                t1 = ax.plot(x_range + x_gap,
+                        dc_pulse + y_offset-lead_name_offset + 0.8,
+                        linewidth=line_width * 1.5, 
+                        color=color_line
+                        )
+                
+                if (bbox):
+                        renderer1 = fig.canvas.get_renderer()
+                        transf = ax.transData.inverted()
+                        bb = t1[0].get_window_extent()                                                
+                        x1, y1 = bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi
+                        x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
+            
+            dc_full_lead_offset = 0 
+            if(show_dc_pulse):
+                dc_full_lead_offset = sample_rate*standard_values['dc_offset_length']*step
+            
+            t1 = ax.plot(np.arange(0,len(ecg['full'+key])*step,step) + x_gap + dc_full_lead_offset, 
+                        ecg['full'+key] + y_offset-lead_name_offset + 0.8,
+                        linewidth=line_width, 
+                        color=color_line
+                        )
+            x_vals = np.arange(0,len(ecg['full'+key])*step,step) + x_gap + dc_full_lead_offset
+            y_vals = ecg['full'+key] + y_offset-lead_name_offset + 0.8
+
+            if (bbox):
+                renderer1 = fig.canvas.get_renderer()
+                transf = ax.transData.inverted()
+                bb = t1[0].get_window_extent()  
+                if show_dc_pulse == False:                                           
+                    x1, y1 = bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi
+                    x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
+                else:
+                    y1 = min(y1, bb.y0*resolution/fig.dpi)
+                    y2 = max(y2, bb.y1*resolution/fig.dpi)
+                    x2 = bb.x1*resolution/fig.dpi
+
+                box_dict = dict()
+                x1 = int(x1)
+                y1 = int(y1)
+                x2 = int(x2)
+                y2 = int(y2)
+                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
+                box_dict[1] = [round(json_dict['height'] - y2), round(x2, 2)]
+                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
+                box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
+                current_lead_ds["lead_bounding_box"] = box_dict
+            current_lead_ds["start_sample"] = start_index
+            current_lead_ds["end_sample"] = start_index + len(ecg['full'+key])
+            current_lead_ds['plotted_pixels'] = []
+            for i in range(len(x_vals)):
+                xi, yi = x_vals[i], y_vals[i]
+                xi, yi = ax.transData.transform((xi, yi))
+                yi = json_dict['height'] - yi
+                current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
+            leads_ds.append(current_lead_ds)
+
+            y_offset += row_height
+
+    y_offset = row_height/2 + (len(full_mode) - 1) * row_height
 
     leadNames_12 = configs['leadNames_12']
     tickLength = configs['tickLength']
@@ -367,93 +463,8 @@ def ecg_plot(
             sep_y = np.linspace(y_offset - tickLength/2*y_grid_dots*tickSize_step, y_offset + tickSize_step*y_grid_dots*tickLength/2, len(sep_x))
             ax.plot(sep_x, sep_y, linewidth=line_width * 3, color=color_line)
 
-    #Plotting longest lead for 12 seconds
-    if(full_mode!='None'):
-        current_lead_ds = dict()
-        if(show_lead_name):
-            t1 = ax.text(x_gap + dc_offset, 
-                    row_height/2-lead_name_offset, 
-                    full_mode, 
-                    fontsize=lead_fontsize)
-            
-            if (store_text_bbox):
-                renderer1 = fig.canvas.get_renderer()
-                transf = ax.transData.inverted()
-                bb = t1.get_window_extent(renderer = fig.canvas.renderer)
-                x1 = bb.x0*resolution/fig.dpi      
-                y1 = bb.y0*resolution/fig.dpi   
-                x2 = bb.x1*resolution/fig.dpi     
-                y2 = bb.y1*resolution/fig.dpi           
-                box_dict = dict()
-                x1 = int(x1)
-                y1 = int(y1)
-                x2 = int(x2)
-                y2 = int(y2)
-                box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
-                box_dict[1] = [round(json_dict['height'] - y2, 2), round(x2, 2)]
-                box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
-                box_dict[3] = [round(json_dict['height'] - y1), round(x1, 2)]
-                current_lead_ds["text_bounding_box"] = box_dict                
-            current_lead_ds["lead_name"] = full_mode
-
-        if(show_dc_pulse):
-            t1 = ax.plot(x_range + x_gap,
-                    dc_pulse + row_height/2-lead_name_offset + 0.8,
-                    linewidth=line_width * 1.5, 
-                    color=color_line
-                    )
-            
-            if (bbox):
-                    renderer1 = fig.canvas.get_renderer()
-                    transf = ax.transData.inverted()
-                    bb = t1[0].get_window_extent()                                                
-                    x1, y1 = bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi
-                    x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
-        
-        dc_full_lead_offset = 0 
-        if(show_dc_pulse):
-            dc_full_lead_offset = sample_rate*standard_values['dc_offset_length']*step
-        
-        t1 = ax.plot(np.arange(0,len(ecg['full'+full_mode])*step,step) + x_gap + dc_full_lead_offset, 
-                    ecg['full'+full_mode] + row_height/2-lead_name_offset + 0.8,
-                    linewidth=line_width, 
-                    color=color_line
-                    )
-        x_vals = np.arange(0,len(ecg['full'+full_mode])*step,step) + x_gap + dc_full_lead_offset
-        y_vals = ecg['full'+full_mode] + row_height/2-lead_name_offset + 0.8
-
-        if (bbox):
-            renderer1 = fig.canvas.get_renderer()
-            transf = ax.transData.inverted()
-            bb = t1[0].get_window_extent()  
-            if show_dc_pulse == False:                                           
-                x1, y1 = bb.x0*resolution/fig.dpi, bb.y0*resolution/fig.dpi
-                x2, y2 = bb.x1*resolution/fig.dpi, bb.y1*resolution/fig.dpi
-            else:
-                y1 = min(y1, bb.y0*resolution/fig.dpi)
-                y2 = max(y2, bb.y1*resolution/fig.dpi)
-                x2 = bb.x1*resolution/fig.dpi
-
-            box_dict = dict()
-            x1 = int(x1)
-            y1 = int(y1)
-            x2 = int(x2)
-            y2 = int(y2)
-            box_dict[0] = [round(json_dict['height'] - y2, 2), round(x1, 2)]
-            box_dict[1] = [round(json_dict['height'] - y2), round(x2, 2)]
-            box_dict[2] = [round(json_dict['height'] - y1, 2), round(x2, 2)]
-            box_dict[3] = [round(json_dict['height'] - y1, 2), round(x1, 2)]
-            current_lead_ds["lead_bounding_box"] = box_dict
-        current_lead_ds["start_sample"] = start_index
-        current_lead_ds["end_sample"] = start_index + len(ecg['full'+full_mode])
-        current_lead_ds['plotted_pixels'] = []
-        for i in range(len(x_vals)):
-            xi, yi = x_vals[i], y_vals[i]
-            xi, yi = ax.transData.transform((xi, yi))
-            yi = json_dict['height'] - yi
-            current_lead_ds['plotted_pixels'].append([round(yi, 2), round(xi, 2)])
-        leads_ds.append(current_lead_ds)
-
+    
+    
 
 
     head, tail = os.path.split(rec_file_name)

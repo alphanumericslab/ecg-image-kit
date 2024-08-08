@@ -59,7 +59,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `--print_header`: Add text from header file on all the generated images; default: False
 - `--add_qr_code`: Add QR code to all the generated images, default: False. The QR code links to the relative path of the WFDB file used to generate the ECG image. 
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
-- `--full_mode`: Sets the lead to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if the lead II is not available plots the first lead from the header file; default: `'II'`; type: str
+- `--full_mode`: Sets the leads to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if any lead is not available plots a random lead from the header file; default: `['II']`; type: list
 - `--mask_unplotted_samples`: Mask the samples not plotted in the images in the generated WFDB signal file; default: False. For example: for the 3x4 format, the code plots 2.5 seconds of each lead on the image and saves the complete signal in the WFDB file. If the flag is set, the code will mask the part of the signal not plotted in the image (In this case, t > 2.5seconds) with Nan values in the modified WFDB file. 
 - `--max_num_images`: Number of ECG images to be generated, if max_num_images is less than the number of files in the input directory it will generate maximum number of images and the order is dependent on the OS library; default: all files in the input directory; type: int
 -   `--remove_lead_names`: Remove lead names from all generated images, default=False.
@@ -78,6 +78,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:** 
      ```bash
      python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_add_header 0.8 --calibration_pulse 0.5 --store_config 1 --add_qr_code
+     --full_mode II III
      ```
 
 ## Adding distortions to the synethic images
@@ -101,7 +102,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:** 
 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --hw_text -n 4 --x_offset 30 --y_offset 20 -se 10 --random_grid_color --add_qr_code
+     python gen_ecg_images_from_data_batch.py -i my_input_dir -o my_output_dir --hw_text -n 4 --x_offset 30 --y_offset 20 -se 10 --random_grid_color --add_qr_code --full_mode II
      ```
 
      - Below are sample synthetic ECG images with handwritten text generated from sample records of the [PhysioNet PTB-XL](https://physionet.org/content/ptb-xl/) dataset using the script above.
