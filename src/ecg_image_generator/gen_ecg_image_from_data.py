@@ -12,8 +12,9 @@ from ecg_image_generator.CreasesWrinkles.creases import get_creased
 from ecg_image_generator.ImageAugmentation.augment import get_augment
 import warnings
 from ecg_image_generator.helper_functions import read_config_file
+import site
 
-
+site_packages_path = site.getsitepackages()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 warnings.filterwarnings("ignore")
 
@@ -119,7 +120,7 @@ def run_single_file(args):
         else:
             bernoulli_add_print = bernoulli(args.random_print_header)
         
-        font = os.path.join('Fonts',random.choice(os.listdir("Fonts")))
+        font = os.path.join(site_packages_path[0], args.module_name, 'Fonts',random.choice(os.listdir(os.path.join(site_packages_path[0], args.module_name, 'Fonts'))))
         
         if(args.random_bw == 0):
             if args.random_grid_color == False:
@@ -129,7 +130,7 @@ def run_single_file(args):
         else:
             standard_colours = False
 
-        configs = read_config_file(os.path.join(os.getcwd(), args.config_file))
+        configs = read_config_file(os.path.join(site_packages_path[0], args.module_name, args.config_file))
 
         out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.lead_name_bbox, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.lead_bbox, columns = args.num_columns, seed=args.seed)
         

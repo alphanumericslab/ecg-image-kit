@@ -26,7 +26,7 @@ def gen_batch_images(input_dir, output_dir, seed=-1, num_leads='twelve', max_num
     print("Function call")
 
 
-def gen_image(input_file, header_file, output_dir, seed=-1, num_leads='twelve', config_file='config.yaml', 
+def gen_image(input_file, header_file, output_dir, start_index=-1, seed=-1, num_leads='twelve', config_file='config.yaml', 
                 resolution = 200, pad_inches=0, print_header=0, num_columns =-1, full_mode='II', mask_unplotted_samples = False,
                 add_qr_code = False, link='', num_words=5, x_offset=30, y_offset=30, hws = 0.2, crease_angle = 90, 
                 num_creases_vertically=10, num_creases_horizontally=10, rotate = 0, noise=50, crop = 0.01, temperature=40000,
@@ -40,6 +40,7 @@ def gen_image(input_file, header_file, output_dir, seed=-1, num_leads='twelve', 
     parser.input_file = input_file
     parser.header_file = header_file
     parser.output_directory = output_dir
+    parser.start_index = start_index
     convert_function_inp_to_args_object(parser, seed, num_leads, config_file, resolution, pad_inches, print_header, num_columns, full_mode, mask_unplotted_samples,
                     add_qr_code, link, num_words, x_offset, y_offset, hws, crease_angle, num_creases_vertically, num_creases_horizontally, rotate, noise, crop, temperature,
                     random_resolution, random_padding, random_grid_color, standard_grid_color, calibration_pulse, random_grid_present, random_print_header, random_bw, remove_lead_names, lead_name_bbox, store_config, 

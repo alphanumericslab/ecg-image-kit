@@ -398,4 +398,53 @@ def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', confi
     args.config_file = config_file
     args.resolution = resolution
     args.pad_inches = pad_inches
+    args.print_header= print_header
+    args.num_columns = num_columns
+    args.full_mode = full_mode
+    args.mask_unplotted_samples = mask_unplotted_samples
+    args.add_qr_code = add_qr_code
+    args.link = link
+    args.num_words = num_words
+    args.x_offset = x_offset
+    args.y_offset = y_offset
+    args.hws = hws
+    args.crease_angle = crease_angle
+    args.num_creases_vertically = num_creases_vertically
+    args.num_creases_horizontally = num_creases_horizontally
+    args.rotate = rotate
+    args.noise = noise
+    args.crop = crop
+    args.temperature = temperature
+    args.random_resolution = random_resolution
+    args.random_padding = random_padding
+    args.random_grid_color = random_grid_color
+    args.standard_grid_color = standard_grid_color
+    args.calibration_pulse = calibration_pulse
+    args.random_grid_present = random_grid_present
+    args.random_print_header = random_print_header
+    args.random_bw = random_bw
+    args.remove_lead_names = remove_lead_names
+    args.lead_name_bbox = lead_name_bbox
+    args.store_config = store_config
+    args.deterministic_offset = deterministic_offset
+    args.deterministic_num_words = deterministic_num_words
+    args.deterministic_hw_size = deterministic_hw_size
+    args.deterministic_angle = deterministic_angle
+    args.deterministic_vertical = deterministic_vertical
+    args.deterministic_horizontal = deterministic_horizontal
+    args.deterministic_rot = deterministic_rot
+    args.deterministic_noise = deterministic_noise
+    args.deterministic_crop = deterministic_crop
+    args.deterministic_temp = deterministic_temp
+    args.fully_random = fully_random
+    args.hw_text = hw_text
+    args.wrinkles = wrinkles
+    args.augment = augment
+    args.lead_bbox = lead_bbox
+    args.pkg_name = 'ecg_image_kit'
+    args.module_name = 'ecg_image_generator'
+
+
+
+
 
