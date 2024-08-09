@@ -100,9 +100,9 @@ def writeCSV(args):
                 writer.writerow(["filename","xgrid","ygrid","lead_name","start","end"])
 
 def run_single_file(args):
-        if hasattr(args, 'st') == True:
+        if hasattr(args, 'start_index') == True:
             random.seed(args.seed)
-            args.encoding = args.input_file
+            args.encoding = os.path.split(os.path.splitext(args.input_file)[0])[1]
 
         filename = args.input_file
         header = args.header_file
@@ -156,7 +156,7 @@ def run_single_file(args):
                 x_offset = args.x_offset if (args.deterministic_offset) else random.choice(range(1,args.x_offset+1))
                 y_offset = args.y_offset if (args.deterministic_offset) else random.choice(range(1,args.y_offset+1))
 
-                out = get_handwritten(link=args.link,num_words=num_words,input_file=out,output_dir=args.output_directory,x_offset=x_offset,y_offset=y_offset,handwriting_size_factor=args.handwriting_size_factor,bbox = args.lead_bbox)
+                out = get_handwritten(link=args.link,num_words=num_words,input_file=out,output_dir=args.output_directory,x_offset=x_offset,y_offset=y_offset,handwriting_size_factor=args.handwriting_size_factor,bbox = args.lead_bbox, module_name = args.module_name)
             else:
                 num_words = 0
                 x_offset = 0
@@ -174,7 +174,7 @@ def run_single_file(args):
                 crease_angle = args.crease_angle if (args.deterministic_angle) else random.choice(range(0,args.crease_angle+1))
                 num_creases_vertically = args.num_creases_vertically if (args.deterministic_vertical) else random.choice(range(1,args.num_creases_vertically+1))
                 num_creases_horizontally = args.num_creases_horizontally if (args.deterministic_horizontal) else random.choice(range(1,args.num_creases_horizontally+1))
-                out = get_creased(out,output_directory=args.output_directory,ifWrinkles=ifWrinkles,ifCreases=ifCreases,crease_angle=crease_angle,num_creases_vertically=num_creases_vertically,num_creases_horizontally=num_creases_horizontally,bbox = args.lead_bbox)
+                out = get_creased(out,output_directory=args.output_directory,ifWrinkles=ifWrinkles,ifCreases=ifCreases,crease_angle=crease_angle,num_creases_vertically=num_creases_vertically,num_creases_horizontally=num_creases_horizontally,bbox = args.lead_bbox, module_name=args.module_name)
             else:
                 crease_angle = 0
                 num_creases_horizontally = 0

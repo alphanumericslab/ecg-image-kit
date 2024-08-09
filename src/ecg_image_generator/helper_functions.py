@@ -316,7 +316,7 @@ def write_wfdb_file(ecg_frame, filename, rate, header_file, write_dir, full_mode
     full_leads = standardize_leads(full_leads)
 
     lead_step = 10.0
-    samples = len(ecg_frame[full_mode])
+    samples = len(ecg_frame[full_mode[0]])
     array = np.zeros((1, samples))
 
     leads = []
@@ -384,7 +384,7 @@ def rotate_points(pixel_coordinates, origin, angle):
 
 def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', config_file='config.yaml', 
                         resolution = 200, pad_inches=0, print_header=0, num_columns =-1, full_mode='II', mask_unplotted_samples = False,
-                        add_qr_code = False, link='', num_words=5, x_offset=30, y_offset=30, hws = 0.2, crease_angle = 90, 
+                        add_qr_code = False, link='', num_words=5, x_offset=30, y_offset=30, handwriting_size_factor = 0.2, crease_angle = 90, 
                         num_creases_vertically=10, num_creases_horizontally=10, rotate = 0, noise=50, crop = 0.01, temperature=40000,
                         random_resolution=False, random_padding=False, random_grid_color=False, standard_grid_color=5, calibration_pulse=1, 
                         random_grid_present=1, random_print_header=0, random_bw=0, remove_lead_names=True, lead_name_bbox=False, store_config=0, 
@@ -407,7 +407,7 @@ def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', confi
     args.num_words = num_words
     args.x_offset = x_offset
     args.y_offset = y_offset
-    args.hws = hws
+    args.handwriting_size_factor = handwriting_size_factor
     args.crease_angle = crease_angle
     args.num_creases_vertically = num_creases_vertically
     args.num_creases_horizontally = num_creases_horizontally

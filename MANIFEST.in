@@ -42,3 +42,8 @@ include src/ecg_image_generator/HandwrittenText/data/translation.pkl
 include src/ecg_image_generator/HandwrittenText/Biomedical.txt
 include src/ecg_image_generator/TemplateFiles/template_text_file.txt
 include src/ecg_image_generator/config.yaml
+include src/ecg_image_generator/HandwrittenText/data/styles.pkl
+include src/ecg_image_generator/HandwrittenText/data/translation.pkl
+include src/ecg_image_generator/HandwrittenText/pretrained/model-29.data-00000-of-00001
+include src/ecg_image_generator/HandwrittenText/pretrained/model-29.index
+include src/ecg_image_generator/HandwrittenText/pretrained/model-29.meta

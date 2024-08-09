@@ -16,6 +16,9 @@ from PIL import Image
 from math import ceil 
 import heapq
 import time
+import site
+
+site_packages_path = site.getsitepackages()
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -246,13 +249,13 @@ def getCoords(angle,n,hh,ww):
     return coords1,coords2
 
 #Main fnction to apply wrinkles and creases
-def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,crease_angle=0,num_creases_vertically=3,num_creases_horizontally=2,bbox=False):
+def get_creased(input_file,output_directory,ifWrinkles=False,ifCreases=False,crease_angle=0,num_creases_vertically=3,num_creases_horizontally=2,bbox=False, module_name='ecg_image_generator'):
     filename = input_file
 
     if(ifWrinkles):
     #Seed with a different selection of a wrinkle image
     # read wrinkle image as grayscale and convert to float in range 0 to 1
-        wrinkle_file_name = os.path.join(os.path.join('CreasesWrinkles','wrinkles-dataset') , random.choice(os.listdir(os.path.join('CreasesWrinkles','wrinkles-dataset'))))
+        wrinkle_file_name = os.path.join(os.path.join(site_packages_path[0], module_name, 'CreasesWrinkles','wrinkles-dataset') , random.choice(os.listdir(os.path.join(site_packages_path[0], module_name, 'CreasesWrinkles','wrinkles-dataset'))))
         wrinklesImg = quilt(wrinkle_file_name,250,(1,1),'Cut')
         wrinklesImg=cv2.cvtColor(wrinklesImg, cv2.COLOR_BGR2GRAY)
         wrinklesImg = wrinklesImg.astype("float32") / 255.0

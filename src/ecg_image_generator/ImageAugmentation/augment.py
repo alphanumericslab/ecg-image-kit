@@ -37,9 +37,12 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     lead_bbs = []
     leadNames_bbs = []
     
-         
-    lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, plotted_pixels = read_leads(json_dict['leads'])
-    
+    if json_dict != None:    
+        lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, plotted_pixels = read_leads(json_dict['leads'])
+        rotated_pixel_coordinates = rotate_points(plotted_pixels, [h/2, w/2], -rot)
+    else:
+        rotated_pixel_coordinates = None
+
     if bbox:
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
     if store_text_bounding_box:
@@ -67,8 +70,6 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
         augmented_leadName_bbs = rotate_bounding_box(leadNames_bbs, [h/2,w/2], -rot)
     else:
         augmented_leadName_bbs = []   
-
-    rotated_pixel_coordinates = rotate_points(plotted_pixels, [h/2, w/2], -rot)
 
     if bbox or store_text_bounding_box:
         json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, rotated_pixel_coordinates)

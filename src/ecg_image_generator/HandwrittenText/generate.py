@@ -20,6 +20,9 @@ import random
 import cv2
 import sys
 import time
+import site
+
+site_packages_path = site.getsitepackages()
 
 def get_parser():
     description = 'Create a corpus for medical corpus'
@@ -139,7 +142,8 @@ def sample_text(sess, args_text, translation, force,bias,style=None):
     return phi_data, window_data, kappa_data, stroke_data, coords
 
 #Main function to add handwritten text to ecg
-def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,handwriting_size_factor=0.2,model_path=os.path.join(os.path.join('HandwrittenText','pretrained'), 'model-29'),text=None,style=None,bias=1.,force=False,animation=False,noinfo=True,save=None,bbox= False):
+def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,handwriting_size_factor=0.2,model_path='',text=None,style=None,bias=1.,force=False,animation=False,noinfo=True,save=None,bbox= False, module_name = 'ecg_image_generator'):
+    model_path = os.path.join(site_packages_path[0], module_name, os.path.join('HandwrittenText','pretrained'), 'model-29') 
     #Use 'Agg' mode to prevent accumulation of figures
     matplotlib.use("Agg")
     filename = input_file
@@ -165,7 +169,7 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
     else:
         #Extract medical terms from .txt files
         if link == '':
-            link = 'HandwrittenText/Biomedical.txt'
+            link =  os.path.join(site_packages_path[0], module_name, 'HandwrittenText/Biomedical.txt')
         with open(link, 'r') as f:
         #Extract lines from the file
             text = ""
@@ -178,7 +182,7 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
     words = random.choices(doc.ents,k=num_words)
 
         #Load the pretrained RNN model for handwritten text generation
-    with open(os.path.join(os.path.join('HandwrittenText','data'), 'translation.pkl'), 'rb') as file:
+    with open(os.path.join(os.path.join(site_packages_path[0], module_name, 'HandwrittenText','data'), 'translation.pkl'), 'rb') as file:
         translation = pickle.load(file)
     rev_translation = {v: k for k, v in translation.items()}
     charset = [rev_translation[i] for i in range(len(rev_translation))]
