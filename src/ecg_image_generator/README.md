@@ -57,6 +57,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 - `-r`: Resolution with default being 200; type: int
 - `--pad_inches`: Padding of white border along the image with default padding of 0 inches; type: int
 - `--print_header`: Add text from header file on all the generated images; default: False
+- `--store_plotted_pixels`: Store pixel locations of the ECG signal in the image under the attribute `plotted_pixels` in the config JSON file generated for every record (conditional); ; Add `--store_config` parameter to the command you are running. Note: Add `--store_config` parameter to the command you are running to save the config file with bounding box information. default: False.
 - `--add_qr_code`: Add QR code to all the generated images, default: False. The QR code links to the relative path of the WFDB file used to generate the ECG image. 
 - `--num_columns` : Number of columns of the ECG leads. The default(-1) will plot a single column for 2 lead data and 4 columns for the 12 or any other number of lead data. Default: -1; type: int
 - `--full_mode`: Sets the leads to add at the bottom of the paper ECG as a long strip obtained from the WFDB record's `.hea` header file, if any lead is not available plots a random lead from the header file; default: `['II']`; type: list
@@ -77,7 +78,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
 
      **Example:** 
      ```bash
-     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_add_header 0.8 --calibration_pulse 0.5 --store_config 1 --add_qr_code
+     python gen_ecg_images_from_data_batch.py -i <path_to_input_directory> -o <path_to_output_directory> -se 10 --lead_name_bbox --lead_bbox --random_print_header 0.8 --calibration_pulse 0.5 --store_config 1 --add_qr_code
      --full_mode II III
      ```
 
@@ -189,7 +190,7 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      **Example:**
 
      ```
-     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --random_add_header 0.8 -se 20 --lead_name_bbox  --resolution 300 --random_padding --pad_inches 1 --lead_bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 
+     python gen_ecg_images_from_data_batch.py -i <input_dir> -o <output_dir> --random_print_header 0.8 -se 20 --lead_name_bbox  --resolution 300 --random_padding --pad_inches 1 --lead_bbox --augment -rot 5 -noise 40 --deterministic_rot --deterministic_noise --hw_text -n 4 --x_offset 30 --y_offset 20 --wrinkles -ca 45 
      ```
 
      |                            |                             |

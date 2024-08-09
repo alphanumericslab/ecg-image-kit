@@ -11,7 +11,7 @@ def gen_batch_images(input_dir, output_dir, seed=-1, num_leads='twelve', max_num
                     random_grid_present=1, random_print_header=0, random_bw=0, remove_lead_names=True, lead_name_bbox=False, store_config=0, 
                     deterministic_offset=False, deterministic_num_words=False, deterministic_hw_size=False, deterministic_angle=False,
                     deterministic_vertical=False, deterministic_horizontal=False, deterministic_rot=False, deterministic_noise=False, deterministic_crop=False,
-                    deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False):
+                    deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False, store_plotted_pixels=False):
     
     parser = argparse.ArgumentParser()
     parser.input_directory = input_dir
@@ -21,7 +21,7 @@ def gen_batch_images(input_dir, output_dir, seed=-1, num_leads='twelve', max_num
                     add_qr_code, link, num_words, x_offset, y_offset, handwriting_size_factor, crease_angle, num_creases_vertically, num_creases_horizontally, rotate, noise, crop, temperature,
                     random_resolution, random_padding, random_grid_color, standard_grid_color, calibration_pulse, random_grid_present, random_print_header, random_bw, remove_lead_names, lead_name_bbox, store_config, 
                     deterministic_offset, deterministic_num_words, deterministic_hw_size, deterministic_angle, deterministic_vertical, deterministic_horizontal, deterministic_rot, deterministic_noise, deterministic_crop,
-                    deterministic_temp, fully_random, hw_text, wrinkles, augment, lead_bbox)
+                    deterministic_temp, fully_random, hw_text, wrinkles, augment, lead_bbox, store_plotted_pixels)
     run(parser)
 
 
@@ -33,7 +33,7 @@ def gen_image(input_file, header_file, output_dir, start_index=-1, seed=-1, num_
                 random_grid_present=1, random_print_header=0, random_bw=0, remove_lead_names=True, lead_name_bbox=False, store_config=0, 
                 deterministic_offset=False, deterministic_num_words=False, deterministic_hw_size=False, deterministic_angle=False,
                 deterministic_vertical=False, deterministic_horizontal=False, deterministic_rot=False, deterministic_noise=False, deterministic_crop=False,
-                deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False):
+                deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False, store_plotted_pixels=False):
 
     parser = argparse.ArgumentParser()
     parser.input_file = input_file
@@ -44,5 +44,5 @@ def gen_image(input_file, header_file, output_dir, start_index=-1, seed=-1, num_
                     add_qr_code, link, num_words, x_offset, y_offset, handwriting_size_factor, crease_angle, num_creases_vertically, num_creases_horizontally, rotate, noise, crop, temperature,
                     random_resolution, random_padding, random_grid_color, standard_grid_color, calibration_pulse, random_grid_present, random_print_header, random_bw, remove_lead_names, lead_name_bbox, store_config, 
                     deterministic_offset, deterministic_num_words, deterministic_hw_size, deterministic_angle, deterministic_vertical, deterministic_horizontal, deterministic_rot, deterministic_noise, deterministic_crop,
-                    deterministic_temp, fully_random, hw_text, wrinkles, augment, lead_bbox)
+                    deterministic_temp, fully_random, hw_text, wrinkles, augment, lead_bbox, store_plotted_pixels)
     run_single_file(parser)

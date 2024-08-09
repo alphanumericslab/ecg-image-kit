@@ -16,7 +16,8 @@ def get_parser():
     parser.add_argument('--num_leads',type=str,default='twelve')
     parser.add_argument('--max_num_images',type=int,default = -1)
     parser.add_argument('--config_file', type=str, default='config.yaml')
-    
+    parser.add_argument('--store_plotted_pixels', action="store_true", default=False)
+
     parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
     parser.add_argument('--pad_inches',type=int,required=False,default=0)
     parser.add_argument('-ph','--print_header', action="store_true",default=False)

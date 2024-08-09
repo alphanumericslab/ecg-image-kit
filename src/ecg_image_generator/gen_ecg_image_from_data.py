@@ -27,6 +27,7 @@ def get_parser():
     parser.add_argument('-st', '--start_index', type=int, required=True, default=-1)
     parser.add_argument('--num_leads',type=str,default='twelve')
     parser.add_argument('--config_file', type=str, default='config.yaml')
+    parser.add_argument('--store_plotted_pixels', action="store_true", default=False)
 
     parser.add_argument('-r','--resolution',type=int,required=False,default = 200)
     parser.add_argument('--pad_inches',type=int,required=False,default=0)
@@ -132,7 +133,7 @@ def run_single_file(args):
 
         configs = read_config_file(os.path.join(site_packages_path[0], args.module_name, args.config_file))
 
-        out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.lead_name_bbox, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.lead_bbox, columns = args.num_columns, seed=args.seed)
+        out_array = get_paper_ecg(input_file=filename,header_file=header, configs=configs, mask_unplotted_samples=args.mask_unplotted_samples, start_index=args.start_index, store_configs=args.store_config, store_text_bbox=args.lead_name_bbox, output_directory=args.output_directory,resolution=resolution,papersize=papersize,add_lead_names=lead,add_dc_pulse=bernoulli_dc,add_bw=bernoulli_bw,show_grid=bernoulli_grid,add_print=bernoulli_add_print,pad_inches=padding,font_type=font,standard_colours=standard_colours,full_mode=args.full_mode,bbox = args.lead_bbox, columns = args.num_columns, seed=args.seed, store_plotted_pixels=args.store_plotted_pixels)
         
         for out in out_array:
             if args.store_config:
@@ -204,7 +205,7 @@ def run_single_file(args):
                 else:
                     temp = random.choice(range(10000,20000))
                 rotate = args.rotate
-                out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.lead_bbox, store_text_bounding_box = args.lead_name_bbox, json_dict = json_dict)
+                out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.lead_bbox, store_text_bounding_box = args.lead_name_bbox, json_dict = json_dict, store_plotted_pixels=args.store_plotted_pixels)
             
             else:
                 crop = 0

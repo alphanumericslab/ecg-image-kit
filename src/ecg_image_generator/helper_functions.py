@@ -237,7 +237,8 @@ def read_leads(leads):
         startTimeStamps.append(st_time_stamp)
         end_time_stamp = leads[i]['end_sample']
         endTimeStamps.append(end_time_stamp)
-        plotted_pixels.append(leads[i]['plotted_pixels'])
+        if 'plotted_pixels' in leads[i].keys():
+            plotted_pixels.append(leads[i]['plotted_pixels'])
 
         key = "lead_bounding_box"
         if key in leads[i].keys():
@@ -292,7 +293,8 @@ def convert_bounding_boxes_to_dict(lead_bboxes, text_bboxes, labels, startTimeLi
         current_lead_ds["lead_name"] = labels[i]
         current_lead_ds["start_sample"] = startTimeList[i]
         current_lead_ds["end_sample"] = endTimeList[i]
-        current_lead_ds["plotted_pixels"] = [[plotted_pixels_dict[i][j][0], plotted_pixels_dict[i][j][1]] for j in range(len(plotted_pixels_dict[i]))]
+        if  plotted_pixels_dict != None:
+            current_lead_ds["plotted_pixels"] = [[plotted_pixels_dict[i][j][0], plotted_pixels_dict[i][j][1]] for j in range(len(plotted_pixels_dict[i]))]
         leads_ds.append(current_lead_ds)
 
     return leads_ds
@@ -390,7 +392,7 @@ def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', confi
                         random_grid_present=1, random_print_header=0, random_bw=0, remove_lead_names=True, lead_name_bbox=False, store_config=0, 
                         deterministic_offset=False, deterministic_num_words=False, deterministic_hw_size=False, deterministic_angle=False,
                         deterministic_vertical=False, deterministic_horizontal=False, deterministic_rot=False, deterministic_noise=False, deterministic_crop=False,
-                        deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False):
+                        deterministic_temp=False, fully_random=False, hw_text=False, wrinkles=False, augment=False, lead_bbox=False, store_plotted_pixels=False):
     
 
     args.seed = seed
@@ -443,6 +445,7 @@ def convert_function_inp_to_args_object(args, seed=-1, num_leads='twelve', confi
     args.lead_bbox = lead_bbox
     args.pkg_name = 'ecg_image_kit'
     args.module_name = 'ecg_image_generator'
+    args.store_plotted_pixels = store_plotted_pixels
 
 
 

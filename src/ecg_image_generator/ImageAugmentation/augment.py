@@ -28,29 +28,31 @@ def get_parser():
     return parser
 
 # Main function for running augmentations
-def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False, json_dict=None):
+def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,temperature=6500,bbox=False, store_text_bounding_box=False, json_dict=None, store_plotted_pixels=False):
     filename = input_file
     image = Image.open(filename)
     
     image = np.array(image)
-    
+    images = [image[:, :, :3]]
+    h, w, _ = image.shape
+    rot = random.randint(-rotate, rotate)
+
     lead_bbs = []
     leadNames_bbs = []
     
     if json_dict != None:    
         lead_bbs, leadNames_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, plotted_pixels = read_leads(json_dict['leads'])
+    if store_plotted_pixels:
         rotated_pixel_coordinates = rotate_points(plotted_pixels, [h/2, w/2], -rot)
     else:
         rotated_pixel_coordinates = None
+
 
     if bbox:
         lead_bbs = BoundingBoxesOnImage(lead_bbs, shape=image.shape)
     if store_text_bounding_box:
         leadNames_bbs = BoundingBoxesOnImage(leadNames_bbs, shape=image.shape)
     
-    images = [image[:, :, :3]]
-    h, w, _ = image.shape
-    rot = random.randint(-rotate, rotate)
     crop_sample = random.uniform(0, crop)
     #Augment in a sequential manner. Create an augmentation object
     seq = iaa.Sequential([
@@ -71,7 +73,7 @@ def get_augment(input_file,output_directory,rotate=25,noise=25,crop=0.01,tempera
     else:
         augmented_leadName_bbs = []   
 
-    if bbox or store_text_bounding_box:
+    if bbox or store_text_bounding_box or store_plotted_pixels:
         json_dict['leads'] = convert_bounding_boxes_to_dict(augmented_lead_bbs, augmented_leadName_bbs, lead_bbs_labels, startTime_bbs, endTime_bbs, rotated_pixel_coordinates)
 
     head, tail = os.path.split(filename)
