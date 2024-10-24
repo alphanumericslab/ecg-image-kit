@@ -1,0 +1,738 @@
+Sinus Rhythm
+Bradycardia
+Tachycardia
+Atrial Fibrillation
+Ventricular Fibrillation
+Premature Atrial Contraction
+Premature Ventricular Contraction
+Atrial Flutter
+Ventricular Tachycardia
+Supraventricular Tachycardia
+Bundle Branch Block
+Left Bundle Branch Block
+Right Bundle Branch Block
+Complete Heart Block
+Intraventricular Conduction Delay
+First-degree AV Block
+Second-degree AV Block
+Third-degree AV Block
+Mobitz Type I
+Mobitz Type II
+ST Elevation
+ST Depression
+T-wave Inversion
+QRS Complex Prolongation
+QT Interval Prolongation
+Short QT Interval
+Long QT Syndrome
+Wolff-Parkinson-White Syndrome
+U-wave
+Electrocardiographic Artifact
+Ischemic Changes
+Old Myocardial Infarction
+Recent Myocardial Infarction
+Non-Q Wave Infarction
+Transmural Infarction
+Subendocardial Infarction
+Heart Block
+Bifascicular Block
+Trifascicular Block
+Sinus Arrhythmia
+Atrial Tachycardia
+Junctional Rhythm
+Ectopic Atrial Rhythm
+Multifocal Atrial Tachycardia
+Sinus Pause
+Sinus Arrest
+Ventricular Escape Rhythm
+Idioventricular Rhythm
+Accelerated Idioventricular Rhythm
+Paced Rhythm
+Electrolyte Imbalance
+Hypokalemia
+Hyperkalemia
+Hypocalcemia
+Hypercalcemia
+Hypomagnesemia
+Hypermagnesemia
+Early Repolarization
+Delta Wave
+PR Interval Shortening
+PR Interval Prolongation
+Atrioventricular Dissociation
+Electromechanical Dissociation
+Atrial Premature Beat
+Ventricular Premature Beat
+P-wave Abnormalities
+Peaked P-waves
+Flattened P-waves
+Left Atrial Enlargement
+Right Atrial Enlargement
+Left Ventricular Hypertrophy
+Right Ventricular Hypertrophy
+Biventricular Hypertrophy
+Cardiomyopathy
+Dilated Cardiomyopathy
+Hypertrophic Cardiomyopathy
+Restrictive Cardiomyopathy
+Arrhythmogenic Right Ventricular Dysplasia
+Pericarditis
+Myocarditis
+Endocarditis
+Pericardial Effusion
+Tamponade
+Constrictive Pericarditis
+Acute Coronary Syndrome
+STEMI
+NSTEMI
+Stable Angina
+Unstable Angina
+Coronary Artery Disease
+Cardiac Arrest
+Asystole
+Pulseless Electrical Activity
+Palpitations
+Syncope
+Dizziness
+Chest Pain
+Dyspnea
+Fatigue
+Sudden Cardiac Death
+Heart Failure
+Left-sided Heart Failure
+Right-sided Heart Failure
+Congestive Heart Failure
+Decompensated Heart Failure
+Valvular Heart Disease
+Mitral Stenosis
+Mitral Regurgitation
+Aortic Stenosis
+Aortic Regurgitation
+Tricuspid Stenosis
+Tricuspid Regurgitation
+Pulmonary Stenosis
+Pulmonary Regurgitation
+Endocardial Fibroelastosis
+Rheumatic Heart Disease
+Infective Endocarditis
+Prosthetic Valve Dysfunction
+Valve Prolapse
+Mitral Valve Prolapse
+Tricuspid Valve Prolapse
+Aortic Valve Sclerosis
+Pulmonary Hypertension
+Systemic Hypertension
+Cor Pulmonale
+Pulmonary Embolism
+Deep Vein Thrombosis
+Patent Foramen Ovale
+Atrial Septal Defect
+Ventricular Septal Defect
+Tetralogy of Fallot
+Patent Ductus Arteriosus
+Coarctation of the Aorta
+Marfan Syndrome
+Ehlers-Danlos Syndrome
+Eisenmenger Syndrome
+Turner Syndrome
+Noonan Syndrome
+Ebstein Anomaly
+Hypoplastic Left Heart Syndrome
+Transposition of the Great Arteries
+Truncus Arteriosus
+Total Anomalous Pulmonary Venous Return
+Double Outlet Right Ventricle
+Single Ventricle
+Cardiac Tumor
+Myxoma
+Rhabdomyoma
+Fibroma
+Hemangioma
+Cardiac Sarcoma
+Cardiac Lymphoma
+Pericardial Cyst
+Congenital Heart Disease
+Coronary Artery Fistula
+Myocardial Bridging
+Heart Transplant
+LVAD Implantation
+Cardiac Resynchronization Therapy
+Implantable Cardioverter-Defibrillator
+Pacemaker
+Pacemaker Malfunction
+Device Lead Fracture
+Device Lead Displacement
+Battery Depletion
+Cardiopulmonary Resuscitation
+Defibrillation
+Cardioversion
+Ablation
+Electrophysiology Study
+Stress Test
+Echocardiogram
+Transesophageal Echocardiogram
+Holter Monitor
+Event Monitor
+Ambulatory ECG Monitoring
+Signal-averaged ECG
+Exercise ECG
+Pharmacologic Stress Test
+Tilt Table Test
+Cardiac Catheterization
+Coronary Angiography
+Electrophysiology Mapping
+Left Heart Catheterization
+Right Heart Catheterization
+Percutaneous Coronary Intervention
+Balloon Angioplasty
+Stent Placement
+Coronary Artery Bypass Graft
+Valve Replacement Surgery
+Minimally Invasive Valve Surgery
+Heart Valve Repair
+Endovascular Aneurysm Repair
+Ventricular Septal Myectomy
+Left Ventricular Assist Device
+Artificial Heart
+Heart-Lung Machine
+Extracorporeal Membrane Oxygenation
+Intra-aortic Balloon Pump
+Cardiac Rehabilitation
+Antiarrhythmic Therapy
+Beta-blocker Therapy
+Calcium Channel Blocker Therapy
+ACE Inhibitor Therapy
+Angiotensin II Receptor Blocker Therapy
+Aldosterone Antagonist Therapy
+Diuretic Therapy
+Anticoagulant Therapy
+Antiplatelet Therapy
+Thrombolytic Therapy
+Lipid-lowering Therapy
+Statin Therapy
+Omega-3 Fatty Acid Therapy
+Fibrinolytic Therapy
+Heart Rate Variability
+Heart Rate Recovery
+Chronotropic Incompetence
+Autonomic Dysfunction
+Baroreflex Sensitivity
+Vagal Tone
+Sympathetic Tone
+Circadian Rhythm
+Sleep Apnea
+Obstructive Sleep Apnea
+Central Sleep Apnea
+Cheyne-Stokes Respiration
+Hypoventilation
+Sudden Infant Death Syndrome
+Long PR Interval
+Left Axis Deviation
+Right Axis Deviation
+Extreme Axis Deviation
+Q-wave Abnormality
+R-wave Progression
+Electrical Alternans
+Low Voltage ECG
+High Voltage ECG
+Poor R-wave Progression
+Early R-wave Transition
+Atrial Enlargement
+Ventricular Enlargement
+Aneurysm
+Aortic Aneurysm
+Ventricular Aneurysm
+Cardiomegaly
+Pericardial Calcification
+Myocardial Scarring
+Myocardial Stunning
+Myocardial Hibernation
+Coronary Artery Spasm
+Prinzmetal Angina
+Microvascular Angina
+Takotsubo Cardiomyopathy
+Stress-induced Cardiomyopathy
+Peripartum Cardiomyopathy
+Dilated Left Atrium
+Dilated Right Atrium
+Dilated Left Ventricle
+Dilated Right Ventricle
+Endocardial Cushion Defect
+Ebstein’s Anomaly
+Total Anomalous Pulmonary Venous Connection
+Restrictive Ventricular Septal Defect
+Postinfarction Ventricular Septal Defect
+Arrhythmogenic Right Ventricular Cardiomyopathy
+Mitral Valve Annular Calcification
+Cardiac Amyloidosis
+Cardiac Sarcoidosis
+Hyperdynamic Circulation
+Anomalous Coronary Artery
+Single Coronary Artery
+Coronary Artery Hypoplasia
+Coronary Artery Aneurysm
+Myocardial Ischemia
+Reperfusion Injury
+Coronary Microvascular Dysfunction
+electrocardiogram  
+ventricular arrhythmia detection  
+atrial fibrillation detection  
+ventricular hypertrophy  
+myocardial infarction diagnosis  
+P-wave detection  
+QRS complex identification  
+T-wave inversion  
+ST-segment elevation  
+QT interval prolongation  
+heart block diagnosis  
+bundle branch block  
+sinus rhythm  
+ventricular tachycardia  
+atrial flutter detection  
+ST elevation myocardial infarction (STEMI)  
+non-ST elevation myocardial infarction (NSTEMI)  
+PR interval abnormalities  
+QTc interval analysis  
+atrial enlargement detection  
+left atrial abnormality  
+right atrial abnormality  
+ventricular ectopic beats  
+premature atrial contractions  
+premature ventricular contractions  
+wide QRS complex  
+narrow QRS complex  
+atrial pacemaker rhythm  
+ventricular pacemaker rhythm  
+AV block detection  
+mobitz type I and II block  
+Wolff-Parkinson-White (WPW) syndrome  
+ECG beat classification  
+real-time ECG monitoring  
+cardiac event detection  
+cardiac ischemia  
+ST-segment depression  
+ST-segment elevation criteria  
+early repolarization patterns  
+J-point elevation  
+heart rate variability analysis  
+heart rate calculation from ECG  
+ventricular rate determination  
+electronic pacemaker detection  
+AV dissociation  
+second-degree AV block  
+complete heart block  
+idioventricular rhythm  
+junctional rhythm  
+low atrial rhythm  
+ischemic heart disease diagnosis  
+coronary artery disease  
+myocardial ischemia  
+posterior infarction  
+inferior infarction  
+lateral infarction  
+anterior infarction  
+anterior-septal infarction  
+acute pericarditis  
+multifocal atrial tachycardia  
+ventricular hypertrophy criteria  
+Sokolow-Lyon index  
+Romhilt-Estes point score  
+Cornell voltage criteria  
+ventricular premature beats  
+cardiac rhythm monitoring  
+automated ECG analysis  
+ECG serial comparison  
+cardiac conduction abnormalities  
+right atrial enlargement  
+left atrial enlargement  
+biatrial enlargement  
+right ventricular hypertrophy  
+left ventricular hypertrophy  
+biventricular hypertrophy  
+repolarization abnormalities  
+abnormal R-wave progression  
+axis deviation  
+left axis deviation  
+right axis deviation  
+abnormal heart axis  
+T-wave alternans  
+T-wave inversion in leads  
+poor R-wave progression  
+ST-segment abnormalities  
+hyperacute T waves  
+reciprocal changes in ECG  
+ST elevation  
+inferior ST elevation  
+anterior ST elevation  
+posterior ST elevation  
+ventricular pre-excitation  
+Brugada syndrome  
+ventricular asystole  
+sinus bradycardia  
+sinus tachycardia  
+long QT syndrome  
+short QT syndrome  
+non-sustained ventricular tachycardia  
+bigeminy  
+trigeminy  
+quadrigeminy  
+fusion beats  
+escape beats  
+bifascicular block  
+trifascicular block  
+dilated cardiomyopathy detection  
+hypertrophic cardiomyopathy  
+restrictive cardiomyopathy  
+pericardial effusion  
+tamponade ECG signs  
+pulmonary embolism  
+low-voltage ECG  
+electromechanical dissociation  
+digitalis effect on ECG  
+hyperkalemia detection  
+hypokalemia detection  
+hypercalcemia detection  
+hypocalcemia detection  
+hypothermia-induced ECG changes  
+ventricular septal defect diagnosis  
+arrhythmogenic right ventricular dysplasia  
+asymptomatic arrhythmia detection  
+silent myocardial infarction detection  
+** * pediatric ecg analysis * **  
+*** age and gender specific ecg analysis ***  
+** acute cardiac syndrome criteria **  
+report dictated, transcription pending  
+leads v2, v3, v4, and v6 are interpolated  
+waveform is valid only when viewed in 4x2.5 format with lead ii as the rhythm lead  
+only the first 5 seconds of lead i are valid  
+reserved for database conversion  
+the system removed serial comparison statements because  
+this ecg was not analyzed with 12sl  
+the 1st previous ecg was not analyzed with 12sl  
+this patient has a test analyzed with the heart algorithm  
+sinus rhythm  
+atrial rate=  
+sinus bradycardia  
+normal sinus rhythm  
+sinus tachycardia  
+marked sinus bradycardia  
+low right atrial bradycardia  
+low right atrial tachycardia  
+left atrial bradycardia  
+left atrial tachycardia  
+low right atrial rhythm  
+with 2nd degree av block  
+with complete heart block  
+with variable av block  
+with av dissociation  
+with 2nd degree sa block (mobitz ii)  
+with 2nd degree sa block (mobitz i)  
+with sinus pause  
+with 2:1 av conduction  
+with 3:1 av conduction  
+with 4:1 av conduction  
+with 5:1 av conduction  
+atrial flutter  
+atrial fibrillation  
+coarse  
+atrial tachycardia  
+with rapid ventricular response  
+with slow ventricular response  
+with premature ventricular or aberrantly conducted complexes  
+with a competing junctional pacemaker  
+with undetermined rhythm irregularity  
+atrial-paced complexes  
+ventricular-paced complexes  
+av dual-paced complexes  
+atrial-sensed ventricular-paced complexes  
+sinus complexes  
+supraventricular complexes  
+intrinsic complexes  
+with prolonged av conduction  
+premature supraventricular complexes  
+premature atrial complexes  
+premature junctional complexes  
+premature ventricular complexes  
+premature ventricular and fusion complexes  
+wide qrs tachycardia  
+narrow qrs tachycardia  
+wide qrs rhythm  
+idioventricular rhythm  
+premature ectopic complexes  
+with junctional escape complexes  
+with ventricular escape complexes  
+fusion complexes  
+with retrograde conduction  
+aberrant conduction  
+sinus/atrial capture  
+ventricular tachycardia  
+ventricular fibrillation  
+with sinus arrhythmia  
+with marked sinus arrhythmia  
+probable sinus bradycardia, verify av conduction  
+supraventricular tachycardia  
+junctional rhythm  
+idioventricular rhythm with av block  
+ventricular rhythm  
+junctional tachycardia  
+supraventricular tachycardia  
+ventricular tachycardia (ventricular or supraventricular with aberration)  
+atrial flutter  
+with ventricular fusion  
+with junctional escape  
+with escape beat  
+with transient ventricular tachycardia  
+with mobitz i (wenckebach) block  
+possible wandering atrial pacemaker  
+multifocal atrial tachycardia  
+complete heart block  
+suspect av conduction defect  
+with intermittent aberrant ventricular conduction  
+with sa block or transient av block  
+with sinus arrest or transient av block  
+low heart rate, verify av conduction  
+atrial flutter with 2 to 1 block  
+biventricular pacemaker detected  
+electronic ventricular pacemaker  
+demand pacemaker, interpretation is based on intrinsic rhythm  
+electronic atrial pacemaker  
+av sequential or dual chamber electronic pacemaker  
+electronic demand pacing  
+atrial-paced rhythm  
+ventricular-paced rhythm  
+atrial-sensed ventricular-paced rhythm  
+av dual-paced rhythm  
+undetermined rhythm  
+ventricular pre-excitation, wpw pattern type a  
+ventricular pre-excitation, wpw pattern type b  
+with fusion or intermittent ventricular pre-excitation (wpw)  
+wolff-parkinson-white  
+clockwise rotation of the heart, may invalidate criteria for ventricular hypertrophy  
+counter clockwise rotation of the heart, may invalidate criteria for ventricular hypertrophy  
+dextrocardia  
+current undetermined rhythm precludes rhythm comparison, needs review  
+previous ecg has undetermined rhythm, needs review  
+vent. rate  
+right atrial enlargement  
+left atrial enlargement  
+biatrial enlargement  
+leftward axis  
+abnormal left axis deviation  
+left axis deviation  
+rightward axis  
+abnormal right axis deviation  
+abnormal right superior axis deviation  
+right axis deviation  
+right superior axis deviation  
+indeterminate axis  
+northwest axis  
+qrs axis  
+shifted left  
+shifted right  
+low voltage qrs  
+pulmonary disease pattern  
+s1-s2-s3 pattern, consider pulmonary disease, rvh, or normal variant  
+brugada pattern, type 1  
+brugada pattern, type 2  
+brugada pattern, type 3  
+right bundle branch block  
+right ventricular hypertrophy  
+right bundle branch block -or- right ventricular hypertrophy  
+incomplete right bundle branch block  
+rsr' or qr pattern in v1 suggests right ventricular conduction delay  
+rsr' pattern in v1  
+left bundle branch block  
+incomplete left bundle branch block  
+left anterior fascicular block  
+left posterior fascicular block  
+(rbbb and left anterior fascicular block)  
+(rbbb and left posterior fascicular block)  
+*** bifascicular block ***  
+trifascicular block  
+nonspecific intraventricular block  
+nonspecific intraventricular conduction delay  
+right ventricular hypertrophy with repolarization abnormality  
+r in avl  
+sokolow-lyon  
+cornell voltage  
+cornell product  
+romhilt-estes  
+voltage criteria for left ventricular hypertrophy  
+left ventricular hypertrophy  
+minimal voltage criteria for lvh, may be normal variant  
+with qrs widening  
+with repolarization abnormality  
+moderate voltage criteria for lvh, may be normal variant  
+biventricular hypertrophy  
+prominent mid-precordial voltage  
+deep q wave in lead v6  
+prominent posterior voltage  
+prominent lateral voltage  
+deep q in lead iii  
+septal infarct  
+anterior infarct  
+lateral infarct  
+inferior infarct  
+masked by fascicular block  
+with right ventricular involvement  
+with posterior extension  
+inferior-posterior infarct  
+posterior infarct  
+increased r/s ratio in v1, consider early transition or posterior infarct  
+inferior injury pattern suggests right ventricular involvement, recommend adding leads v3r and v4r to confirm  
+consider right ventricular involvement in acute inferior infarct  
+anteroseptal infarct  
+anterolateral infarct  
+** acute mi / stemi **  
+** acute mi / non-stemi **  
+** consider acute mi if lbbb is new **  
+** lbbb with primary st-t abnormality - consider acute coronary syndrome (acs) **  
+lbbb with primary st elevation abnormality - probable acute mi  
+consider acute coronary syndrome (acs)  
+acute mi  
+possibly acute  
+age undetermined  
+old  
+new  
+increased evidence of infarction in  
+questionable change in initial forces of  
+criteria for  
+minimal criteria for  
+borderline criteria for  
+qrs contour suggests infarct size is probably  
+very small  
+small  
+moderate  
+large  
+very large  
+nonspecific st abnormality  
+acute pericarditis  
+st elevation, consider early repolarization, pericarditis, or injury  
+st elevation, probably due to early repolarization  
+nonspecific st elevation  
+septal injury pattern  
+anterior injury pattern  
+lateral injury pattern  
+inferior injury pattern  
+anteroseptal injury pattern  
+anterolateral injury pattern  
+inferolateral injury pattern  
+st elevation, consider inferior injury or acute infarct  
+st elevation, consider anterior injury or acute infarct  
+st elevation, consider lateral injury or acute infarct  
+st elevation, consider anterolateral injury or acute infarct  
+st elevation, consider inferolateral injury or acute infarct  
+st elevation, consider injury or variant associated with lvh  
+junctional st depression, probably normal  
+junctional st depression, probably abnormal  
+st abnormality, possible digitalis effect  
+st depression, consider subendocardial injury or digitalis effect  
+nonspecific st depression  
+st depression, consider subendocardial injury  
+marked st abnormality, possible septal subendocardial injury  
+marked st abnormality, possible anterior subendocardial injury  
+marked st abnormality, possible lateral subendocardial injury  
+marked st abnormality, possible inferior subendocardial injury  
+marked st abnormality, possible inferolateral subendocardial injury  
+marked st abnormality, possible anteroseptal subendocardial injury  
+marked st abnormality, possible anterolateral subendocardial injury  
+st depression in  
+st elevation in  
+with strain pattern  
+st abnormality may be secondary to qrs abnormality  
+nonspecific t wave abnormality  
+abnormal qrs-t angle, consider primary t wave abnormality  
+prolonged qt  
+borderline qt interval  
+t wave abnormality, consider inferolateral ischemia  
+t wave abnormality, consider anterior ischemia  
+marked t wave abnormality, consider anterior ischemia  
+t wave abnormality, consider lateral ischemia  
+marked t wave abnormality, consider lateral ischemia  
+t wave abnormality, consider inferior ischemia  
+marked t wave abnormality, consider inferior ischemia  
+marked t wave abnormality, consider inferolateral ischemia  
+t wave abnormality, consider anterolateral ischemia  
+marked t wave abnormality, consider anterolateral ischemia  
+t wave inversion in  
+qt has lengthened  
+qt has shortened  
+no previous ecgs available  
+warning: demographic data different  
+no significant change was found  
+unconfirmed  
+*** critical test result:  
+high hr  
+low hr  
+long q
+tc  
+stemi  
+acs / ischemia  
+av block  
+arrhythmia  
+poor data quality in current ecg precludes serial comparison  
+manual comparison required  
+septal leads  
+anterior leads  
+lateral leads  
+inferior leads  
+posterior leads  
+suspect unspecified pacemaker failure  
+suspect arm lead reversal  
+poor data quality  
+manual reading required due to inconsistent morphologies  
+normal ecg  
+otherwise normal ecg  
+borderline ecg  
+abnormal ecg
+atrial rate between 60 and 100 bpm with sinus arrhythmia.  
+atrial rate between 45 and 59 bpm.  
+atrial rate between 60 and 100 bpm without rhythm modifiers, or only with sinus arrhythmia.  
+atrial rate over 100 bpm.  
+atrial rate less than 45 bpm.  
+rigidly coupled P wave, atrial rate below 200 bpm, and minimal difference between atrial and ventricular rates.  
+no AV block, regular atrial rhythm, and atrial rate significantly faster than ventricular rate.  
+range of RR intervals to be at least 10% of the average.  
+no AV block or flutter, with atrial rate faster than ventricular rate and PR variance.  
+description of both atrial and ventricular activity in cases of AV dyssynchrony.  
+blocked P wave pattern and atrial rate close to twice the ventricular rate.  
+atrial rate within 10 bpm of three times the ventricular rate for SAV rhythm.  
+atrial rate within 15 bpm of four times the ventricular rate for SAV rhythm.  
+RR intervals less than 10% of average and atrial rate close to five times the ventricular rate.  
+atrial rate between 200 and 350 bpm for adults, 300 to 350 bpm for pediatrics.  
+Atrial fibrillation diagnosis in pediatrics adult age.  
+ventricular rate over 100 bpm.  
+ventricular rate below 60 bpm.  
+no pacer spikes, and minimal variation in RR intervals.  
+adult age and wide variation in RR intervals.  
+pediatric age with significant variation in RR intervals, appended to rhythm description.  
+detection of complexes with different morphology than the dominant beat, unless classified otherwise.  
+atrial-paced complexes with different morphology than the dominant beat without atrial-paced rhythm.  
+ventricular-paced complexes with different morphology than the dominant beat without ventricular-paced rhythm.  
+AV dual-paced complexes with different morphology than the dominant beat without AV dual-paced rhythm.  
+atrial-sensed ventricular-paced complexes with different morphology than the dominant beat without atrial-sensed ventricular-paced rhythm.  
+predominant paced rhythm with normal QRS complexes and normal P waves.  
+predominant paced rhythm with abnormal or absent P waves.  
+paced rhythm with a PR interval longer than 210 ms.  
+detection of one or two ectopic beats.  
+more than two consecutive ectopic beats and comments on frequency and pattern.  
+no AV block and premature QRS without a preceding P wave.  
+no AV block and premature QRS with a preceding P wave.  
+at least one ectopic QRS over 120 ms in duration.  
+a pattern of alternating premature and regular beats (bigeminy).  
+fast ventricular rate over 120 bpm, wide QRS, and regular intervals.  
+pediatric age with lower rate thresholds for fast heart rate.  
+premature QRS with a preceding P wave.  
+ectopic QRS over 120 ms following a long RR interval and normal beat.  
+a QRS complex that differs from the dominant beat but is neither premature nor late.  
+RR intervals with a variation of 20-39% (40% for pediatrics).  
+RR intervals with variation over 40%, not used for pediatrics.  
+heart rate between 45 and 65 bpm.  
+fast ventricular rate over 140 bpm (220 bpm for pediatrics) with narrow QRS and regular intervals.  
+at least 50% more ventricular pacing spikes than paced beats.  
+detection of pace spikes before P waves with synchronous QRS complexes.  
+pace spikes before QRS complexes with no organized atrial activity.  
+pace spikes before QRS complexes following organized atrial activity.  
+pace spikes before both P waves and QRS complexes.  
+rhythm criteria not met, undetermined rhythm.  
+ectopic QRS over 120 ms following a long RR interval and normal beat.

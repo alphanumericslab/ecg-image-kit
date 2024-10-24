@@ -1,0 +1,487 @@
+statement not found
+** * pediatric ecg analysis * **
+*** age and gender specific ecg analysis ***
+** acute cardiac syndrome criteria **
+report dictated, transcription pending
+leads v2, v3, v4, and v6 are interpolated
+waveform is valid only when viewed in 4x2.5 format with lead ii as the rhythm lead
+only the first 5 seconds of lead i are valid
+reserved for database conversion
+reserved for database conversion
+reserved for database conversion
+the system removed serial comparison statements because
+this ecg was not analyzed with 12sl
+the 1st previous ecg was not analyzed with 12sl
+this patient has a test analyzed with the heart algorithm
+sinus rhythm
+(atrial rate=
+sinus bradycardia
+normal sinus rhythm
+sinus tachycardia
+marked sinus bradycardia
+low right atrial bradycardia
+low right atrial tachycardia
+left atrial bradycardia
+left atrial tachycardia
+low right atrial rhythm
+with 2nd degree av block
+with complete heart block
+with variable av block
+with av dissociation
+with 2nd degree sa block (mobitz ii)
+with 2nd degree sa block (mobitz i)
+with sinus pause
+with 2:1 av conduction
+with 3:1 av conduction
+with 4:1 av conduction
+with 5:1 av conduction
+atrial flutter
+atrial fibrillation
+coarse
+atrial tachycardia
+with rapid ventricular response
+with slow ventricular response
+with premature ventricular or aberrantly conducted complexes
+with a competing junctional pacemaker
+with undetermined rhythm irregularity
+irregular
+with
+or
+and
+with premature ventricular or aberrantly conducted complexes
+atrial-paced complexes
+ventricular-paced complexes
+av dual-paced complexes
+atrial-sensed ventricular-paced complexes
+sinus complexes
+supraventricular complexes
+intrinsic complexes
+with prolonged av conduction
+with occasional
+with frequent
+premature supraventricular complexes
+premature atrial complexes
+premature junctional complexes
+premature ventricular complexes
+premature ventricular and fusion complexes
+and consecutive
+in a pattern of bigeminy
+wide qrs tachycardia
+narrow qrs tachycardia
+wide qrs rhythm
+idioventricular rhythm
+premature ectopic complexes
+with junctional escape complexes
+with ventricular escape complexes
+fusion complexes
+with retrograde conduction
+aberrant conduction
+sinus/atrial capture
+ventricular tachycardia
+ventricular fibrillation
+with sinus arrhythmia
+with marked sinus arrhythmia
+probable sinus bradycardia, verify av conduction
+supraventricular tachycardia
+junctional rhythm
+idioventricular rhythm with av block
+ventricular rhythm
+junctional tachycardia
+supraventricular tachycardia
+ventricular tachycardia (ventricular or supraventricular with aberration)
+atrial flutter
+with ventricular fusion
+with junctional escape
+with escape beat
+with transient ventricular tachycardia
+with mobitz i (wenckebach) block
+possible wandering atrial pacemaker
+multifocal atrial tachycardia
+complete heart block
+suspect av conduction defect
+with intermittent aberrant ventricular conduction
+with sa block or transient av block
+with sinus arrest or transient av block
+low heart rate, verify av conduction
+atrial flutter with 2 to 1 block
+biventricular pacemaker detected
+electronic ventricular pacemaker
+demand pacemaker, interpretation is based on intrinsic rhythm
+electronic atrial pacemaker
+av sequential or dual chamber electronic pacemaker
+electronic demand pacing
+atrial-paced rhythm
+ventricular-paced rhythm
+atrial-sensed ventricular-paced rhythm
+av dual-paced rhythm
+undetermined rhythm
+ventricular pre-excitation, wpw pattern type a
+ventricular pre-excitation, wpw pattern type b
+with fusion or intermittent ventricular pre- excitation (wpw)
+wolff-parkinson-white
+clockwise rotation of the heart, may invalidate criteria for ventricular hypertrophy
+counter clockwise rotation of the heart, may invalidate criteria for ventricular hypertrophy
+dextrocardia
+current undetermined rhythm precludes rhythm comparison, needs review
+previous ecg has undetermined rhythm, needs review
+vent. rate
+vent. rate
+rhythm
+the premature contractions
+consecutive
+with a demand pacemaker
+basic rhythm
+right atrial enlargement
+left atrial enlargement
+biatrial enlargement
+leftward axis
+abnormal left axis deviation
+left axis deviation
+rightward axis
+abnormal right axis deviation
+abnormal right superior axis deviation
+right axis deviation
+right superior axis deviation
+indeterminate axis
+northwest axis
+qrs axis
+qrs axis
+shifted left
+shifted right
+low voltage qrs
+pulmonary disease pattern
+s1-s2-s3 pattern, consider pulmonary disease, rvh, or normal variant
+brugada pattern, type 1
+brugada pattern, type 2
+brugada pattern, type 3
+right bundle branch block
+, plus right ventricular hypertrophy
+right bundle branch block -or- right ventricular hypertrophy
+incomplete right bundle branch block
+incomplete right bundle branch block
+.
+rsr' or qr pattern in v1 suggests right ventricular conduction delay
+rsr' pattern in v1
+left bundle branch block
+incomplete left bundle branch block
+left anterior fascicular block
+left posterior fascicular block
+(rbbb and left anterior fascicular block)
+(rbbb and left posterior fascicular block)
+*** bifascicular block ***
+trifascicular block
+nonspecific intraventricular block
+nonspecific intraventricular conduction delay
+right ventricular hypertrophy
+right ventricular hypertrophy with repolarization abnormality
+r in avl
+sokolow-lyon
+cornell voltage
+cornell product
+romhilt-estes
+voltage criteria for left ventricular hypertrophy
+left ventricular hypertrophy
+minimal voltage criteria for lvh, may be normal variant
+with qrs widening
+with repolarization abnormality
+with repolarization abnormality
+with qrs widening and repolarization abnormality
+moderate voltage criteria for lvh, may be normal variant
+biventricular hypertrophy
+prominent mid-precordial voltage,
+deep q wave in lead v6,
+prominent posterior voltage
+prominent lateral voltage
+deep q in lead iii
+septal infarct
+.
+anterior infarct
+lateral infarct
+inferior infarct
+(masked by fascicular block?)
+with right ventricular involvement
+, with posterior extension
+inferior-posterior infarct
+posterior infarct
+increased r/s ratio in v1, consider early transition or posterior infarct
+inferior injury pattern suggests right ventricular involvement, recommend adding leads v3r and v4r to confirm
+consider right ventricular involvement in acute inferior infarct
+anteroseptal infarct
+anterolateral infarct
+** ** acute mi / stemi ** **
+** ** acute mi / non-stemi ** **
+** ** consider acute mi if lbbb is new ** **
+** ** lbbb with primary st-t abnormality - consider acute coronary syndrome
+(acs) ** ** ** ** lbbb with primary st elevation abnormality - probable acute mi ** **
+** ** consider acute coronary syndrome (acs) ** **
+** ** acute mi ** **
+, possibly acute
+, age undetermined
+, old
+, new
+increased evidence of infarction in
+questionable change in initial forces of
+questionable change in initial forces of
+criteria for
+(cited on or before
+minimal criteria for
+borderline criteria for
+*** qrs contour suggests infarct size is probably
+very small
+small
+moderate
+large
+very large
+nonspecific st abnormality
+acute pericarditis
+st elevation, consider early repolarization, pericarditis, or injury
+st elevation, probably due to early repolarization
+nonspecific st elevation
+septal injury pattern
+anterior injury pattern
+lateral injury pattern
+inferior injury pattern
+anteroseptal injury pattern
+anterolateral injury pattern
+inferolateral injury pattern
+st elevation, consider inferior injury or acute infarct
+st elevation, consider anterior injury or acute infarct
+st elevation, consider lateral injury or acute infarct
+st elevation, consider anterolateral injury or acute infarct
+st elevation, consider inferolateral injury or acute infarct
+st elevation, consider injury or variant associated with lvh
+st elevation, consider injury or variant associated with lvh
+early repolarization
+junctional st depression, probably normal
+junctional st depression, probably abnormal
+st abnormality, possible digitalis effect
+nonspecific st abnormality
+st depression, consider subendocardial injury or digitalis effect
+nonspecific st depression
+st depression, consider subendocardial injury
+marked st abnormality, possible septal subendocardial injury
+marked st abnormality, possible anterior subendocardial injury
+marked st abnormality, possible lateral subendocardial injury
+marked st abnormality, possible inferior subendocardial injury
+marked st abnormality, possible inferolateral subendocardial injury
+marked st abnormality, possible anteroseptal subendocardial injury
+marked st abnormality, possible anterolateral subendocardial injury
+st depression in
+st elevation in
+with strain pattern
+with strain pattern
+st &
+st no longer depressed in
+st less depressed in
+st more depressed in
+st now depressed in
+st depression has replaced st elevation in
+questionable change in st segment
+non-specific change in st segment in
+non-specific change in st segment in
+st more elevated in
+st less elevated in
+st elevation now present in
+st no longer elevated in
+st elevation has replaced st depression in
+st abnormality and
+, may be secondary to qrs abnormality
+nonspecific t wave abnormality
+nonspecific st and t wave abnormality
+nonspecific st and t wave abnormality
+abnormal qrs-t angle, consider primary t wave abnormality
+prolonged qt
+borderline qt interval
+t wave abnormality, consider inferolateral ischemia
+t wave abnormality, consider anterior ischemia
+marked t wave abnormality, consider anterior ischemia
+t wave abnormality, consider lateral ischemia
+marked t wave abnormality, consider lateral ischemia
+t wave abnormality, consider inferior ischemia
+marked t wave abnormality, consider inferior ischemia
+marked t wave abnormality, consider inferolateral ischemia
+t wave abnormality, consider anterolateral ischemia
+marked t wave abnormality, consider anterolateral ischemia
+t wave inversion in
+t waves
+t wave amplitude has increased in
+t wave amplitude has decreased in
+flat t waves have replaced inverted t waves in
+questionable change in t waves
+flat t waves no longer evident in
+fewer leads exhibit flat t waves in
+flat t waves now evident in
+more leads exhibit flat t waves in
+nonspecific t wave abnormality no longer evident in
+nonspecific t wave abnormality now evident in
+nonspecific t wave abnormality, improved in
+nonspecific t wave abnormality, worse in
+nonspecific t wave abnormality has replaced inverted t waves in
+inverted t waves have replaced nonspecific t wave abnormality in
+t wave inversion now evident in
+t wave inversion more evident in
+inverted t waves have replaced flat t waves in
+t wave inversion less evident in
+t wave inversion no longer evident in
+qt has lengthened
+qt has shortened
+although rate has decreased
+although rate has increased
+with rate increase
+with rate decrease
+no previous ecgs available
+when compared with ecg of
+poor data quality in current ecg precludes serial comparison
+serial comparison not performed, all previous tracings are of poor data quality
+warning: demographic data different
+no significant change was found
+(unconfirmed)
+*** critical test result:
+high hr
+low hr
+long qtc
+stemi
+acs / ischemia
+av block
+arrhythmia
+and
+however
+however it
+less frequent
+more frequent
+is no longer
+is now
+has changed
+has not changed
+are now
+present
+have not changed
+have changed
+has replaced
+has increased
+has decreased
+are no longer
+qrs
+qrs duration
+qrs voltage
+questionable change in
+acute
+serial changes of evolving
+serial changes of
+significant changes have occurred
+manual comparison required, data off line and on volume
+manual comparison required for analog tracing
+manual comparison required, cannot contact main system
+septal leads
+anterior leads
+lateral leads
+inferior leads
+posterior leads
+anteroseptal leads
+anterolateral leads
+inferoposterior leads
+inferolateral leads
+reciprocal
+reciprocal
+ecg interpretation of acs is based on presence of symptoms and
+ecg not diagnostic for acute coronary syndrome; consider clinical findings
+poor data quality
+powerline interference
+baseline wander
+muscle tremor
+electrode noise
+disconnected
+in lead
+in leads
+nap
+nst
+nax
+ra
+la
+rl
+ll
+limb lead
+h
+e
+i
+m
+i
+ii
+v1
+v2
+v3
+v4
+v5
+v6
+v7
+v8
+v9
+v2r
+v3r
+v4r
+v5r
+v6r
+v7r
+v8r
+v9r
+a1
+a2
+a3
+a4
+iii
+avr
+avl
+avf
+mvr
+d
+a
+j
+x
+y
+z
+my
+mz
+cc5
+cm5
+r
+l
+n
+f
+c1
+c2
+c3
+c4
+c5
+c6
+c7
+c8
+c9
+c2r
+c3r
+c4r
+c5r
+c6r
+c7r
+c8r
+c9r
+(
+)
+*** suspect unspecified pacemaker failure
+, probably digitalis effect
+or digitalis effect
+*** suspect arm lead reversal, interpretation assumes no reversal
+*** poor data quality, interpretation may be adversely affected
+acquisition hardware fault prevents reliable analysis, carefully check ecg record before interpreting
+manual reading required due to inconsistent morphologies
+** less than 4 qrs complexes detected, no interpretation possible **
+*** memory allocation failure, no ecg interpretation possible ***
+** no qrs complexes found, no ecg analysis possible **
+** nonstandard lead placement, ecg interpretation not available **
+possible
+cannot rule out
+,
+normal ecg
+otherwise normal ecg
+borderline ecg
+borderline
+abnormal ecg

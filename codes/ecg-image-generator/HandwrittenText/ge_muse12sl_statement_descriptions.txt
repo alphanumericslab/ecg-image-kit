@@ -1,0 +1,236 @@
+"Requires atrial rate from 60 to 100 bpm and any rhythm
+modifiers appended beyond with sinus arrhythmia."
+Requires atrial rate from 45 to 59 bpm.
+"Requires atrial rate from 60 to 100 bpm and no rhythm
+modifiers appended or only with sinus arrhythmia
+appended."
+Requires atrial rate over 100 bpm.
+Requires atrial rate less than 45 bpm.
+"Requires:
+• Rigidly coupled P wave detected for primary beats.
+• Atrial rate less than 200 bpm.
+• The atrial rate is less than 10 bpm different than twice
+the ventricular rate."
+"Requires:
+• No AV Block (Mobitz I or II).
+• Regular atrial rhythm detected.
+• No rigidly coupled P wave detected for primary beats.
+• Atrial rate more than 6 bpm faster than ventricular
+rate
+• One of the following:
+• PR variance greater than 200 ms.
+• Atrial rate more than 25 bpm faster than ventricular
+rate."
+"Requires range of RR intervals is 10% or more of the
+average RR interval."
+"Requires:
+• No AV Block (Mobitz I or II).
+• No flutter.
+• Regular atrial rhythm detected.
+• No rigidly coupled P wave detected for primary beats.
+• One of the following:
+• Atrial rate more than 25 bpm faster than ventricular
+rate.
+• PR variance greater than 200 ms.
+If complete heart block or with AV dissociation is stated,
+then additional statements regarding the ventricular
+activity will follow. The presence of an atrioventricular
+dyssynchrony requires that both the atrial and the
+ventricular activity be specified. The ventricular activity will
+be stated as one of the otherwise predominant rhythm
+statements of: Junctional rhythm, Junctional bradycardia,
+Ideoventricular rhythm, Wide QRS rhythm, or Wide QRS
+tachycardia.• Atrial rate more than 25 bpm faster than ventricular
+rate.
+• PR variance greater than 200 ms.
+If complete heart block or with AV dissociation is stated,
+then additional statements regarding the ventricular
+activity will follow. The presence of an atrioventricular
+dyssynchrony requires that both the atrial and the
+ventricular activity be specified. The ventricular activity will
+be stated as one of the otherwise predominant rhythm
+statements of: Junctional rhythm, Junctional bradycardia,
+Ideoventricular rhythm, Wide QRS rhythm, or Wide QRS
+tachycardia."
+"For SAV
+Requires:
+• Synchronous blocked P wave identified in the median
+complex in addition to synchronous conducted P
+wave.
+• Pattern of blocked P, conducted P, blocked P,
+conducted P detected somewhere in the rhythm
+analysis.
+• Atrial rate is within 5 bpm of 2 times the ventricular
+rate."
+"For SAV
+Require atrial rate is within 10 bpm of 3 times the
+ventricular rate."
+"For SAV
+Requires atrial rate is within 15 bpm of 4 times the
+ventricular rate."
+"Requires:
+• Range of RR intervals less than 10% of average RR
+interval.
+• Atrial rate is within 10 bpm of 5 times the ventricular
+rate.
+This statement will not appear if screening criteria is
+turned on.
+See Screening Criteria: Suppressed Statements, Increased
+Specificity, for more information."
+The program must detect an atrial rate from 200 to 350 bpm for adults, and 300 to 350 bpm for pediatrics.
+"Atrial fibrillation occurs so rarely in pediatric individuals
+that the program requires an adult age for this diagnosis."
+"Requires ventricular rate higher than 100 bpm.
+This statement will not appear if screening criteria is
+turned on.
+See Screening Criteria: Suppressed Statements, Increased
+Specificity, for more information."
+"Requires ventricular rate lower than 60 bpm.
+This statement will not appear if screening criteria is
+turned on.
+See Screening Criteria: Suppressed Statements, Increased
+Specificity, for more information."
+"Requires:
+• No electronic pacer spikes detected.
+• One of the following:
+o Range of RR intervals less than 5% of average
+RR.
+o the 3 longest RR intervals are longer than 800 ms
+and within 40 ms of each other.
+This statement will not appear if screening criteria is
+turned on.
+See Screening Criteria: Suppressed Statements, Increased
+Specificity, for more information."
+"Requires adult age and range of RR intervals greater than
+20% of average RR interval.
+This statement will not appear if screening criteria is
+turned on. See
+for more information."
+"Requires pediatric age and range of RR intervals greater
+than 20% of average RR interval. In this case, this
+statement is prefixed to the existing rhythm statement,
+for example, “Irregular right atrial rhythm”."
+"Requires any complexes that are of a different
+morphology than the dominant beat shape, unless they
+are otherwise classified as ventricular escape or paced."
+"Requires atrial-paced complexes that are of a different
+morphology than the dominant beat and the predominant
+rhythm is not Atrial-paced rhythm."
+"Requires ventricular-paced complexes that are of a
+different morphology than the dominant beat and the
+predominant rhythm is not Ventricular- paced rhythm."
+"Requires AV dual-paced complexes that are of a different
+morphology than the dominant beat and the predominant
+rhythm is not AV dual- paced rhythm."
+"Requires atrial-sensed ventricular-paced complexes that
+are of a different morphology than the dominant beat and
+the predominant rhythm is not Atrial-sensed ventricular-
+paced rhythm.
+NOTE: No more than one of the previous four statements
+will be made. If there are multiple paced beat types, only
+the most frequently occurring will be commented
+on."
+"Requires predominant rhythm of paced and QRS
+complexes of a normal morphology with normal P waves."
+"Requires: predominant rhythm of paced and QRS
+complexes of a normal morphology but with abnormal or
+no P waves.
+NOTE: No more than one of the previous two statements
+will be made. If there are both sinus and supraventricular
+complexes, only the most frequently occurring will
+be commented on."
+"Requires any paced rhythm and PR interval of 210 ms or
+longer (for pediatrics, it is the 98th percentile plus 20 ms;
+refer to Appendix C for pediatric threshold)."
+Requires 1 or 2 beats.
+"Requires greater than 2 beats.
+If ectopic shaped beats appear as at least one consecutive
+pair, then
+not only is the frequency of the beats commented on, but
+the consecutive nature of the beats is also indicated."
+"Requires:
+• No AV block, Mobitz I or II.
+• No AV dissociation.
+• At least one QRS that is premature, normally shaped.
+• No P wave found before this QRS."
+"Requires:
+• No AV block, Mobitz I or II.
+• No AV dissociation.
+• At least one QRS that is premature, normally shaped.
+• A P wave found preceding this QRS"
+"Requires:
+• At least one QRS that is premature, ectopic shaped
+• Has a QRS duration greater than 120 ms (for
+pediatrics, wide for age; refer to Appendix C: Pediatric
+Tables).
+• No fusion beats detected."
+"Requires:
+• At least one pair or beats.
+• These beats are either
+o Separated by less than 600 ms for rates lower
+than 85 bpm.
+o At least 100 ms premature for rates over 85 bpm."
+"Requires:
+• A strict 10-second pattern of alternating premature
+and not premature beats.
+• One of the following:
+o At least one QRS that is premature, ectopic
+shaped.
+o At least one premature atrial or supraventricular
+beat."
+"Requires:
+• A fast ventricular rate (>120 bpm; refer to Appendix C:
+Pediatric Tables).
+• A wide QRS (QRS duration > 120 ms; refer to to
+Appendix C: Pediatric Tables for pediatric ages).
+• A regular heart rate (that is, the range of RR intervals
+is less than 20% of the average RR interval)."
+"Requires:
+• Pediatric age.
+• Same criteria as described for supraventricular
+tachycardia but allows rates below 220 bpm that are
+still above the fast heart rate for age."
+"Requires:
+• No AV block, Mobitz I or II.
+• No AV dissociation.
+• At least one QRS that is premature, normally shaped.
+• A P wave found preceding this QRS"
+"Requires:
+• At least one beat that is ectopic shaped.
+• Has a QRS duration greater than 120 ms, (for
+pediatrics, wide for age; refer to Appendix C: Pediatric
+Tables).
+• Follows an RR interval of more than 1200 ms.
+• Follows a normally shaped beat."
+"Requires QRS complex that is different from dominant
+beat type and is not premature and not late."
+"Requires range of RR intervals 20 to 39% (greater than
+40% for pediatrics) of average RR interval."
+"Requires range of RR intervals 40% or greater of average
+RR interval (not used for pediatric ages)."
+Requires rate from 45 to 65 bpm.
+"Requires:
+• A fast ventricular rate (>140 bpm; >220 bpm for
+pediatric).
+• A narrow QRS (QRS duration <120 ms; refer to
+Appendix C for pediatric).
+• A regular heart rate (that is, the range of RR intervals
+is less than 20% of the average RR interval)."
+"Requires at least 50% more ventricular spikes detected
+than ventricular- paced beats."
+Pace spikes in front of P waves, where P waves are synchronous with QRS complexes.
+Pace spikes in front of QRS complexes and either no organized atrial activity or atrial activity asynchronous to the QRS complex.
+Pace spikes in front of QRS complexes which follow non-paced, organized atrial activity (for example, sinus or ectopic atrial rhythm)
+Pace spikes in front of the P waves and the QRS complexes.
+"If the criteria cannot be met for these descriptive
+statements, then the program will state Undetermined
+rhythm."
+"Requires:
+• At least one beat that is ectopic shaped.
+• Has a QRS duration greater than 120 ms, (for
+pediatrics, wide for age; refer to Appendix C: Pediatric
+Tables).
+• Follows an RR interval of more than 1200 ms.
+• Follows a normally shaped beat."
+"Requires that less than half of the detected pace spikes are associated with P waves or QRS complexes. This was only
+implemented in 12SL v22. This test has since been retired."
