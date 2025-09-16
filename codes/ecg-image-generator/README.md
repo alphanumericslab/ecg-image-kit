@@ -143,11 +143,10 @@ The basic mode of the tool creates ECG images without distortions. The mode of o
      - `-rot`: Rotation angle by which images can be rotated; default: 0; type: int
      - `-noise`: Noise levels to be added; default: 50; type: int
      - `-c`: Percentage by which image will be cropped; default: 0.01; type: int
-     - `-t`: Colour temperature changes to be added to the image; default: 40000; type: int
+     - `-t`: Sets the deterministic temperature level to all images. If omitted, sets colour temperature per image to random value in one of two ranges - 2000-4000 K (warmer, yellow and orange hues) and 10000-20000 K (colder, blue hues); Neutral white: 6500K; type: int
      - `--deterministic_rot`: Adds the given amount of rotation to all images deterministically. If False, chooses rotation angles randomly in the given range; default: False
      - `--deterministic_noise`: Adds the noise level given detreministcally to all images. If False, adds random amounts of noise in the given range; default: False
      - `--deterministic_crop`: Adds the given level of crop to all images deterministically. If False, adds random crop levels; default: False
-     - `--deterministic_temp`: Adds the deterministic temperature level to all images. If False, adds random colour temepratures in that range; default- False
 
      **Example:**
 

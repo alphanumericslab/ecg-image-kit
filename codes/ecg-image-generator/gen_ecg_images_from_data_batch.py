@@ -38,7 +38,7 @@ def get_parser():
     parser.add_argument('-rot','--rotate',type=int,default=0)
     parser.add_argument('-noise','--noise',type=int,default=50)
     parser.add_argument('-c','--crop',type=float,default=0.01)
-    parser.add_argument('-t','--temperature',type=int,default=40000)
+    parser.add_argument('-t','--temperature',type=int)
 
     parser.add_argument('--random_resolution',action="store_true",default=False)
     parser.add_argument('--random_padding',action="store_true",default=False)

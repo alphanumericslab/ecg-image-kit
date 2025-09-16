@@ -47,7 +47,7 @@ def get_parser():
     parser.add_argument('-rot','--rotate',type=int,default=0)
     parser.add_argument('-noise','--noise',type=int,default=50)
     parser.add_argument('-c','--crop',type=float,default=0.01)
-    parser.add_argument('-t','--temperature',type=int,default=40000)
+    parser.add_argument('-t','--temperature',type=int)
 
     parser.add_argument('--random_resolution',action="store_true",default=False)
     parser.add_argument('--random_padding',action="store_true",default=False)
@@ -201,6 +201,11 @@ def run_single_file(args):
                     temp = random.choice(range(2000,4000))
                 else:
                     temp = random.choice(range(10000,20000))
+                
+                # Set deterministic temperature when passed as argument
+                if args.temperature:
+                    temp = args.temperature
+                
                 rotate = args.rotate
                 out = get_augment(out,output_directory=args.output_directory,rotate=args.rotate,noise=noise,crop=crop,temperature=temp,bbox = args.lead_bbox, store_text_bounding_box = args.lead_name_bbox, json_dict = json_dict)
             
