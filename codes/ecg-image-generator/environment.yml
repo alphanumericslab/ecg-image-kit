@@ -1,4 +1,4 @@
-name: myenv
+name: ecg-image-generator
 channels:
   - defaults
 dependencies:
@@ -24,4 +24,5 @@ dependencies:
       - seaborn==0.12.2
       - validators==0.18.2
       - spacy==3.0.8
-      - https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_sm-0.4.0.tar.gz
+      - pyyaml==6.0
+      - qrcode==8.2

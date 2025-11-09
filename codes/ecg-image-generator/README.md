@@ -11,8 +11,8 @@ The process of scanning and digitizing ECG images is governed by some fundamenta
 ## Installation
 - Setup with Conda env: 
      ```
-     conda env create -f environment_droplet.yml
-     conda activate myenv
+     conda env create -f environment.yml
+     conda activate ecg-image-generator
      ```
 
 - Set up with pip:
