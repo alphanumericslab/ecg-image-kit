@@ -145,9 +145,10 @@ def get_handwritten(link,num_words,input_file,output_dir,x_offset=0,y_offset=0,h
     filename = input_file
     
     #Extract n medical terms
-    if(validators.url(link)):
-        #Parse URL
-        r = requests.get(link)
+    if(validators.url(link) and link.lower().startswith(("http://", "https://"))):
+        #Parse URL — restrict scheme, set timeout, disable redirects to prevent SSRF/DoS
+        r = requests.get(link, timeout=10, allow_redirects=False)
+        r.raise_for_status()
 
         if platform == "darwin":
             soup = BeautifulSoup(r.content, "html5lib")
