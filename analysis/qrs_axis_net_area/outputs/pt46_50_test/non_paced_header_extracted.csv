@@ -1,0 +1,6 @@
+patient_id,image,ventricular_rate_bpm,atrial_rate_bpm,pr_ms,qrs_ms,qt_ms,qtcb_ms,p_axis_deg,qrs_axis_deg,t_axis_deg
+46,EKGE-NP-PT46.jpg,66,66,113,74,444,47,88,88,
+47,EKGE-NP-PT47.jpg,111,111,114,66,-2,460,2,,
+48,EKGE-NP-PT48.jpg,61,61,140,66,858,455,88,,84
+49,EKGE-NP-PT49.jpg,66,66,103,93,462,461,8,58,
+50,EKGE-NP-PT50.jpg,,,186,76,356,46,88,28,-8
