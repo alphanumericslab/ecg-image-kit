@@ -204,7 +204,11 @@ def axis_from_limb_least_squares(limb_areas: np.ndarray) -> float:
     return angle180(math.degrees(math.atan2(y_component, x_component)))
 
 
-def estimate_image(image_path: Path, patient_id: int) -> tuple[AxisResult, list[int], list[float], int, int]:
+def estimate_image(
+    image_path: Path,
+    patient_id: int,
+    standard_axis_deg: float | None = None,
+) -> tuple[AxisResult, list[int], list[float], int, int]:
     image, arr, dark_mask = load_dark_mask(image_path)
     height, width = arr.shape[:2]
     x0, x1 = 66, width - 8
@@ -220,7 +224,9 @@ def estimate_image(image_path: Path, patient_id: int) -> tuple[AxisResult, list[
     beat_areas = qrs_net_areas(signals, peaks)
     limb_areas = np.median(beat_areas, axis=0)
 
-    standard = float(STANDARD_QRS_AXIS_DEG[patient_id])
+    if standard_axis_deg is None:
+        standard_axis_deg = STANDARD_QRS_AXIS_DEG[patient_id]
+    standard = float(standard_axis_deg)
     direct = axis_from_i_avf(limb_areas[0], limb_areas[5])
     lead_i_ii = axis_from_i_ii(limb_areas[0], limb_areas[1])
     limb_ls = axis_from_limb_least_squares(limb_areas)
@@ -264,6 +270,15 @@ def write_debug_overlay(image_path: Path, output_path: Path, peaks: list[int], c
 
 def summarize(results: list[AxisResult], field: str) -> dict[str, float]:
     errors = np.asarray([getattr(result, field) for result in results], dtype=float)
+    errors = errors[np.isfinite(errors)]
+    if len(errors) == 0:
+        return {
+            "n": 0.0,
+            "mae_deg": math.nan,
+            "median_abs_error_deg": math.nan,
+            "within_15_deg_fraction": math.nan,
+            "within_30_deg_fraction": math.nan,
+        }
     return {
         "n": float(len(errors)),
         "mae_deg": float(np.mean(errors)),

@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from analyze_non_paced_qrs_axis import estimate_image, summarize
+from analyze_non_paced_qrs_axis import estimate_image, summarize, write_debug_overlay
 
 
 FIELD_BOXES = {
@@ -301,28 +301,61 @@ def main() -> None:
         action="store_true",
         help="Use experimental template OCR only, without the verified header readout fallback.",
     )
+    parser.add_argument(
+        "--debug-overlays",
+        action="store_true",
+        help="Save row-center and QRS-peak overlay images.",
+    )
     args = parser.parse_args()
 
+    patient_ids = list(range(args.first, args.last + 1))
+    needs_templates = args.template_only or any(patient_id not in VERIFIED_HEADER_VALUES for patient_id in patient_ids)
+    templates = build_templates(args.image_dir) if needs_templates else {}
+
     if args.template_only:
-        templates = build_templates(args.image_dir)
-        headers = [extract_header(args.image_dir, patient_id, templates) for patient_id in range(args.first, args.last + 1)]
+        headers = [extract_header(args.image_dir, patient_id, templates) for patient_id in patient_ids]
     else:
-        headers = [verified_header(args.image_dir, patient_id) for patient_id in range(args.first, args.last + 1)]
+        headers = [
+            verified_header(args.image_dir, patient_id)
+            if patient_id in VERIFIED_HEADER_VALUES
+            else extract_header(args.image_dir, patient_id, templates)
+            for patient_id in patient_ids
+        ]
     write_rows(args.output_dir / "non_paced_header_extracted.csv", [asdict(header) for header in headers])
+
+    debug_dir = args.output_dir / "debug_overlays"
+    if args.debug_overlays:
+        debug_dir.mkdir(parents=True, exist_ok=True)
 
     comparisons = []
     net_results = []
+    missing_qrs_axis: list[int] = []
     for header in headers:
+        standard_axis = float(header.qrs_axis_deg) if header.qrs_axis_deg is not None else math.nan
         if header.qrs_axis_deg is None:
-            raise RuntimeError(f"Missing QRS axis for PT{header.patient_id}")
-        net_result, *_ = estimate_image(args.image_dir / header.image, header.patient_id)
+            missing_qrs_axis.append(header.patient_id)
+        net_result, peaks, centers, x0, x1 = estimate_image(
+            args.image_dir / header.image,
+            header.patient_id,
+            standard_axis_deg=standard_axis,
+        )
         row = asdict(net_result)
-        row["standard_axis_deg"] = float(header.qrs_axis_deg)
+        row["standard_axis_deg"] = standard_axis
         row["direct_abs_error_deg"] = abs(((row["direct_axis_deg"] - row["standard_axis_deg"] + 180) % 360) - 180)
         row["lead_i_ii_abs_error_deg"] = abs(((row["lead_i_ii_axis_deg"] - row["standard_axis_deg"] + 180) % 360) - 180)
         row["limb_ls_abs_error_deg"] = abs(((row["limb_ls_axis_deg"] - row["standard_axis_deg"] + 180) % 360) - 180)
         comparisons.append(row)
         net_results.append(type(net_result)(**row))
+
+        if args.debug_overlays:
+            write_debug_overlay(
+                args.image_dir / header.image,
+                debug_dir / f"EKGE-NP-PT{header.patient_id}-overlay.jpg",
+                peaks,
+                centers,
+                x0,
+                x1,
+            )
 
     write_rows(args.output_dir / "non_paced_qrs_axis_results_from_extracted_header.csv", comparisons)
 
@@ -340,6 +373,8 @@ def main() -> None:
                 **summary
             )
         )
+    if missing_qrs_axis:
+        print(f"Warning: missing extracted QRS axis for PT IDs: {missing_qrs_axis}")
     print(f"Wrote {args.output_dir / 'non_paced_header_extracted.csv'}")
     print(f"Wrote {args.output_dir / 'non_paced_qrs_axis_results_from_extracted_header.csv'}")
 

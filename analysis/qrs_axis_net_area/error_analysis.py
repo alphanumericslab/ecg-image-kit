@@ -88,6 +88,8 @@ def enrich_rows(result_rows: list[dict[str, str]], header_rows: list[dict[str, s
     for row in result_rows:
         patient_id = int(row["patient_id"])
         standard = to_float(row, "standard_axis_deg")
+        if not math.isfinite(standard):
+            continue
         area_i = to_float(row, "area_i")
         area_avf = to_float(row, "area_avf")
         area_ii = to_float(row, "area_ii")

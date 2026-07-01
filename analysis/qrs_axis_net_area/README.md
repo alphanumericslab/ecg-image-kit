@@ -70,6 +70,22 @@ font is very small and template-only OCR can misread values such as `76` as
   analysis/qrs_axis_net_area/extract_header_and_compare.py --template-only
 ```
 
+For the expanded `EKGE-NP-PT*.jpg` set, pass the image range and write to a
+separate output directory:
+
+```bash
+/Users/yaweizhang/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
+  analysis/qrs_axis_net_area/extract_header_and_compare.py \
+  --image-dir "/Users/yaweizhang/Downloads/No Pacemaker" \
+  --first 1 \
+  --last 100 \
+  --output-dir analysis/qrs_axis_net_area/outputs/pt1_100
+```
+
+PT7-PT45 use the verified header table. Other PT IDs use the template OCR
+fallback; if QRS axis cannot be read, the script still writes waveform-based
+axis estimates and leaves error fields as `nan`.
+
 ## Error analysis
 
 Run:
@@ -77,6 +93,16 @@ Run:
 ```bash
 /Users/yaweizhang/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
   analysis/qrs_axis_net_area/error_analysis.py
+```
+
+For the expanded output directory:
+
+```bash
+/Users/yaweizhang/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
+  analysis/qrs_axis_net_area/error_analysis.py \
+  --results-csv analysis/qrs_axis_net_area/outputs/pt1_100/non_paced_qrs_axis_results_from_extracted_header.csv \
+  --header-csv analysis/qrs_axis_net_area/outputs/pt1_100/non_paced_header_extracted.csv \
+  --output-dir analysis/qrs_axis_net_area/outputs/pt1_100/error_analysis
 ```
 
 This writes:
